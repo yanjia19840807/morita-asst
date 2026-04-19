@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String          @id @default(uuid())
+  email          String          @unique
+  createdAt      DateTime        @default(now())
+  knowledgeBases KnowledgeBase[]
+  documents      Document[]
+  name           String
+  emailVerified  Boolean         @default(false)
+  image          String?
+  updatedAt      DateTime        @updatedAt
+  sessions       Session[]
+  accounts       Account[]
+
+  role       String?
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model KnowledgeBase {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  userId      String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  documents Document[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("knowledge-base")
+}
+
+model Document {
+  id         String @id @default(uuid())
+  filename   String
+  fileType   String
+  storageUrl String
+  fileSize   Int?
+
+  status       ProcessingStatus @default(UPLOADED)
+  errorMessage String?
+
+  knowledgeBaseId String?
+  knowledgeBase   KnowledgeBase? @relation(fields: [knowledgeBaseId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime  @default(now())
+  processedAt DateTime?
+
+  // 可选：额外元数据（LangChain 会把 fileId、knowledgeBaseId 写到向量表的 metadata JSONB）
+  metadata Json?
+  chunks   Chunk[]
+
+  @@index([knowledgeBaseId])
+  @@index([userId])
+  @@index([status])
+  @@map("document")
+}
+
+model Chunk {
+  id String @id @default(uuid())
+
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  content  String // Chunk 的实际文本内容（可编辑）
+  metadata Json // LangChain 用的 metadata（包含 knowledgeBaseId、documentId 等）
+
+  // 嵌入状态
+  embeddingStatus ProcessingStatus @default(NOT_EMBEDDED)
+  embeddingId     String? // 可选：LangChain pgvector 表里的 uuid，方便精准删除
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([documentId])
+  @@index([embeddingStatus])
+  @@map("chunk")
+}
+
+enum ProcessingStatus {
+  UPLOADED // 已上传（文档初始状态）
+  SPLITTED // 已切分（文档切分完成）
+  NOT_EMBEDDED // 未嵌入（Chunk 已切分但还未嵌入向量）
+  EMBEDDING // 嵌入中（正在执行嵌入操作）
+  EMBEDDED // 已嵌入（可被 RAG 检索）
+  FAILED // 失败（通用失败状态，文档或 Chunk 都可用）
+}

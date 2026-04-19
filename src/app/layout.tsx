@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Figtree, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Navbar from "@/components/nav-bar";
+import { ThemeProvider } from "@/components/theme-provider";
+import QueryProvider from "@/components/query-provider";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,13 +39,19 @@ export default function RootLayout({
         "font-sans",
         inter.variable,
       )}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col p-4">
-        <header>
-          <Navbar />
-        </header>
-        {children}
-        <footer>YunTianJiaYuan.INC</footer>
+      <body className="mx-auto w-full h-full px-4 flex flex-col min-h-screen">
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -1,35 +1,40 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import Logo from "./logo";
 import { buttonVariants } from "./ui/button";
+import { ModeToggle } from "./mode-toggle";
+import UserAvatar from "./user-avatar";
+import AuthBar from "./auth-bar";
 
-function Navbar() {
+export default function NavBar() {
   return (
-    <nav className="flex w-full justify-between">
-      <div className="flex items-center gap-8">
+    <nav className="flex w-full justify-between py-2">
+      <div className="flex items-center gap-4">
         <Logo />
 
         <div className="flex items-center gap-2">
-          <Link href="/">主页</Link>
-          <Link href="/">知识库</Link>
-          <Link href="/">文档</Link>
-          <Link href="/">用户</Link>
+          <Link className={buttonVariants({ variant: "ghost" })} href="/">
+            主页
+          </Link>
+          <Link className={buttonVariants({ variant: "ghost" })} href="/">
+            知识库
+          </Link>
+          <Link className={buttonVariants({ variant: "ghost" })} href="/">
+            文档
+          </Link>
+          <Link className={buttonVariants({ variant: "ghost" })} href="/users">
+            用户
+          </Link>
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        <Link className={buttonVariants()} href="/auth/sign-up">
-          注册
-        </Link>
-        <Link
-          className={buttonVariants({ variant: "outline" })}
-          href="/auth/sign-in"
-        >
-          登录
-        </Link>
+
+      <div className="flex items-center gap-3">
+        <AuthBar />
+        <UserAvatar />
+        <ModeToggle />
       </div>
     </nav>
   );
 }
-
-export default Navbar;
