@@ -67,6 +67,11 @@ export type Verification = Prisma.VerificationModel
  */
 export type KnowledgeBase = Prisma.KnowledgeBaseModel
 /**
+ * Model DocumentCategory
+ * 
+ */
+export type DocumentCategory = Prisma.DocumentCategoryModel
+/**
  * Model Document
  * 
  */

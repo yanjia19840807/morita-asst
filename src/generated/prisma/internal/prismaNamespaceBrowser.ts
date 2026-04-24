@@ -56,6 +56,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   KnowledgeBase: 'KnowledgeBase',
+  DocumentCategory: 'DocumentCategory',
   Document: 'Document',
   Chunk: 'Chunk'
 } as const
@@ -83,7 +84,11 @@ export const UserScalarFieldEnum = {
   name: 'name',
   emailVerified: 'emailVerified',
   image: 'image',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  role: 'role',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -97,7 +102,8 @@ export const SessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
-  userId: 'userId'
+  userId: 'userId',
+  impersonatedBy: 'impersonatedBy'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -146,16 +152,29 @@ export const KnowledgeBaseScalarFieldEnum = {
 export type KnowledgeBaseScalarFieldEnum = (typeof KnowledgeBaseScalarFieldEnum)[keyof typeof KnowledgeBaseScalarFieldEnum]
 
 
+export const DocumentCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DocumentCategoryScalarFieldEnum = (typeof DocumentCategoryScalarFieldEnum)[keyof typeof DocumentCategoryScalarFieldEnum]
+
+
 export const DocumentScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   filename: 'filename',
-  fileType: 'fileType',
-  storageUrl: 'storageUrl',
   fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  storageUrl: 'storageUrl',
   status: 'status',
   errorMessage: 'errorMessage',
   knowledgeBaseId: 'knowledgeBaseId',
-  userId: 'userId',
+  categoryId: 'categoryId',
   createdAt: 'createdAt',
   processedAt: 'processedAt',
   metadata: 'metadata'

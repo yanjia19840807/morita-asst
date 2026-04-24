@@ -1,28 +1,35 @@
-import { NextResponse } from "next/server";
-import { fetchSTS } from "@/server/sts-token";
-import { withAuth } from "@/lib/api/with-auth";
-import { ApiError, handleApiError } from "@/lib/api/errors";
+import { getSTS } from '@/server/sts-token'
+import { withAuth } from '@/lib/api/with-auth'
+import { ApiError, handleApiError } from '@/lib/api/errors'
+import { BucketAccess } from '@/types/bucket'
+import { NextRequest, NextResponse } from 'next/server'
 
-const bucket = process.env.ALI_BUCKET;
-const region = process.env.ALI_OSS_REGION || "oss-cn-beijing";
-
-export const GET = withAuth(async (request, { user }) => {
+export const GET = withAuth(async (request: NextRequest, { user }) => {
   try {
-    const response = await fetchSTS();
-    const { accessKeyId, accessKeySecret, securityToken, expiration } =
-      response;
+    const region = process.env.ALI_OSS_REGION
+    const searchParams = request.nextUrl.searchParams
+    const bucketAccess = searchParams.get('bucketAccess') as BucketAccess
+    const bucket =
+      bucketAccess === 'private'
+        ? process.env.ALI_PRIVATE_BUCKET
+        : process.env.ALI_PUBLIC_BUCKET
+
+    const response = await getSTS(user.id)
+    const { accessKeyId, accessKeySecret, securityToken, expiration } = response
 
     return NextResponse.json({
       accessKeyId,
       accessKeySecret,
       securityToken,
       expiration,
-      bucket,
-      region,
-    });
+      bucketData: {
+        bucket,
+        region
+      }
+    })
   } catch (error) {
-    console.error("STS AssumeRole Error:", error);
+    console.error('STS AssumeRole Error:', error)
 
-    return handleApiError(new ApiError("获取STS令牌失败"));
+    return handleApiError(new ApiError('获取STS令牌失败'))
   }
-});
+})

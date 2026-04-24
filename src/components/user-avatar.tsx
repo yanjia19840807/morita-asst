@@ -1,60 +1,57 @@
-"use client";
+'use client'
 
-import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { authClient } from "@/lib/auth-client";
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { authClient } from '@/lib/auth-client'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { useRouter } from "next/navigation";
-import { LogOut, User, UserCircle, UserCircle2, UserRound } from "lucide-react";
+  DropdownMenuTrigger
+} from './ui/dropdown-menu'
+import { useRouter } from 'next/navigation'
+import { LogOut, UserRound } from 'lucide-react'
 
 export default function UserAvatar() {
-  const router = useRouter();
-  const { data, isPending } = authClient.useSession();
-
-  if (!data || !data.session) {
-    return null;
-  }
+  const router = useRouter()
+  const { data: userData } = authClient.useSession()
 
   const handleSignOut = () => {
     authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.replace("/");
-        },
-      },
-    });
-  };
+          router.replace('/')
+        }
+      }
+    })
+  }
+
+  if (!userData) {
+    return null
+  }
 
   return (
-    <DropdownMenu modal={false}>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer">
+        <button className='focus-visible:ring-ring cursor-pointer rounded-full outline-none focus-visible:ring-2'>
           <Avatar>
-            <AvatarImage src={data.user.image || "/avatar-default.svg"} />
-            <AvatarFallback>
-              {data.user.name?.charAt(0)?.toUpperCase() || "U"}
-            </AvatarFallback>
+            <AvatarImage src={userData.user.image || '/avatar-default.svg'} />
+            <AvatarFallback>U</AvatarFallback>
           </Avatar>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col gap-1">
-            <p className="text-sm font-medium">{data.user.name}</p>
-            <p className="text-xs text-muted-foreground truncate">
-              {data.user.email}
+      <DropdownMenuContent align='end' className='w-48'>
+        <DropdownMenuLabel className='font-normal'>
+          <div className='flex flex-col gap-1'>
+            <p className='text-sm font-medium'>{userData.user.name}</p>
+            <p className='text-muted-foreground truncate text-xs'>
+              {userData.user.email}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => router.push("/profile")}>
+        <DropdownMenuItem onClick={() => router.push('/profile')}>
           <UserRound />
           个人中心
         </DropdownMenuItem>
@@ -65,5 +62,5 @@ export default function UserAvatar() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

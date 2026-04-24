@@ -16,8 +16,9 @@ model User {
   id             String          @id @default(uuid())
   email          String          @unique
   createdAt      DateTime        @default(now())
-  knowledgeBases KnowledgeBase[]
-  documents      Document[]
+  knowledgeBases     KnowledgeBase[]
+  documents          Document[]
+  documentCategories DocumentCategory[]
   name           String
   emailVerified  Boolean         @default(false)
   image          String?
@@ -100,12 +101,33 @@ model KnowledgeBase {
   @@map("knowledge-base")
 }
 
+model DocumentCategory {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  userId      String
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  documents Document[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, name])
+  @@index([userId])
+  @@map("document-category")
+}
+
 model Document {
-  id         String @id @default(uuid())
-  filename   String
-  fileType   String
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  filename String
+  fileSize Int?
+  mimeType String?
+
   storageUrl String
-  fileSize   Int?
 
   status       ProcessingStatus @default(UPLOADED)
   errorMessage String?
@@ -113,8 +135,8 @@ model Document {
   knowledgeBaseId String?
   knowledgeBase   KnowledgeBase? @relation(fields: [knowledgeBaseId], references: [id], onDelete: Cascade)
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId String?
+  category   DocumentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   createdAt   DateTime  @default(now())
   processedAt DateTime?
@@ -126,6 +148,7 @@ model Document {
   @@index([knowledgeBaseId])
   @@index([userId])
   @@index([status])
+  @@index([categoryId])
   @@map("document")
 }
 

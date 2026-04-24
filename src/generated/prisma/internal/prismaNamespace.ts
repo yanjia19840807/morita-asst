@@ -389,6 +389,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   KnowledgeBase: 'KnowledgeBase',
+  DocumentCategory: 'DocumentCategory',
   Document: 'Document',
   Chunk: 'Chunk'
 } as const
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "knowledgeBase" | "document" | "chunk"
+    modelProps: "user" | "session" | "account" | "verification" | "knowledgeBase" | "documentCategory" | "document" | "chunk"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -780,6 +781,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DocumentCategory: {
+      payload: Prisma.$DocumentCategoryPayload<ExtArgs>
+      fields: Prisma.DocumentCategoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DocumentCategoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DocumentCategoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+        }
+        findFirst: {
+          args: Prisma.DocumentCategoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DocumentCategoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+        }
+        findMany: {
+          args: Prisma.DocumentCategoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>[]
+        }
+        create: {
+          args: Prisma.DocumentCategoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+        }
+        createMany: {
+          args: Prisma.DocumentCategoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DocumentCategoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>[]
+        }
+        delete: {
+          args: Prisma.DocumentCategoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+        }
+        update: {
+          args: Prisma.DocumentCategoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.DocumentCategoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DocumentCategoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DocumentCategoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.DocumentCategoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+        }
+        aggregate: {
+          args: Prisma.DocumentCategoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocumentCategory>
+        }
+        groupBy: {
+          args: Prisma.DocumentCategoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DocumentCategoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DocumentCategoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DocumentCategoryCountAggregateOutputType> | number
+        }
+      }
+    }
     Document: {
       payload: Prisma.$DocumentPayload<ExtArgs>
       fields: Prisma.DocumentFieldRefs
@@ -974,7 +1049,11 @@ export const UserScalarFieldEnum = {
   name: 'name',
   emailVerified: 'emailVerified',
   image: 'image',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  role: 'role',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -988,7 +1067,8 @@ export const SessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
-  userId: 'userId'
+  userId: 'userId',
+  impersonatedBy: 'impersonatedBy'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -1037,16 +1117,29 @@ export const KnowledgeBaseScalarFieldEnum = {
 export type KnowledgeBaseScalarFieldEnum = (typeof KnowledgeBaseScalarFieldEnum)[keyof typeof KnowledgeBaseScalarFieldEnum]
 
 
+export const DocumentCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DocumentCategoryScalarFieldEnum = (typeof DocumentCategoryScalarFieldEnum)[keyof typeof DocumentCategoryScalarFieldEnum]
+
+
 export const DocumentScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   filename: 'filename',
-  fileType: 'fileType',
-  storageUrl: 'storageUrl',
   fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  storageUrl: 'storageUrl',
   status: 'status',
   errorMessage: 'errorMessage',
   knowledgeBaseId: 'knowledgeBaseId',
-  userId: 'userId',
+  categoryId: 'categoryId',
   createdAt: 'createdAt',
   processedAt: 'processedAt',
   metadata: 'metadata'
@@ -1313,6 +1406,7 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   knowledgeBase?: Prisma.KnowledgeBaseOmit
+  documentCategory?: Prisma.DocumentCategoryOmit
   document?: Prisma.DocumentOmit
   chunk?: Prisma.ChunkOmit
 }
