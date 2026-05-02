@@ -1,6 +1,6 @@
 'use client'
 
-import { EmailSignUpSchema } from '@/schemas/auth'
+import { EmailSignUpFormValues, emailSignUpSchema } from '@/schemas/auth'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -12,18 +12,16 @@ import {
 } from '@/components/ui/card'
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { authClient } from '@/lib/auth-client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import { useTransition } from 'react'
 import {
   Controller,
   ControllerFieldState,
@@ -31,27 +29,17 @@ import {
   useForm,
   UseFormStateReturn
 } from 'react-hook-form'
-import { z } from 'zod'
-import { useAuthState } from '@/hooks/use-auth-state'
-import FormError from '../form-error'
-import FormSuccess from '../form-success'
-
-type FormValues = z.infer<typeof EmailSignUpSchema>
+import { toast } from 'sonner'
+import { signUpEmailAction } from '@/app/(auth)/actions'
+import { authClient } from '@/lib/auth-client'
 
 export default function EmailSignUpForm() {
   const router = useRouter()
-  const {
-    error,
-    success,
-    loading,
-    setSuccess,
-    setError,
-    setLoading,
-    resetState
-  } = useAuthState()
+  const [isPending, startTransition] = useTransition()
+  const { refetch: refetchSession } = authClient.useSession()
 
   const form = useForm({
-    resolver: zodResolver(EmailSignUpSchema),
+    resolver: zodResolver(emailSignUpSchema),
     defaultValues: {
       name: '',
       email: '',
@@ -64,9 +52,9 @@ export default function EmailSignUpForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'name'>
+    field: ControllerRenderProps<EmailSignUpFormValues, 'name'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<EmailSignUpFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -74,7 +62,7 @@ export default function EmailSignUpForm() {
         <Input
           id='name'
           aria-invalid={fieldState.invalid}
-          placeholder='请输入用户名'
+          placeholder='用户名: 3-30个字符'
           {...field}
         />
         {fieldState.invalid && fieldState.error && (
@@ -88,9 +76,9 @@ export default function EmailSignUpForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'email'>
+    field: ControllerRenderProps<EmailSignUpFormValues, 'email'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<EmailSignUpFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -98,7 +86,7 @@ export default function EmailSignUpForm() {
         <Input
           id='email'
           aria-invalid={fieldState.invalid}
-          placeholder='请输入邮箱地址'
+          placeholder='输入邮箱地址'
           {...field}
         />
         {fieldState.invalid && fieldState.error && (
@@ -112,9 +100,9 @@ export default function EmailSignUpForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'password'>
+    field: ControllerRenderProps<EmailSignUpFormValues, 'password'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<EmailSignUpFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -123,10 +111,9 @@ export default function EmailSignUpForm() {
           id='password'
           type='password'
           aria-invalid={fieldState.invalid}
-          placeholder='请输入密码'
+          placeholder='密码: 8-30个字符'
           {...field}
         />
-        <FieldDescription>长度为8-30个字符</FieldDescription>
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
         )}
@@ -138,9 +125,9 @@ export default function EmailSignUpForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'confirmPassword'>
+    field: ControllerRenderProps<EmailSignUpFormValues, 'confirmPassword'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<EmailSignUpFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -159,36 +146,17 @@ export default function EmailSignUpForm() {
     )
   }
 
-  const onSubmit = async (data: FormValues) => {
-    const { email, name, password } = data
-    try {
-      await await authClient.signUp.email(
-        {
-          email,
-          name,
-          password
-        },
-        {
-          onResponse: () => {
-            setLoading(false)
-          },
-          onRequest: () => {
-            resetState()
-            setLoading(true)
-          },
-          onSuccess: () => {
-            setSuccess('注册成功')
-            router.replace('/')
-          },
-          onError: ctx => {
-            setError(ctx.error.message)
-          }
-        }
-      )
-    } catch (error) {
-      setError('网络错误，请稍后重试。')
-      console.error(error instanceof Error ? error.message : String(error))
-    }
+  const onSubmit = async (data: EmailSignUpFormValues) => {
+    startTransition(async () => {
+      const result = await signUpEmailAction(data)
+      if (result.success) {
+        await refetchSession()
+        toast.success('注册成功')
+        router.replace('/')
+      } else {
+        toast.error(result.error.message)
+      }
+    })
   }
 
   return (
@@ -223,11 +191,9 @@ export default function EmailSignUpForm() {
           </FieldGroup>
         </CardContent>
         <CardFooter className='flex flex-col gap-3'>
-          {success && <FormSuccess message={success} />}
-          {error && <FormError message={error} />}
           <Field orientation='horizontal'>
-            <Button variant='default' className='flex-1' disabled={loading}>
-              {loading && <LoaderCircle className='animate-spin' />}
+            <Button variant='default' className='flex-1' disabled={isPending}>
+              {isPending && <LoaderCircle className='animate-spin' />}
               注册
             </Button>
           </Field>

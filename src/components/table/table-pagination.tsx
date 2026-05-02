@@ -1,8 +1,6 @@
 'use client'
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { parseAsInteger, useQueryState } from 'nuqs'
-import { useTransition } from 'react'
 import { getActivePage, getMaximumPage, getPagesToShow } from '@/lib/pagination'
 import {
   Pagination,
@@ -13,6 +11,7 @@ import {
   PaginationPrevious
 } from '../ui/pagination'
 import { cn } from '@/lib/utils'
+import { useTablePagination } from '@/hooks/use-table-pagination'
 
 interface TablePaginationProps {
   pageSize: number
@@ -25,15 +24,7 @@ export function TablePagination({
   total,
   className
 }: TablePaginationProps) {
-  const [, startTransition] = useTransition()
-  const [page, setPage] = useQueryState(
-    'page',
-    parseAsInteger.withDefault(1).withOptions({
-      startTransition,
-      shallow: false,
-      history: 'push'
-    })
-  )
+  const { page, setPage } = useTablePagination()
   const activePage = getActivePage(page, pageSize, total)
   const maximumSize = getMaximumPage(pageSize, total)
   const totalPagesToShow = 5

@@ -13,18 +13,18 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(uuid())
-  email          String          @unique
-  createdAt      DateTime        @default(now())
+  id                 String             @id @default(uuid())
+  email              String             @unique
+  createdAt          DateTime           @default(now())
   knowledgeBases     KnowledgeBase[]
   documents          Document[]
   documentCategories DocumentCategory[]
-  name           String
-  emailVerified  Boolean         @default(false)
-  image          String?
-  updatedAt      DateTime        @updatedAt
-  sessions       Session[]
-  accounts       Account[]
+  name               String
+  emailVerified      Boolean            @default(false)
+  image              String?
+  updatedAt          DateTime           @updatedAt
+  sessions           Session[]
+  accounts           Account[]
 
   role       String?
   banned     Boolean?  @default(false)
@@ -102,11 +102,11 @@ model KnowledgeBase {
 }
 
 model DocumentCategory {
-  id          String  @id @default(uuid())
-  name        String
-  description String?
-  userId      String
-  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(uuid())
+  name   String
+  slug   String @unique
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   documents Document[]
 
@@ -127,7 +127,7 @@ model Document {
   fileSize Int?
   mimeType String?
 
-  storageUrl String
+  storageKey String
 
   status       ProcessingStatus @default(UPLOADED)
   errorMessage String?

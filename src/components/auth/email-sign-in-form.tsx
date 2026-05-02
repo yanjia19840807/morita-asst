@@ -1,6 +1,6 @@
 'use client'
 
-import { EmailSignInSchema } from '@/schemas/auth'
+import { EmailSignInFormValues, emailSignInSchema } from '@/schemas/auth'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -26,30 +26,20 @@ import {
   useForm,
   UseFormStateReturn
 } from 'react-hook-form'
-import z from 'zod'
 import { useRouter } from 'next/navigation'
-import { authClient } from '@/lib/auth-client'
 import { LoaderCircle } from 'lucide-react'
-import { useAuthState } from '@/hooks/use-auth-state'
-import FormError from '../form-error'
-import FormSuccess from '../form-success'
-
-type FormValues = z.infer<typeof EmailSignInSchema>
+import { useTransition } from 'react'
+import { toast } from 'sonner'
+import { signInEmailAction } from '@/app/(auth)/actions'
+import { authClient } from '@/lib/auth-client'
 
 export default function EmailSignInForm() {
   const router = useRouter()
-  const {
-    error,
-    success,
-    loading,
-    setSuccess,
-    setError,
-    setLoading,
-    resetState
-  } = useAuthState()
+  const [isPending, startTransition] = useTransition()
+  const { refetch: refetchSession } = authClient.useSession()
 
   const form = useForm({
-    resolver: zodResolver(EmailSignInSchema),
+    resolver: zodResolver(emailSignInSchema),
     defaultValues: {
       email: '',
       password: ''
@@ -60,9 +50,9 @@ export default function EmailSignInForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'email'>
+    field: ControllerRenderProps<EmailSignInFormValues, 'email'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<EmailSignInFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -70,7 +60,7 @@ export default function EmailSignInForm() {
         <Input
           id='email'
           aria-invalid={fieldState.invalid}
-          placeholder='请输入邮箱地址'
+          placeholder='输入邮箱地址'
           {...field}
         />
         {fieldState.invalid && fieldState.error && (
@@ -84,9 +74,9 @@ export default function EmailSignInForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'password'>
+    field: ControllerRenderProps<EmailSignInFormValues, 'password'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<EmailSignInFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -94,7 +84,7 @@ export default function EmailSignInForm() {
         <Input
           id='password'
           aria-invalid={fieldState.invalid}
-          placeholder='请输入密码'
+          placeholder='密码: 8-30个字符'
           {...field}
         />
         {fieldState.invalid && fieldState.error && (
@@ -104,36 +94,17 @@ export default function EmailSignInForm() {
     )
   }
 
-  async function onSubmit(data: FormValues) {
-    const { email, password } = data
-
-    try {
-      await await authClient.signIn.email(
-        {
-          email,
-          password
-        },
-        {
-          onResponse: () => {
-            setLoading(false)
-          },
-          onRequest: () => {
-            resetState()
-            setLoading(true)
-          },
-          onSuccess: () => {
-            setSuccess('登录成功')
-            router.replace('/dashboard')
-          },
-          onError: ctx => {
-            setError(ctx.error.message)
-          }
-        }
-      )
-    } catch (error) {
-      setError('网络错误，请稍后重试。')
-      console.error(error instanceof Error ? error.message : String(error))
-    }
+  async function onSubmit(data: EmailSignInFormValues) {
+    startTransition(async () => {
+      const result = await signInEmailAction(data)
+      if (result.success) {
+        await refetchSession()
+        toast.success('登录成功')
+        router.replace('/')
+      } else {
+        toast.error(result.error.message)
+      }
+    })
   }
 
   return (
@@ -158,11 +129,9 @@ export default function EmailSignInForm() {
           </FieldGroup>
         </CardContent>
         <CardFooter className='flex flex-col gap-3'>
-          {success && <FormSuccess message={success} />}
-          {error && <FormError message={error} />}
           <Field orientation='horizontal'>
-            <Button variant='default' className='flex-1' disabled={loading}>
-              {loading && <LoaderCircle className='animate-spin' />}
+            <Button variant='default' className='flex-1' disabled={isPending}>
+              {isPending && <LoaderCircle className='animate-spin' />}
               登录
             </Button>
           </Field>

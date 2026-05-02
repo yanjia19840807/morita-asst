@@ -1,14 +1,12 @@
 'use client'
 
-import { authClient } from '@/lib/auth-client'
+import { useAuthenticatedUser } from '@/lib/auth-client'
 import Link from 'next/link'
-import React from 'react'
 import { buttonVariants } from './ui/button'
 
-export default function AuthBar() {
-  const { data: userData } = authClient.useSession()
-
-  if (!userData) {
+export default function UserToolbar() {
+  const user = useAuthenticatedUser()
+  if (!!user) {
     return null
   }
 

@@ -16,8 +16,9 @@ import { toast } from 'sonner'
 
 import {
   removeUserAction,
-  toggleUserBanAction
-} from '@/app/(dashboard)/users/actions'
+  banUserAction,
+  unbanUserAction
+} from '@/app/(auth)/actions'
 import ConfirmDialog from '@/components/confirm-dialog'
 import { Button } from '@/components/ui/button'
 import {
@@ -26,7 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import type { UserRow } from '@/server/auth'
+import type { UserRow } from '@/data-access/auth'
 
 interface UserTableRowActionsProps {
   row: Row<UserRow>
@@ -40,19 +41,29 @@ export function UserTableRowActions({ row }: UserTableRowActionsProps) {
   const handleToggleBan = () => {
     startTransition(async () => {
       try {
-        const result = await toggleUserBanAction({
-          userId: user.id,
-          banned: Boolean(user.banned)
-        })
-        toast.success(result.message)
-        router.refresh()
+        if (user.banned) {
+          const result = await unbanUserAction(user.id)
+          if (result.success) {
+            toast.success('用户已启用')
+            router.refresh()
+          } else {
+            toast.error(result.error.message)
+          }
+        } else {
+          const result = await banUserAction({
+            id: user.id,
+            banReason: user.banReason || '管理员禁用'
+          })
+          if (result.success) {
+            toast.success('用户已禁用')
+            router.refresh()
+          } else {
+            toast.error(result.error.message)
+          }
+        }
       } catch (error) {
         console.error(error)
-        const message =
-          error instanceof Error && error.name === 'APIError'
-            ? error.message
-            : '操作失败，请稍后重试'
-        toast.error(message)
+        toast.error('操作失败，请稍后重试')
       }
     })
   }
@@ -60,16 +71,16 @@ export function UserTableRowActions({ row }: UserTableRowActionsProps) {
   const handleRemove = () => {
     startTransition(async () => {
       try {
-        const result = await removeUserAction({ userId: user.id })
-        toast.success(result.message)
-        router.refresh()
+        const result = await removeUserAction(user.id)
+        if (result.success) {
+          toast.success('用户已删除')
+          router.refresh()
+        } else {
+          toast.error(result.error.message)
+        }
       } catch (error) {
         console.error(error)
-        const message =
-          error instanceof Error && error.name === 'APIError'
-            ? error.message
-            : '操作失败，请稍后重试'
-        toast.error(message)
+        toast.error('操作失败，请稍后重试')
       }
     })
   }

@@ -17,9 +17,8 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { parseAsString, parseAsStringEnum, useQueryStates } from 'nuqs'
 import { useTransition } from 'react'
-import { documentColumns } from './document-table-columns'
+import { docColumns } from './doc-table-columns'
 import TableFooterSection from '../table/table-footer-section'
 import { TablePagination } from '../table/table-pagination'
 import TableActionSection from '../table/table-action-section'
@@ -38,17 +37,18 @@ import {
   AlertDialogTrigger
 } from '../ui/alert-dialog'
 import { toast } from 'sonner'
-import DocumentSearch from './document-search'
+import DocSearch from './doc-search'
 import { useTableSelection } from '@/hooks/use-table-selection'
 import { DocumentModel } from '@/generated/prisma/models'
+import { useDocumentsParams } from '@/hooks/use-documents-params'
 
-interface DocumentTableProps {
+interface DocTableProps {
   data: DocumentModel[]
   total: number
   pageSize: number
 }
 
-export function DocumentTable({ data, total, pageSize }: DocumentTableProps) {
+export function DocTable({ data, total, pageSize }: DocTableProps) {
   const {
     isBulkMode,
     setIsBulkMode,
@@ -57,22 +57,16 @@ export function DocumentTable({ data, total, pageSize }: DocumentTableProps) {
     rowSelection,
     onRowSelectionChange
   } = useTableSelection(data)
+  const { sortBy, sortDirection, setSorting } = useDocumentsParams()
 
-  const [isPending, startTransition] = useTransition()
-  const [{ sortBy, sortDirection }, setSortParams] = useQueryStates(
-    {
-      sortBy: parseAsString,
-      sortDirection: parseAsStringEnum(['asc', 'desc'])
-    },
-    { shallow: false, startTransition, history: 'push' }
-  )
+  const [, startTransition] = useTransition()
 
   const sorting: SortingState = sortBy
     ? [{ id: sortBy, desc: sortDirection === 'desc' }]
     : []
 
   const handleToggle = () => {
-    if (isBulkMode) setSelectedIds(new Set())
+    if (isBulkMode) setSelectedIds([])
     setIsBulkMode(v => !v)
   }
 
@@ -80,19 +74,16 @@ export function DocumentTable({ data, total, pageSize }: DocumentTableProps) {
     const newSorting =
       typeof updater === 'function' ? updater(sorting) : updater
     if (newSorting.length > 0) {
-      setSortParams({
-        sortBy: newSorting[0].id,
-        sortDirection: newSorting[0].desc ? 'desc' : 'asc'
-      })
+      setSorting(newSorting[0].id, newSorting[0].desc ? 'desc' : 'asc')
     } else {
-      setSortParams({ sortBy: null, sortDirection: null })
+      setSorting(null, null)
     }
   }
 
   const handleBulkRemove = () => {
     startTransition(async () => {
       try {
-        setSelectedIds(new Set())
+        setSelectedIds([])
         setIsBulkMode(false)
       } catch {
         toast.error('操作失败，请稍后重试')
@@ -102,7 +93,7 @@ export function DocumentTable({ data, total, pageSize }: DocumentTableProps) {
 
   const table = useReactTable({
     data,
-    columns: documentColumns as ColumnDef<DocumentModel>[],
+    columns: docColumns as ColumnDef<DocumentModel>[],
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: isBulkMode,
     state: {
@@ -115,16 +106,16 @@ export function DocumentTable({ data, total, pageSize }: DocumentTableProps) {
   })
 
   return (
-    <div>
+    <div className='px-2'>
       <TableActionSection className='justify-between'>
         <div>
-          <DocumentSearch />
+          <DocSearch />
         </div>
         <div>
           <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
-            {isBulkMode && selectedIds.size > 0 && (
+            {isBulkMode && selectedIds.length > 0 && (
               <>
-                <TableSelectionText count={selectedIds.size} />
+                <TableSelectionText count={selectedIds.length} />
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant='destructive'>批量删除</Button>
@@ -133,7 +124,7 @@ export function DocumentTable({ data, total, pageSize }: DocumentTableProps) {
                     <AlertDialogHeader>
                       <AlertDialogTitle>确认批量删除</AlertDialogTitle>
                       <AlertDialogDescription>
-                        即将删除 {selectedIds.size}{' '}
+                        即将删除 {selectedIds.length}
                         个用户，此操作不可撤销，是否继续？
                       </AlertDialogDescription>
                     </AlertDialogHeader>
@@ -186,7 +177,7 @@ export function DocumentTable({ data, total, pageSize }: DocumentTableProps) {
           ) : (
             <TableRow>
               <TableCell
-                colSpan={documentColumns.length}
+                colSpan={docColumns.length}
                 className='h-24 text-center'
               >
                 没有数据

@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -12,12 +11,16 @@ import {
 import { useUserParams } from '@/hooks/use-user-params'
 
 export default function UserSearch() {
-  const { searchValue, searchField, setSearchValue, setSearchField } =
-    useUserParams()
+  const { searchValue, searchField, setSearch } = useUserParams()
 
   return (
     <div className='flex flex-row gap-2'>
-      <Select value={searchField} onValueChange={setSearchField}>
+      <Select
+        value={searchField}
+        onValueChange={value => {
+          setSearch(value as 'name' | 'email', searchValue)
+        }}
+      >
         <SelectTrigger className='w-full max-w-32'>
           <SelectValue />
         </SelectTrigger>
@@ -29,7 +32,7 @@ export default function UserSearch() {
       <Input
         onKeyDown={e => e.key === 'Enter' && e.currentTarget.blur()}
         value={searchValue}
-        onChange={e => setSearchValue(e.target.value || null)}
+        onChange={e => setSearch(searchField, e.target.value || null)}
         placeholder={searchField === 'name' ? '搜索用户名' : '搜索邮箱'}
         className='w-64'
       />

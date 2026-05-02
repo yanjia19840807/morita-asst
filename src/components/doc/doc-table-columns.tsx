@@ -4,11 +4,11 @@ import { ColumnDef } from '@tanstack/react-table'
 
 import Link from 'next/link'
 import { TableColumnHeader } from '../table/table-column-header'
-import { DocumentRowActions } from './document-row-actions'
+import { DocRowActions } from './doc-row-actions'
 import { Checkbox } from '../ui/checkbox'
 import { DocumentModel } from '@/generated/prisma/models'
 
-export const documentColumns: ColumnDef<DocumentModel>[] = [
+export const docColumns: ColumnDef<DocumentModel>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -61,6 +61,6 @@ export const documentColumns: ColumnDef<DocumentModel>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => <DocumentRowActions row={row} />
+    cell: ({ row }) => <DocRowActions row={row} />
   }
 ]

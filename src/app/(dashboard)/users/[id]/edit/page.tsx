@@ -1,7 +1,6 @@
-import { notFound } from 'next/navigation'
-
+import { fetchUserById } from '@/data-access/auth'
 import { UserEditForm } from '@/components/auth/user-edit-form'
-import { fetchUserById } from '@/server/auth'
+import { UserEditFormValues } from '@/schemas/auth'
 
 export default async function UserEditPage({
   params
@@ -9,12 +8,11 @@ export default async function UserEditPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  const data = await fetchUserById(id)
 
-  const user = await fetchUserById(id).catch(() => null)
-
-  if (!user) {
-    notFound()
-  }
-
-  return <UserEditForm user={user} />
+  return (
+    <div className='flex flex-1 flex-col gap-3 px-4'>
+      <UserEditForm data={data as UserEditFormValues} />
+    </div>
+  )
 }

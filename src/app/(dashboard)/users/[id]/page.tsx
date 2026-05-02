@@ -1,7 +1,6 @@
-import { notFound } from 'next/navigation'
-
-import { UserDetailView } from '@/components/auth/user-detail-view'
-import { fetchUserById } from '@/server/auth'
+import { UserDetail } from '@/components/auth/user-detail'
+import { fetchUserById } from '@/data-access/auth'
+import { UserFormValues } from '@/schemas/auth'
 
 export default async function UserDetailPage({
   params
@@ -11,9 +10,9 @@ export default async function UserDetailPage({
   const { id } = await params
   const user = await fetchUserById(id)
 
-  if (!user) {
-    notFound()
-  }
-
-  return <UserDetailView user={user} />
+  return (
+    <div className='flex flex-1 flex-col gap-3 px-4'>
+      <UserDetail user={user as UserFormValues} />
+    </div>
+  )
 }

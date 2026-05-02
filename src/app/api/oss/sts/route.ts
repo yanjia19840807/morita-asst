@@ -1,8 +1,9 @@
-import { getSTS } from '@/server/sts-token'
+import { getSTS } from '@/data-access/sts-token'
 import { withAuth } from '@/lib/api/with-auth'
-import { ApiError, handleApiError } from '@/lib/api/errors'
-import { BucketAccess } from '@/types/bucket'
-import { NextRequest, NextResponse } from 'next/server'
+import { APIError } from '@/lib/api/errors'
+import { NextRequest } from 'next/server'
+import { BucketAccess } from '@/lib/oss'
+import { handleApiError, handleApiResult } from '@/lib/api/response'
 
 export const GET = withAuth(async (request: NextRequest, { user }) => {
   try {
@@ -17,7 +18,7 @@ export const GET = withAuth(async (request: NextRequest, { user }) => {
     const response = await getSTS(user.id)
     const { accessKeyId, accessKeySecret, securityToken, expiration } = response
 
-    return NextResponse.json({
+    return handleApiResult({
       accessKeyId,
       accessKeySecret,
       securityToken,
@@ -30,6 +31,6 @@ export const GET = withAuth(async (request: NextRequest, { user }) => {
   } catch (error) {
     console.error('STS AssumeRole Error:', error)
 
-    return handleApiError(new ApiError('获取STS令牌失败'))
+    return handleApiError(new APIError('获取STS令牌失败'))
   }
 })

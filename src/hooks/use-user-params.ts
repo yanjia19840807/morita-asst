@@ -1,5 +1,6 @@
 import {
   debounce,
+  parseAsInteger,
   parseAsString,
   parseAsStringEnum,
   useQueryStates
@@ -8,36 +9,46 @@ import { useTransition } from 'react'
 
 export function useUserParams() {
   const [, startTransition] = useTransition()
-  const [{ searchValue, searchField, page }, setParams] = useQueryStates(
-    {
-      searchValue: parseAsString.withDefault(''),
-      searchField: parseAsStringEnum(['name', 'email'] as const).withDefault(
-        'name'
-      ),
-      page: parseAsString
-    },
-    {
-      shallow: false,
-      startTransition,
-      history: 'push',
-      limitUrlUpdates: debounce(250)
-    }
-  )
+  const [{ searchValue, searchField, page, sortBy, sortDirection }, setParams] =
+    useQueryStates(
+      {
+        searchValue: parseAsString.withDefault(''),
+        searchField: parseAsStringEnum(['name', 'email'] as const).withDefault(
+          'name'
+        ),
+        page: parseAsInteger.withDefault(1),
+        sortBy: parseAsString.withDefault('createdAt'),
+        sortDirection: parseAsStringEnum(['asc', 'desc']).withDefault('desc')
+      },
+      {
+        shallow: false,
+        startTransition,
+        history: 'push',
+        limitUrlUpdates: debounce(250)
+      }
+    )
 
-  const setSearchValue = (value: string | null) => {
-    setParams({ searchValue: value, page: null })
+  const setSearch = (
+    searchField: 'name' | 'email' | null,
+    searchValue: string | null
+  ) => {
+    setParams({ searchField, searchValue, page: 1 })
   }
 
-  const setSearchField = (value: 'name' | 'email') => {
-    setParams({ searchField: value, page: null })
+  const setSorting = (
+    nextSortBy: string | null,
+    nextSortDirection: 'asc' | 'desc' | null
+  ) => {
+    setParams({ sortBy: nextSortBy, sortDirection: nextSortDirection, page: 1 })
   }
 
   return {
     searchValue,
     searchField,
     page,
-    setSearchValue,
-    setSearchField,
-    setParams
+    sortBy,
+    sortDirection,
+    setSearch,
+    setSorting
   }
 }

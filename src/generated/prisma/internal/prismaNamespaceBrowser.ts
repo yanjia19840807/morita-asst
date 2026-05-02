@@ -155,7 +155,7 @@ export type KnowledgeBaseScalarFieldEnum = (typeof KnowledgeBaseScalarFieldEnum)
 export const DocumentCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  description: 'description',
+  slug: 'slug',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -170,7 +170,7 @@ export const DocumentScalarFieldEnum = {
   filename: 'filename',
   fileSize: 'fileSize',
   mimeType: 'mimeType',
-  storageUrl: 'storageUrl',
+  storageKey: 'storageKey',
   status: 'status',
   errorMessage: 'errorMessage',
   knowledgeBaseId: 'knowledgeBaseId',

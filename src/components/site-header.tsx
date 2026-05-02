@@ -1,5 +1,5 @@
 import Logo from './logo'
-import AuthBar from './auth-bar'
+import UserToolbar from './user-tool-bar'
 import UserAvatar from './user-avatar'
 import { ModeToggle } from './mode-toggle'
 
@@ -11,7 +11,7 @@ export default function SiteHeader() {
       </div>
 
       <div className='flex items-center gap-3'>
-        <AuthBar />
+        <UserToolbar />
         <UserAvatar />
         <ModeToggle />
       </div>

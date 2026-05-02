@@ -2,6 +2,8 @@
 
 import {
   ColumnDef,
+  OnChangeFn,
+  SortingState,
   flexRender,
   getCoreRowModel,
   useReactTable
@@ -16,7 +18,7 @@ import {
 } from '@/components/ui/table'
 import { useTransition } from 'react'
 import { userColumns } from './user-table-columns'
-import type { UserRow } from '@/server/auth'
+import type { UserRow } from '@/data-access/auth'
 import TableFooterSection from '../table/table-footer-section'
 import { TablePagination } from '../table/table-pagination'
 import TableActionSection from '../table/table-action-section'
@@ -26,12 +28,13 @@ import TableBulkAction from '../table/table-bulk-action'
 import { Button } from '../ui/button'
 import {
   bulkBanUsersAction,
-  bulkRemoveUsersAction
-} from '@/app/(dashboard)/users/actions'
+  bulkRemoveUsersAction,
+  bulkUnbanUsersAction
+} from '@/app/(auth)/actions'
 import { toast } from 'sonner'
 import ConfirmDialog from '../confirm-dialog'
 import { useTableSelection } from '@/hooks/use-table-selection'
-import { useTableSort } from '@/hooks/use-table-sort'
+import { useUserParams } from '@/hooks/use-user-params'
 
 interface UserTableProps {
   data: UserRow[]
@@ -49,18 +52,35 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
     rowSelection,
     onRowSelectionChange
   } = useTableSelection(data)
-  const { sorting, onSortingChange } = useTableSort()
+  const { sortBy, sortDirection, setSorting } = useUserParams()
   const [isPending, startTransition] = useTransition()
+
+  const sorting: SortingState = sortBy
+    ? [{ id: sortBy, desc: sortDirection === 'desc' }]
+    : []
+
+  const onSortingChange: OnChangeFn<SortingState> = updater => {
+    const nextSorting =
+      typeof updater === 'function' ? updater(sorting) : updater
+
+    if (nextSorting.length > 0) {
+      setSorting(nextSorting[0].id, nextSorting[0].desc ? 'desc' : 'asc')
+    } else {
+      setSorting(null, null)
+    }
+  }
 
   const handleBulkRemove = () => {
     startTransition(async () => {
       try {
-        const result = await bulkRemoveUsersAction({
-          userIds: Array.from(selectedIds)
-        })
-        toast.success(result.message)
-        setSelectedIds(new Set())
-        setIsBulkMode(false)
+        const result = await bulkRemoveUsersAction(selectedIds)
+        if (result.success) {
+          toast.success(`已删除 ${selectedIds.length} 个用户`)
+          setSelectedIds([])
+          setIsBulkMode(false)
+        } else {
+          toast.error(result.error.message)
+        }
       } catch {
         toast.error('操作失败，请稍后重试')
       }
@@ -70,12 +90,31 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
   const handleBulkBan = () => {
     startTransition(async () => {
       try {
-        const result = await bulkBanUsersAction({
-          userIds: Array.from(selectedIds)
-        })
-        toast.success(result.message)
-        setSelectedIds(new Set())
-        setIsBulkMode(false)
+        const result = await bulkBanUsersAction(selectedIds)
+        if (result.success) {
+          toast.success(`已禁用 ${selectedIds.length} 个用户`)
+          setSelectedIds([])
+          setIsBulkMode(false)
+        } else {
+          toast.error(result.error.message)
+        }
+      } catch {
+        toast.error('操作失败，请稍后重试')
+      }
+    })
+  }
+
+  const handleBulkUnban = () => {
+    startTransition(async () => {
+      try {
+        const result = await bulkUnbanUsersAction(selectedIds)
+        if (result.success) {
+          toast.success(`已启用 ${selectedIds.length} 个用户`)
+          setSelectedIds([])
+          setIsBulkMode(false)
+        } else {
+          toast.error(result.error.message)
+        }
       } catch {
         toast.error('操作失败，请稍后重试')
       }
@@ -86,6 +125,7 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
     data,
     columns: userColumns as ColumnDef<UserRow>[],
     getCoreRowModel: getCoreRowModel(),
+    manualSorting: true,
     enableRowSelection: isBulkMode,
     state: {
       sorting,
@@ -104,12 +144,12 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
         </div>
         <div>
           <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
-            {isBulkMode && selectedIds.size > 0 && (
+            {isBulkMode && selectedIds.length > 0 && (
               <>
-                <TableSelectionText count={selectedIds.size} />
+                <TableSelectionText count={selectedIds.length} />
                 <ConfirmDialog
                   title='确认批量删除'
-                  description={`即将删除 ${selectedIds.size}{' '}
+                  description={`即将删除 ${selectedIds.length}
                         个用户，此操作不可撤销，是否继续？`}
                   actions={{
                     label: '确认删除',
@@ -120,13 +160,27 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
                 </ConfirmDialog>
                 <ConfirmDialog
                   title='批量禁用'
-                  description={`即将禁用 ${selectedIds.size} 个用户，是否继续？`}
+                  description={`即将禁用 ${selectedIds.length} 个用户，是否继续？`}
                   actions={{
                     label: '确认禁用',
                     onClick: handleBulkBan
                   }}
                 >
-                  <Button variant='destructive'>批量禁用</Button>
+                  <Button variant='destructive' disabled={isPending}>
+                    批量禁用
+                  </Button>
+                </ConfirmDialog>
+                <ConfirmDialog
+                  title='批量启用'
+                  description={`即将启用 ${selectedIds.length} 个用户，是否继续？`}
+                  actions={{
+                    label: '确认启用',
+                    onClick: handleBulkUnban
+                  }}
+                >
+                  <Button variant='secondary' disabled={isPending}>
+                    批量启用
+                  </Button>
                 </ConfirmDialog>
               </>
             )}

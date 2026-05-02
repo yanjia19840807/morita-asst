@@ -1,57 +1,37 @@
-import { NextResponse } from "next/server";
-
-// lib/api/errors.ts
-export class ApiError extends Error {
+export class APIError extends Error {
   constructor(
     message: string,
     public statusCode: number = 500,
-    public code?: string,
+    public code?: string
   ) {
-    super(message);
-    this.name = "ApiError";
+    super(message)
+    this.name = 'ApiError'
   }
 }
 
-export class NotFoundError extends ApiError {
+export class NotFoundError extends APIError {
   constructor(resource: string) {
-    super(`${resource} not found`, 404, "NOT_FOUND");
+    super('未查询到数据', 404, 'NOT_FOUND')
   }
 }
 
-export class ValidationError extends ApiError {
+export class ValidationError extends APIError {
   constructor(
     message: string,
-    public details?: unknown,
+    public details?: unknown
   ) {
-    super(message, 400, "VALIDATION_ERROR");
+    super(message, 400, 'VALIDATION_ERROR')
   }
 }
 
-export class UnauthorizedError extends ApiError {
+export class UnauthorizedError extends APIError {
   constructor() {
-    super("Unauthorized", 401, "UNAUTHORIZED");
+    super('未认证', 401, 'UNAUTHORIZED')
   }
 }
 
-export class ForbiddenError extends ApiError {
+export class ForbiddenError extends APIError {
   constructor() {
-    super("Forbidden", 403, "FORBIDDEN");
+    super('未授权', 403, 'FORBIDDEN')
   }
-}
-
-export function handleApiError(error: unknown) {
-  console.error("API Error:", error);
-
-  if (error instanceof ApiError) {
-    return NextResponse.json(
-      { error: error.message, code: error.code },
-      { status: error.statusCode },
-    );
-  }
-
-  // Don't expose internal errors to clients
-  return NextResponse.json(
-    { error: "Internal server error", code: "INTERNAL_ERROR" },
-    { status: 500 },
-  );
 }

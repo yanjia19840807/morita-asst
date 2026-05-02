@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Controller,
@@ -11,25 +10,11 @@ import {
   UseFormStateReturn
 } from 'react-hook-form'
 import { toast } from 'sonner'
-import z from 'zod'
-
-import {
-  removeUserAction,
-  resetUserPasswordAction,
-  toggleUserBanAction,
-  updateUserAction
-} from '@/app/(dashboard)/users/actions'
 import AvatarInput from '@/components/avatar-input'
-import { Badge } from '@/components/ui/badge'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -44,44 +29,71 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { UserEditFormValues, userEditSchema } from '@/schemas/auth'
 import { uploadAvatar } from '@/lib/oss'
-import { UserEditSchema } from '@/schemas/auth'
-import type { FetchUserByIdResult } from '@/server/auth'
-import { Button } from '../ui/button'
-import { Ban, KeyRound, Save, ShieldCheck, Trash2 } from 'lucide-react'
-import Link from 'next/link'
-import PageActionBar from '../page-action-bar'
 import { authClient } from '@/lib/auth-client'
+import { editUserAction } from '@/app/(auth)/actions'
+import PageTitle from '@/components/page-title'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
+import { useEffect, useTransition } from 'react'
+import Link from 'next/link'
 
-type FormValues = z.input<typeof UserEditSchema>
-type SubmitValues = z.output<typeof UserEditSchema>
-
-export function UserEditForm({ user }: { user: FetchUserByIdResult }) {
+export function UserEditForm({ data }: { data: UserEditFormValues }) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const { data: userData } = authClient.useSession()
 
-  const form = useForm<FormValues, undefined, SubmitValues>({
-    resolver: zodResolver(UserEditSchema),
-    defaultValues: {
-      name: user.name,
-      role: user.role ?? '',
-      image: user.image ?? null
-    }
+  const defaultValues: UserEditFormValues = {
+    id: '',
+    email: '',
+    name: '',
+    password: undefined,
+    role: 'user' as 'user' | 'admin',
+    image: undefined
+  }
+
+  const form = useForm({
+    resolver: zodResolver(userEditSchema),
+    defaultValues
   })
 
   const renderAvatarInput = function ({
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'image'>
+    field: ControllerRenderProps<UserEditFormValues, 'image'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<UserEditFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
         <FieldLabel htmlFor={field.name}>头像</FieldLabel>
-        <AvatarInput {...field} disabled={isPending} />
+        <AvatarInput {...field} />
+        {fieldState.invalid && fieldState.error && (
+          <FieldError errors={[fieldState.error]} />
+        )}
+      </Field>
+    )
+  }
+
+  const renderEmailInput = function ({
+    field,
+    fieldState
+  }: {
+    field: ControllerRenderProps<UserEditFormValues, 'email'>
+    fieldState: ControllerFieldState
+    formState: UseFormStateReturn<UserEditFormValues>
+  }) {
+    return (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel htmlFor={field.name}>邮箱地址</FieldLabel>
+        <Input
+          id={field.name}
+          placeholder='填写邮箱地址'
+          aria-invalid={fieldState.invalid}
+          {...field}
+        />
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
         )}
@@ -93,19 +105,50 @@ export function UserEditForm({ user }: { user: FetchUserByIdResult }) {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'name'>
+    field: ControllerRenderProps<UserEditFormValues, 'name'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<UserEditFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
         <FieldLabel htmlFor={field.name}>用户名</FieldLabel>
         <Input
           id={field.name}
+          type='text'
+          placeholder='用户名: 3-30个字符'
           aria-invalid={fieldState.invalid}
-          disabled={isPending}
           {...field}
         />
+        {fieldState.invalid && fieldState.error && (
+          <FieldError errors={[fieldState.error]} />
+        )}
+      </Field>
+    )
+  }
+
+  const renderPasswordInput = function ({
+    field,
+    fieldState
+  }: {
+    field: ControllerRenderProps<UserEditFormValues, 'password'>
+    fieldState: ControllerFieldState
+    formState: UseFormStateReturn<UserEditFormValues>
+  }) {
+    return (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel htmlFor={field.name}>密码</FieldLabel>
+        <Input
+          id={field.name}
+          type='password'
+          placeholder='密码: 8-30个字符'
+          aria-invalid={fieldState.invalid}
+          value={field.value ?? ''}
+          onBlur={field.onBlur}
+          name={field.name}
+          ref={field.ref}
+          onChange={event => field.onChange(event.target.value)}
+        />
+        <FieldDescription>留空则不修改密码</FieldDescription>
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
         )}
@@ -117,9 +160,9 @@ export function UserEditForm({ user }: { user: FetchUserByIdResult }) {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'role'>
+    field: ControllerRenderProps<UserEditFormValues, 'role'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<UserEditFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -144,24 +187,26 @@ export function UserEditForm({ user }: { user: FetchUserByIdResult }) {
     )
   }
 
-  const handleSave = (values: SubmitValues) => {
+  const onSubmit = (values: UserEditFormValues) => {
     startTransition(async () => {
       try {
         const image = values.image
         const isNewImage = image instanceof File
-        const imageUrl = isNewImage
-          ? (await uploadAvatar(userData!.user.id, image)).url
-          : (image as string | null | undefined)
+        const storageKey = isNewImage
+          ? await uploadAvatar(userData!.user.id, image)
+          : (image as string | undefined)
 
-        const result = await updateUserAction({
-          userId: user.id,
-          name: values.name,
-          role: values.role,
-          image: imageUrl
+        const result = await editUserAction({
+          ...values,
+          image: storageKey
         })
 
-        toast.success(result.message)
-        router.refresh()
+        if (result.success) {
+          toast.success('保存成功')
+          router.push('/users')
+        } else {
+          toast.error(result.error.message)
+        }
       } catch (error) {
         console.error(error)
         toast.error('操作失败，请稍后重试')
@@ -169,124 +214,77 @@ export function UserEditForm({ user }: { user: FetchUserByIdResult }) {
     })
   }
 
-  const handleResetPassword = () => {
-    startTransition(async () => {
-      try {
-        const result = await resetUserPasswordAction({ userId: user.id })
-        toast.success(result.message)
-      } catch (error) {
-        console.error(error)
-        toast.error('操作失败，请稍后重试')
-      }
-    })
-  }
-
-  const handleToggleBan = () => {
-    startTransition(async () => {
-      try {
-        const result = await toggleUserBanAction({
-          userId: user.id,
-          banned: Boolean(user.banned)
-        })
-        toast.success(result.message)
-        router.refresh()
-      } catch (error) {
-        console.error(error)
-        toast.error('操作失败，请稍后重试')
-      }
-    })
-  }
-
-  const handleRemove = () => {
-    startTransition(async () => {
-      try {
-        const result = await removeUserAction({ userId: user.id })
-        toast.success(result.message)
-        router.replace('/users')
-      } catch (error) {
-        console.error(error)
-        toast.error('操作失败，请稍后重试')
-      }
-    })
-  }
+  useEffect(() => {
+    if (data) {
+      form.reset({
+        ...data,
+        password: undefined,
+        role: data.role === 'admin' ? 'admin' : 'user'
+      })
+    }
+  }, [data, form])
 
   return (
-    <form onSubmit={form.handleSubmit(handleSave)}>
-      <PageActionBar>
-        <Button type='submit' disabled={isPending}>
-          <Save />
-          保存
-        </Button>
-        <Button
-          type='button'
-          variant='secondary'
-          onClick={handleResetPassword}
-          disabled={isPending}
-        >
-          <KeyRound />
-          重置密码
-        </Button>
-        <Button
-          type='button'
-          variant='secondary'
-          onClick={handleToggleBan}
-          disabled={isPending}
-        >
-          {user.banned ? <ShieldCheck /> : <Ban />}
-          {user.banned ? '启用' : '禁用'}
-        </Button>
-        <Button
-          type='button'
-          variant='destructive'
-          onClick={handleRemove}
-          disabled={isPending}
-        >
-          <Trash2 />
-          删除
-        </Button>
-        <Button variant='ghost' asChild>
-          <Link href='/users'>返回</Link>
-        </Button>
-      </PageActionBar>
-      <Card>
-        <CardHeader>
-          <CardTitle>编辑用户</CardTitle>
-          <CardDescription>{user.email}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <FieldGroup>
-            <FieldSet>
-              <Field orientation='horizontal'>
-                <FieldLabel>状态</FieldLabel>
-                <div className='flex flex-wrap gap-2'>
-                  <Badge variant={user.emailVerified ? 'secondary' : 'outline'}>
-                    {user.emailVerified ? '邮箱已验证' : '邮箱未验证'}
-                  </Badge>
-                  <Badge variant={user.banned ? 'destructive' : 'secondary'}>
-                    {user.banned ? '已禁用' : '正常'}
-                  </Badge>
-                </div>
-              </Field>
-              <FieldSeparator />
-              <Controller
-                name='image'
-                control={form.control}
-                render={renderAvatarInput}
-              />
-              <Controller
-                name='name'
-                control={form.control}
-                render={renderNameInput}
-              />
-              <Controller
-                name='role'
-                control={form.control}
-                render={renderRoleInput}
-              />
-            </FieldSet>
-          </FieldGroup>
-        </CardContent>
-      </Card>
-    </form>
+    <div>
+      <PageTitle
+        actionButtons={
+          <div className='flex flex-row items-center gap-2'>
+            <Button type='submit' form='userEditForm' disabled={isPending}>
+              {isPending && <LoaderCircle className='animate-spin' />}
+              <Save />
+              保存
+            </Button>
+            <Link
+              href={`/users/`}
+              className={buttonVariants({
+                variant: 'ghost'
+              })}
+            >
+              <ChevronLeft />
+              返回
+            </Link>
+          </div>
+        }
+      >
+        编辑用户
+      </PageTitle>
+      <form id='userEditForm' onSubmit={form.handleSubmit(onSubmit)}>
+        <input type='hidden' {...form.register('id')} />
+        <Card>
+          <CardContent>
+            <FieldGroup>
+              <FieldSet>
+                <Controller
+                  name='image'
+                  control={form.control}
+                  render={renderAvatarInput}
+                />
+                <FieldSeparator />
+                <Controller
+                  name='email'
+                  control={form.control}
+                  render={renderEmailInput}
+                />
+                <Controller
+                  name='name'
+                  control={form.control}
+                  render={renderNameInput}
+                />
+                <Controller
+                  name='password'
+                  control={form.control}
+                  render={renderPasswordInput}
+                />
+                <Controller
+                  name='role'
+                  control={form.control}
+                  render={renderRoleInput}
+                />
+              </FieldSet>
+            </FieldGroup>
+          </CardContent>
+        </Card>
+      </form>
+    </div>
   )
 }

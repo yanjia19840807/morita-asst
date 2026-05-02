@@ -1,13 +1,11 @@
 'use client'
 
-import Link from 'next/link'
 import { Row } from '@tanstack/react-table'
-import { Ellipsis, Loader2, Pencil, Trash2 } from 'lucide-react'
+import { Ellipsis, Loader2, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
 
-import { removeUserAction } from '@/app/(dashboard)/users/actions'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -17,11 +15,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { DocumentModel } from '@/generated/prisma/models'
 
-interface DocumentRowActionsProps {
+interface DocRowActionsProps {
   row: Row<DocumentModel>
 }
 
-export function DocumentRowActions({ row }: DocumentRowActionsProps) {
+export function DocRowActions({ row }: DocRowActionsProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 

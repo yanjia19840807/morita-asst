@@ -1,10 +1,11 @@
 import { Suspense } from 'react'
-import { fetchUsers } from '@/server/auth'
+import { fetchUsers } from '@/data-access/auth'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
-import PageActionBar from '@/components/page-action-bar'
 import { UserTable } from '@/components/auth/user-table'
+import PageTitle from '@/components/page-title'
+import { getPage } from '@/lib/pagination'
 
 interface UsersPageProps {
   page?: number
@@ -14,52 +15,43 @@ interface UsersPageProps {
   sortDirection?: 'asc' | 'desc'
 }
 
+const pageSize = 10
+
 export default async function UsersPage({
   searchParams
 }: {
   searchParams: Promise<UsersPageProps>
 }) {
-  const PAGE_SIZE = 10
-  const {
-    page,
-    searchValue,
-    searchField = 'name',
-    sortBy = 'createdAt',
-    sortDirection = 'desc'
-  } = await searchParams
+  const { page, searchValue, searchField, sortBy, sortDirection } =
+    await searchParams
 
-  const getOffsetValue = () => {
-    if (page && Number(page)) {
-      const toFixedValue = Number(Number(page).toFixed(0))
-      return toFixedValue <= 1 ? 0 : (toFixedValue - 1) * PAGE_SIZE
-    } else {
-      return 0
-    }
-  }
-
-  const query = {
-    limit: PAGE_SIZE,
-    offset: getOffsetValue(),
+  const data = await fetchUsers({
+    page: getPage(page),
+    pageSize,
     searchField,
     searchValue,
     sortBy,
     sortDirection
-  }
-
-  const data = await fetchUsers(query)
+  })
 
   return (
-    <div>
-      <PageActionBar>
-        <Button asChild>
-          <Link href='/users/new'>
-            <Plus />
-            新增
-          </Link>
-        </Button>
-      </PageActionBar>
-      <Suspense fallback={<div>Loading...</div>}>
-        <UserTable data={data.users} total={data.total} pageSize={PAGE_SIZE} />
+    <div className='flex flex-1 flex-col gap-3 px-4'>
+      <PageTitle
+        actionButtons={
+          <div className='flex flex-row items-center gap-2'>
+            <Button asChild>
+              <Link href='/users/new'>
+                <Plus />
+                新增
+              </Link>
+            </Button>
+          </div>
+        }
+      >
+        用户列表
+      </PageTitle>
+      <Suspense fallback={null}>
+        <UserTable data={data.users} total={data.total} pageSize={pageSize} />
       </Suspense>
     </div>
   )

@@ -11,8 +11,7 @@ import { Separator } from '@/components/ui/separator'
 
 function MainLayout({
   children,
-  breadcrumb,
-  toolbar
+  breadcrumb
 }: Readonly<{
   children: React.ReactNode
   breadcrumb: React.ReactNode
@@ -32,9 +31,8 @@ function MainLayout({
               />
               {breadcrumb}
             </div>
-            <div className='flex items-center justify-end gap-2'>{toolbar}</div>
           </header>
-          <div className='flex flex-col gap-4 p-4 pt-0'>{children}</div>
+          {children}
         </SidebarInset>
       </SidebarProvider>
     </TooltipProvider>

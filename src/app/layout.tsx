@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: '森田助手',
+  title: '云天助手',
   description:
     '真实案例 + 森田疗法智慧，让你知道：你并不孤单。顺其自然，为所当为。'
 }
@@ -43,15 +43,7 @@ export default function RootLayout({
       )}
       suppressHydrationWarning
     >
-      <head>
-        {/*
-         * scrollbar-gutter: stable — always reserve gutter space so viewport
-         * content width stays constant when scrollbar appears/disappears.
-         * overflow-x: hidden — prevent margin-right added by react-remove-scroll-bar
-         * from creating a horizontal scrollbar on <html>.
-         */}
-        <style>{`html { scrollbar-gutter: stable; overflow-x: hidden; overflow-y: scroll; }`}</style>
-      </head>
+      <head></head>
       <body className='mx-auto flex h-full min-h-screen w-full flex-col'>
         <NuqsAdapter>
           <QueryProvider>

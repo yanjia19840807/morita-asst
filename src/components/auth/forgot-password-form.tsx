@@ -1,5 +1,5 @@
 'use client'
-import { ForgotPasswordSchema } from '@/schemas/auth'
+import { ForgotPasswordFormValues, forgotPasswordSchema } from '@/schemas/auth'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -20,7 +20,7 @@ import { useAuthState } from '@/hooks/use-auth-state'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useTransition } from 'react'
 import {
   Controller,
   ControllerFieldState,
@@ -28,28 +28,16 @@ import {
   useForm,
   UseFormStateReturn
 } from 'react-hook-form'
-import z from 'zod'
-import FormError from '../form-error'
-import { authClient } from '@/lib/auth-client'
-import FormSuccess from '../form-success'
-
-type FormValues = z.infer<typeof ForgotPasswordSchema>
+import { forgotPasswordAction } from '@/app/(auth)/actions'
+import { toast } from 'sonner'
+import { LoaderCircle } from 'lucide-react'
 
 export default function ForgotPasswordForm() {
   const router = useRouter()
-
-  const {
-    error,
-    success,
-    loading,
-    setSuccess,
-    setError,
-    setLoading,
-    resetState
-  } = useAuthState()
+  const [isPending, startTransition] = useTransition()
 
   const form = useForm({
-    resolver: zodResolver(ForgotPasswordSchema),
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: ''
     }
@@ -59,9 +47,9 @@ export default function ForgotPasswordForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'email'>
+    field: ControllerRenderProps<ForgotPasswordFormValues, 'email'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<ForgotPasswordFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -69,7 +57,7 @@ export default function ForgotPasswordForm() {
         <Input
           id='email'
           aria-invalid={fieldState.invalid}
-          placeholder='请输入邮箱地址'
+          placeholder='输入邮箱地址'
           {...field}
         />
         {fieldState.invalid && fieldState.error && (
@@ -79,36 +67,16 @@ export default function ForgotPasswordForm() {
     )
   }
 
-  async function onSubmit(data: FormValues) {
-    const { email } = data
-
-    try {
-      await authClient.requestPasswordReset(
-        {
-          email,
-          redirectTo: '/reset-password/email' // URL to redirect the user after resetting the password.
-        },
-        {
-          onResponse: () => {
-            setLoading(false)
-          },
-          onRequest: () => {
-            resetState()
-            setLoading(true)
-          },
-          onSuccess: () => {
-            setSuccess('密码重置链接已发送至您的电子邮箱')
-          },
-          onError: (ctx: { error: { message: string } }) => {
-            setError(ctx.error.message)
-          }
-        }
-      )
-    } catch (error) {
-      // catch the error
-      console.log(error)
-      setError('Something went wrong')
-    }
+  async function onSubmit(data: ForgotPasswordFormValues) {
+    startTransition(async () => {
+      const result = await forgotPasswordAction(data)
+      if (result.success) {
+        toast.success('密码重置链接已发送至您的电子邮箱')
+        router.replace('/')
+      } else {
+        toast.error(result.error.message)
+      }
+    })
   }
 
   return (
@@ -128,10 +96,9 @@ export default function ForgotPasswordForm() {
           </FieldGroup>
         </CardContent>
         <CardFooter className='flex flex-col gap-3'>
-          {success && <FormSuccess message={success} />}
-          {error && <FormError message={error} />}
           <Field orientation='horizontal'>
-            <Button variant='default' className='flex-1'>
+            <Button variant='default' className='flex-1' disabled={isPending}>
+              {isPending && <LoaderCircle className='animate-spin' />}
               发送重置邮件
             </Button>
           </Field>

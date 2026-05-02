@@ -1,6 +1,6 @@
 'use client'
 
-import { ResetPasswordSchema } from '@/schemas/auth'
+import { ResetPasswordFormValues, resetPasswordSchema } from '@/schemas/auth'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -18,7 +18,6 @@ import {
   FieldLabel
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { authClient } from '@/lib/auth-client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import Link from 'next/link'
@@ -30,31 +29,21 @@ import {
   useForm,
   UseFormStateReturn
 } from 'react-hook-form'
-import { z } from 'zod'
-import { useAuthState } from '@/hooks/use-auth-state'
-import FormError from '../form-error'
-import FormSuccess from '../form-success'
-
-type FormValues = z.infer<typeof ResetPasswordSchema>
+import { useTransition } from 'react'
+import { resetPasswordAction } from '@/app/(auth)/actions'
+import { toast } from 'sonner'
 
 export default function ResetPasswordForm() {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const searchParams = useSearchParams()
-  const {
-    error,
-    success,
-    loading,
-    setSuccess,
-    setError,
-    setLoading,
-    resetState
-  } = useAuthState()
   const token = searchParams.get('token')
   const form = useForm({
-    resolver: zodResolver(ResetPasswordSchema),
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      token: token || ''
     }
   })
 
@@ -62,9 +51,9 @@ export default function ResetPasswordForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'password'>
+    field: ControllerRenderProps<ResetPasswordFormValues, 'password'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<ResetPasswordFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -89,9 +78,9 @@ export default function ResetPasswordForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'confirmPassword'>
+    field: ControllerRenderProps<ResetPasswordFormValues, 'confirmPassword'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<ResetPasswordFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -111,40 +100,16 @@ export default function ResetPasswordForm() {
     )
   }
 
-  const onSubmit = async (data: FormValues) => {
-    if (!token) {
-      return
-    }
-
-    const { password } = data
-
-    try {
-      await authClient.resetPassword(
-        {
-          newPassword: password,
-          token
-        },
-        {
-          onResponse: () => {
-            setLoading(false)
-          },
-          onRequest: () => {
-            resetState()
-            setLoading(true)
-          },
-          onSuccess: () => {
-            setSuccess('密码修改成功')
-            router.replace('/sign-in/email')
-          },
-          onError: ctx => {
-            setError(ctx.error.message)
-          }
-        }
-      )
-    } catch (error) {
-      setError('网络错误，请稍后重试。')
-      console.error(error instanceof Error ? error.message : String(error))
-    }
+  const onSubmit = async (data: ResetPasswordFormValues) => {
+    startTransition(async () => {
+      const result = await resetPasswordAction(data)
+      if (result.success) {
+        toast.success('密码已设置')
+        router.replace('/sign-in/email')
+      } else {
+        toast.error(result.error.message)
+      }
+    })
   }
 
   return (
@@ -169,15 +134,13 @@ export default function ResetPasswordForm() {
           </FieldGroup>
         </CardContent>
         <CardFooter className='flex flex-col gap-3'>
-          {success && <FormSuccess message={success} />}
-          {error && <FormError message={error} />}
           <Field orientation='horizontal'>
             <Button
               variant='default'
               className='flex-1'
-              disabled={loading || !token}
+              disabled={isPending || !token}
             >
-              {loading && <LoaderCircle className='animate-spin' />}
+              {isPending && <LoaderCircle className='animate-spin' />}
               提交
             </Button>
           </Field>

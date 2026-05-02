@@ -1,5 +1,15 @@
-import DocumentCreateForm from '@/components/document/document-create-form'
+import DocCreateForm from '@/components/doc/doc-create-form'
+import { fetchDocCates } from '@/data-access/doc'
+import { Suspense } from 'react'
 
 export default function DocumentNewPage() {
-  return <DocumentCreateForm />
+  const docCatesPromise = fetchDocCates()
+
+  return (
+    <div className='flex flex-1 flex-col gap-3 px-4'>
+      <Suspense>
+        <DocCreateForm docCatesPromise={docCatesPromise} />
+      </Suspense>
+    </div>
+  )
 }

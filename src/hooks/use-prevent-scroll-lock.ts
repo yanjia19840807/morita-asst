@@ -39,7 +39,6 @@ import { useLayoutEffect } from 'react'
 
 const usePreventScrollLock = () => {
   useLayoutEffect(() => {
-    debugger
     const handler = (e: Event) => {
       if (document.body.getAttribute('data-scroll-locked') === '1') {
         e.stopImmediatePropagation()

@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Controller,
@@ -11,17 +10,8 @@ import {
   UseFormStateReturn
 } from 'react-hook-form'
 import { toast } from 'sonner'
-import z from 'zod'
-
-import { createUserAction } from '@/app/(dashboard)/users/actions'
 import AvatarInput from '@/components/avatar-input'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Field,
   FieldError,
@@ -38,44 +28,46 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { UserCreateFormSchema } from '@/schemas/auth'
+import { UserCreateFormValues, userCreateSchema } from '@/schemas/auth'
 import { uploadAvatar } from '@/lib/oss'
-import { Button } from '../ui/button'
-import { Save } from 'lucide-react'
-import PageActionBar from '../page-action-bar'
 import { authClient } from '@/lib/auth-client'
-
-type FormValues = z.input<typeof UserCreateFormSchema>
-type SubmitValues = z.output<typeof UserCreateFormSchema>
+import { createUserAction } from '@/app/(auth)/actions'
+import PageTitle from '@/components/page-title'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
+import { useTransition } from 'react'
+import Link from 'next/link'
 
 export function UserCreateForm() {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const { data: userData } = authClient.useSession()
 
-  const form = useForm<FormValues, undefined, SubmitValues>({
-    resolver: zodResolver(UserCreateFormSchema),
-    defaultValues: {
-      email: '',
-      name: '',
-      password: '',
-      role: 'user',
-      image: null
-    }
+  const defaultValues: UserCreateFormValues = {
+    email: '',
+    name: '',
+    password: '',
+    role: 'user' as 'user' | 'admin',
+    image: undefined
+  }
+
+  const form = useForm({
+    resolver: zodResolver(userCreateSchema),
+    defaultValues
   })
 
   const renderAvatarInput = function ({
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'image'>
+    field: ControllerRenderProps<UserCreateFormValues, 'image'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<UserCreateFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
         <FieldLabel htmlFor={field.name}>头像</FieldLabel>
-        <AvatarInput {...field} disabled={isPending} />
+        <AvatarInput {...field} />
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
         )}
@@ -87,18 +79,17 @@ export function UserCreateForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'email'>
+    field: ControllerRenderProps<UserCreateFormValues, 'email'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<UserCreateFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
         <FieldLabel htmlFor={field.name}>邮箱地址</FieldLabel>
         <Input
           id={field.name}
-          placeholder='user@example.com'
+          placeholder='填写邮箱地址'
           aria-invalid={fieldState.invalid}
-          disabled={isPending}
           {...field}
         />
         {fieldState.invalid && fieldState.error && (
@@ -112,9 +103,9 @@ export function UserCreateForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'name'>
+    field: ControllerRenderProps<UserCreateFormValues, 'name'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<UserCreateFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -122,9 +113,8 @@ export function UserCreateForm() {
         <Input
           id={field.name}
           type='text'
-          placeholder='username'
+          placeholder='用户名: 3-30个字符'
           aria-invalid={fieldState.invalid}
-          disabled={isPending}
           {...field}
         />
         {fieldState.invalid && fieldState.error && (
@@ -138,9 +128,9 @@ export function UserCreateForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'password'>
+    field: ControllerRenderProps<UserCreateFormValues, 'password'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<UserCreateFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -148,9 +138,8 @@ export function UserCreateForm() {
         <Input
           id={field.name}
           type='password'
-          placeholder='长度8-30个字符'
+          placeholder='密码: 8-30个字符'
           aria-invalid={fieldState.invalid}
-          disabled={isPending}
           value={field.value ?? ''}
           onBlur={field.onBlur}
           name={field.name}
@@ -168,9 +157,9 @@ export function UserCreateForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'role'>
+    field: ControllerRenderProps<UserCreateFormValues, 'role'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<UserCreateFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -195,81 +184,93 @@ export function UserCreateForm() {
     )
   }
 
-  const handleSubmit = (values: SubmitValues) => {
+  const onSubmit = (values: UserCreateFormValues) => {
     startTransition(async () => {
       try {
         const image = values.image
         const isNewImage = image instanceof File
-        const imageUrl = isNewImage
-          ? (await uploadAvatar(userData!.user.id, image)).url
-          : (image as string | null | undefined)
+        const storageKey = isNewImage
+          ? await uploadAvatar(userData!.user.id, image)
+          : (image as string | undefined)
 
         const result = await createUserAction({
           ...values,
-          image: imageUrl
+          image: storageKey
         })
-        toast.success(result.message)
-        router.push('/users')
+
+        if (result.success) {
+          toast.success('保存成功')
+          router.push('/users')
+        } else {
+          toast.error(result.error.message)
+        }
       } catch (error) {
         console.error(error)
-        const message =
-          error instanceof Error && error.name === 'APIError'
-            ? error.message
-            : '操作失败，请稍后重试'
-        toast.error(message)
+        toast.error('操作失败，请稍后重试')
       }
     })
   }
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
-      <PageActionBar>
-        <Button type='submit'>
-          <Save />
-          保存
-        </Button>
-        <Button type='button' variant='ghost' onClick={() => router.back()}>
-          返回
-        </Button>
-      </PageActionBar>
-      <Card>
-        <CardHeader>
-          <CardTitle>新增用户</CardTitle>
-          <CardDescription>填写以下信息创建新用户账号。</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <FieldGroup>
-            <FieldSet>
-              <Controller
-                name='email'
-                control={form.control}
-                render={renderEmailInput}
-              />
-              <FieldSeparator />
-              <Controller
-                name='image'
-                control={form.control}
-                render={renderAvatarInput}
-              />
-              <Controller
-                name='name'
-                control={form.control}
-                render={renderNameInput}
-              />
-              <Controller
-                name='password'
-                control={form.control}
-                render={renderPasswordInput}
-              />
-              <Controller
-                name='role'
-                control={form.control}
-                render={renderRoleInput}
-              />
-            </FieldSet>
-          </FieldGroup>
-        </CardContent>
-      </Card>
-    </form>
+    <div>
+      <PageTitle
+        actionButtons={
+          <div className='flex flex-row items-center gap-2'>
+            <Button type='submit' form='userCreateForm' disabled={isPending}>
+              {isPending && <LoaderCircle className='animate-spin' />}
+              <Save />
+              保存
+            </Button>
+            <Link
+              href={`/users/`}
+              className={buttonVariants({
+                variant: 'ghost'
+              })}
+            >
+              <ChevronLeft />
+              返回
+            </Link>
+          </div>
+        }
+      >
+        新增用户
+      </PageTitle>
+      <form id='userCreateForm' onSubmit={form.handleSubmit(onSubmit)}>
+        <Card>
+          <CardContent>
+            <FieldGroup>
+              <FieldSet>
+                <Controller
+                  name='image'
+                  control={form.control}
+                  render={renderAvatarInput}
+                />
+                <FieldSeparator />
+                <Controller
+                  name='email'
+                  control={form.control}
+                  render={renderEmailInput}
+                />
+                <Controller
+                  name='name'
+                  control={form.control}
+                  render={renderNameInput}
+                />
+                <Controller
+                  name='password'
+                  control={form.control}
+                  render={renderPasswordInput}
+                />
+                <Controller
+                  name='role'
+                  control={form.control}
+                  render={renderRoleInput}
+                />
+              </FieldSet>
+            </FieldGroup>
+          </CardContent>
+        </Card>
+      </form>
+    </div>
   )
 }

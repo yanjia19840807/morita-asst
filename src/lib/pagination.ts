@@ -1,3 +1,5 @@
+export const DefaultPageSize = 10
+
 export const getActivePage = (
   page: number = 1,
   pageSize: number,
@@ -74,4 +76,9 @@ export const getPagesToShow = (
     ]
   }
   return topFivePageNumber
+}
+
+export function getPage(value: unknown): number {
+  const num = parseInt(String(value), 10)
+  return isNaN(num) || num <= 0 ? 1 : num
 }

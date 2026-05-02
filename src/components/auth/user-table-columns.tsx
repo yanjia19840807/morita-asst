@@ -3,7 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 
 import Link from 'next/link'
-import type { UserRow } from '@/server/auth'
+import type { UserRow } from '@/data-access/auth'
 import { TableColumnHeader } from '../table/table-column-header'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { UserTableRowActions } from './user-row-actions'

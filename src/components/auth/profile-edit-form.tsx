@@ -1,6 +1,6 @@
 'use client'
 
-import { authClient } from '@/lib/auth-client'
+import { changePasswordAction, editProfileAction } from '@/app/(auth)/actions'
 import {
   Card,
   CardContent,
@@ -13,18 +13,16 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
   FieldSet
 } from '@/components/ui/field'
-import { LoaderCircle } from 'lucide-react'
+import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useAuthState } from '@/hooks/use-auth-state'
-import FormError from '@/components/form-error'
-import FormSuccess from '@/components/form-success'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Controller,
@@ -33,33 +31,41 @@ import {
   useForm,
   UseFormStateReturn
 } from 'react-hook-form'
-import z from 'zod'
-import { ProfileEditSchema } from '@/schemas/auth'
+import {
+  ProfileEditFormValues,
+  ProfilePasswordFormValues,
+  profileEditSchema,
+  profilePasswordSchema
+} from '@/schemas/auth'
 import { uploadAvatar } from '@/lib/oss'
 import AvatarInput from '../avatar-input'
-import { useEffect } from 'react'
+import { useEffect, useTransition } from 'react'
+import PageTitle from '../page-title'
+import { toast } from 'sonner'
 
-type FormValues = z.infer<typeof ProfileEditSchema>
-
-export default function ProfileEditForm() {
+export default function ProfileEditForm({
+  data
+}: {
+  data: ProfileEditFormValues & { id: string }
+}) {
   const router = useRouter()
-  const { data: userData } = authClient.useSession()
+  const [isProfilePending, startProfileTransition] = useTransition()
+  const [isPasswordPending, startPasswordTransition] = useTransition()
 
-  const {
-    error,
-    success,
-    loading,
-    setSuccess,
-    setError,
-    setLoading,
-    resetState
-  } = useAuthState()
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(ProfileEditSchema),
+  const form = useForm({
+    resolver: zodResolver(profileEditSchema),
     defaultValues: {
       name: '',
-      image: null
+      image: undefined
+    }
+  })
+
+  const passwordForm = useForm<ProfilePasswordFormValues>({
+    resolver: zodResolver(profilePasswordSchema),
+    defaultValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
     }
   })
 
@@ -67,9 +73,9 @@ export default function ProfileEditForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'name'>
+    field: ControllerRenderProps<ProfileEditFormValues, 'name'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<ProfileEditFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -91,9 +97,9 @@ export default function ProfileEditForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<FormValues, 'image'>
+    field: ControllerRenderProps<ProfileEditFormValues, 'image'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<FormValues>
+    formState: UseFormStateReturn<ProfileEditFormValues>
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -106,110 +112,241 @@ export default function ProfileEditForm() {
     )
   }
 
-  async function onSubmit(values: FormValues) {
-    try {
-      const name = values.name.trim()
-      const image = values.image
-      const isNewImage = image instanceof File
-      const imageUrl = isNewImage
-        ? (await uploadAvatar(userData!.user.id, image)).url
-        : image
+  const renderCurrentPasswordInput = function ({
+    field,
+    fieldState
+  }: {
+    field: ControllerRenderProps<ProfilePasswordFormValues, 'currentPassword'>
+    fieldState: ControllerFieldState
+    formState: UseFormStateReturn<ProfilePasswordFormValues>
+  }) {
+    return (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel htmlFor={field.name}>当前密码</FieldLabel>
+        <Input
+          id={field.name}
+          type='password'
+          placeholder='当前密码: 8-30个字符'
+          aria-invalid={fieldState.invalid}
+          {...field}
+        />
+        {fieldState.invalid && fieldState.error && (
+          <FieldError errors={[fieldState.error]} />
+        )}
+      </Field>
+    )
+  }
 
-      await authClient.updateUser(
-        {
+  const renderNewPasswordInput = function ({
+    field,
+    fieldState
+  }: {
+    field: ControllerRenderProps<ProfilePasswordFormValues, 'newPassword'>
+    fieldState: ControllerFieldState
+    formState: UseFormStateReturn<ProfilePasswordFormValues>
+  }) {
+    return (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel htmlFor={field.name}>新密码</FieldLabel>
+        <Input
+          id={field.name}
+          type='password'
+          placeholder='新密码: 8-30个字符'
+          aria-invalid={fieldState.invalid}
+          {...field}
+        />
+        {fieldState.invalid && fieldState.error && (
+          <FieldError errors={[fieldState.error]} />
+        )}
+      </Field>
+    )
+  }
+
+  const renderConfirmPasswordInput = function ({
+    field,
+    fieldState
+  }: {
+    field: ControllerRenderProps<ProfilePasswordFormValues, 'confirmPassword'>
+    fieldState: ControllerFieldState
+    formState: UseFormStateReturn<ProfilePasswordFormValues>
+  }) {
+    return (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel htmlFor={field.name}>确认新密码</FieldLabel>
+        <Input
+          id={field.name}
+          type='password'
+          placeholder='请再次输入新密码'
+          aria-invalid={fieldState.invalid}
+          {...field}
+        />
+        {fieldState.invalid && fieldState.error && (
+          <FieldError errors={[fieldState.error]} />
+        )}
+      </Field>
+    )
+  }
+
+  async function onSubmit(values: ProfileEditFormValues) {
+    startProfileTransition(async () => {
+      try {
+        const name = values.name
+        const image = values.image
+        const isNewImage = image instanceof File
+        const imageUrl = isNewImage
+          ? await uploadAvatar(data!.id, image)
+          : image
+
+        const result = await editProfileAction({
           name,
           image: imageUrl
-        },
-        {
-          onResponse: () => {
-            setLoading(false)
-          },
-          onRequest: () => {
-            resetState()
-            setLoading(true)
-          },
-          onSuccess: async () => {
-            setSuccess('资料更新成功')
-            router.replace('/profile')
-          },
-          onError: ctx => {
-            setError(ctx.error.message || '资料更新失败')
-          }
+        })
+
+        if (result.success) {
+          toast.success('资料更新成功')
+          router.replace('/profile')
+        } else {
+          toast.error(result.error.message)
         }
-      )
-    } catch (error) {
-      console.error('Profile update failed:', error)
-      setError(
-        error instanceof Error ? error.message : '网络错误，请稍后重试。'
-      )
-    } finally {
-      setLoading(false)
-    }
+      } catch (error) {
+        console.error('Profile update failed:', error)
+        toast.error(
+          error instanceof Error ? error.message : '网络错误，请稍后重试。'
+        )
+      }
+    })
+  }
+
+  async function onPasswordSubmit(values: ProfilePasswordFormValues) {
+    startPasswordTransition(async () => {
+      try {
+        const result = await changePasswordAction(values)
+        if (result.success) {
+          toast.success('密码修改成功')
+          passwordForm.reset()
+        } else {
+          toast.error(result.error.message)
+        }
+      } catch (error) {
+        console.error('Password update failed:', error)
+        toast.error(
+          error instanceof Error ? error.message : '网络错误，请稍后重试。'
+        )
+      }
+    })
   }
 
   useEffect(() => {
-    if (userData?.user) {
+    if (data) {
       form.reset({
-        name: userData?.user.name || '',
-        image: userData?.user.image || null // 假设 user.image 是字符串 URL 或 null
+        name: data.name || '',
+        image: data.image || undefined
       })
     }
-  }, [userData?.user, form])
+  }, [data, form])
 
-  if (!userData?.user) {
+  if (!data) {
     return null
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
-      <Card>
-        <CardHeader>
-          <CardTitle>编辑资料</CardTitle>
-          <CardDescription>{userData?.user.email}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <FieldGroup>
-            <FieldSet>
-              <Controller
-                name='image'
-                control={form.control}
-                render={renderAvatarInput}
-              />
-              <FieldSeparator />
-              <Controller
-                name='name'
-                control={form.control}
-                render={renderNameInput}
-              />
-            </FieldSet>
-          </FieldGroup>
-        </CardContent>
-        <CardFooter className='flex flex-col gap-3'>
-          {success && <FormSuccess message={success} />}
-          {error && <FormError message={error} />}
-          <Field orientation='horizontal'>
-            <Button
-              type='submit'
-              variant='default'
-              className='flex-1'
-              disabled={loading}
-            >
-              {loading && <LoaderCircle className='animate-spin' />}
-              提交
-            </Button>
-          </Field>
-          <Field orientation='horizontal'>
+    <div>
+      <PageTitle
+        actionButtons={
+          <div className='flex flex-row items-center gap-2'>
             <Link
               href='/profile'
-              className={`flex-1 ${buttonVariants({
-                variant: 'secondary'
-              })}`}
+              className={buttonVariants({
+                variant: 'ghost'
+              })}
             >
+              <ChevronLeft />
               返回
             </Link>
-          </Field>
-        </CardFooter>
-      </Card>
-    </form>
+          </div>
+        }
+      >
+        编辑资料
+      </PageTitle>
+      <div className='flex flex-col gap-4'>
+        <form id='profileEditForm' onSubmit={form.handleSubmit(onSubmit)}>
+          <Card>
+            <CardHeader>
+              <CardTitle>基本资料</CardTitle>
+              <CardDescription>编辑基本资料</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FieldGroup>
+                <FieldSet>
+                  <Controller
+                    name='image'
+                    control={form.control}
+                    render={renderAvatarInput}
+                  />
+                  <FieldSeparator />
+                  <Controller
+                    name='name'
+                    control={form.control}
+                    render={renderNameInput}
+                  />
+                  <Field orientation='horizontal' className='justify-end'>
+                    <Button type='submit' disabled={isProfilePending}>
+                      {isProfilePending && (
+                        <LoaderCircle className='animate-spin' />
+                      )}
+                      <Save />
+                      保存
+                    </Button>
+                  </Field>
+                </FieldSet>
+              </FieldGroup>
+            </CardContent>
+            <CardFooter className='flex flex-wrap items-center gap-2'></CardFooter>
+          </Card>
+        </form>
+        <form
+          id='profilePasswordForm'
+          onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
+        >
+          <Card>
+            <CardHeader>
+              <CardTitle>修改密码</CardTitle>
+              <CardDescription>请输入当前密码后设置新密码</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FieldGroup>
+                <FieldSet>
+                  <Controller
+                    name='currentPassword'
+                    control={passwordForm.control}
+                    render={renderCurrentPasswordInput}
+                  />
+                  <Controller
+                    name='newPassword'
+                    control={passwordForm.control}
+                    render={renderNewPasswordInput}
+                  />
+                  <Controller
+                    name='confirmPassword'
+                    control={passwordForm.control}
+                    render={renderConfirmPasswordInput}
+                  />
+                  <Field orientation='horizontal' className='justify-end'>
+                    <Button type='submit' disabled={isPasswordPending}>
+                      {isPasswordPending && (
+                        <LoaderCircle className='animate-spin' />
+                      )}
+                      <Save />
+                      修改密码
+                    </Button>
+                  </Field>
+                </FieldSet>
+              </FieldGroup>
+            </CardContent>
+            <CardFooter className='flex flex-wrap items-center gap-2'></CardFooter>
+          </Card>
+        </form>
+      </div>
+    </div>
   )
 }
