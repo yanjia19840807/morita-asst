@@ -17,6 +17,17 @@ interface UsersPageProps {
 
 const pageSize = 10
 
+const CreateBtn = function () {
+  return (
+    <Button asChild>
+      <Link href='/users/new'>
+        <Plus />
+        新增
+      </Link>
+    </Button>
+  )
+}
+
 export default async function UsersPage({
   searchParams
 }: {
@@ -39,12 +50,7 @@ export default async function UsersPage({
       <PageTitle
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
-            <Button asChild>
-              <Link href='/users/new'>
-                <Plus />
-                新增
-              </Link>
-            </Button>
+            <CreateBtn />
           </div>
         }
       >

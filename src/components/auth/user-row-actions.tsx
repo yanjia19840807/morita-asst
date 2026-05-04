@@ -2,14 +2,7 @@
 
 import Link from 'next/link'
 import { Row } from '@tanstack/react-table'
-import {
-  Ban,
-  Ellipsis,
-  Loader2,
-  Pencil,
-  ShieldCheck,
-  Trash2
-} from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
@@ -21,12 +14,6 @@ import {
 } from '@/app/(auth)/actions'
 import ConfirmDialog from '@/components/confirm-dialog'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
 import type { UserRow } from '@/data-access/auth'
 
 interface UserTableRowActionsProps {
@@ -86,58 +73,41 @@ export function UserTableRowActions({ row }: UserTableRowActionsProps) {
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant='ghost'
-          className='data-[state=open]:bg-muted flex h-8 w-8 p-0'
-          disabled={isPending}
-        >
-          {isPending ? (
-            <Loader2 className='h-4 w-4 animate-spin' />
-          ) : (
-            <Ellipsis />
-          )}
-          <span className='sr-only'>Open Menu</span>
+    <div className='flex items-center justify-end gap-2 whitespace-nowrap'>
+      <Button
+        asChild
+        size='sm'
+        variant='ghost'
+        className={isPending ? 'pointer-events-none opacity-50' : undefined}
+      >
+        <Link href={`/users/${user.id}/edit`}>
+          <span>编辑</span>
+        </Link>
+      </Button>
+      <Button
+        size='sm'
+        variant='ghost'
+        disabled={isPending}
+        onClick={handleToggleBan}
+      >
+        {isPending && <Loader2 className='h-4 w-4 animate-spin' />}
+        <span>{user.banned ? '启用' : '禁用'}</span>
+      </Button>
+      <ConfirmDialog
+        title='删除用户'
+        description={`确认删除用户"${user.name}"吗？此操作不可撤销。`}
+        actions={{
+          label: '删除',
+          onClick: handleRemove,
+          className:
+            'bg-destructive text-destructive-foreground hover:bg-destructive/90'
+        }}
+      >
+        <Button size='sm' variant='destructive' disabled={isPending}>
+          {isPending && <Loader2 className='h-4 w-4 animate-spin' />}
+          <span>删除</span>
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem asChild>
-          <Link href={`/users/${user.id}/edit`}>
-            <Pencil />
-            <span>编辑</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          disabled={isPending}
-          onSelect={event => {
-            event.preventDefault()
-            handleToggleBan()
-          }}
-        >
-          {user.banned ? <ShieldCheck /> : <Ban />}
-          <span>{user.banned ? '启用' : '禁用'}</span>
-        </DropdownMenuItem>
-        <ConfirmDialog
-          title='删除用户'
-          description={`确认删除用户"${user.name}"吗？此操作不可撤销。`}
-          actions={{
-            label: '删除',
-            onClick: handleRemove,
-            className:
-              'bg-destructive text-destructive-foreground hover:bg-destructive/90'
-          }}
-        >
-          <DropdownMenuItem
-            disabled={isPending}
-            variant='destructive'
-            onSelect={event => event.preventDefault()}
-          >
-            <Trash2 />
-            <span>删除</span>
-          </DropdownMenuItem>
-        </ConfirmDialog>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </ConfirmDialog>
+    </div>
   )
 }

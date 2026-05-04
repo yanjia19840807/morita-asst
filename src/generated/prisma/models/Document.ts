@@ -41,12 +41,11 @@ export type DocumentMinAggregateOutputType = {
   fileSize: number | null
   mimeType: string | null
   storageKey: string | null
-  status: $Enums.ProcessingStatus | null
+  sourceHash: string | null
   errorMessage: string | null
-  knowledgeBaseId: string | null
   categoryId: string | null
   createdAt: Date | null
-  processedAt: Date | null
+  updatedAt: Date | null
 }
 
 export type DocumentMaxAggregateOutputType = {
@@ -56,12 +55,11 @@ export type DocumentMaxAggregateOutputType = {
   fileSize: number | null
   mimeType: string | null
   storageKey: string | null
-  status: $Enums.ProcessingStatus | null
+  sourceHash: string | null
   errorMessage: string | null
-  knowledgeBaseId: string | null
   categoryId: string | null
   createdAt: Date | null
-  processedAt: Date | null
+  updatedAt: Date | null
 }
 
 export type DocumentCountAggregateOutputType = {
@@ -71,12 +69,11 @@ export type DocumentCountAggregateOutputType = {
   fileSize: number
   mimeType: number
   storageKey: number
-  status: number
+  sourceHash: number
   errorMessage: number
-  knowledgeBaseId: number
   categoryId: number
   createdAt: number
-  processedAt: number
+  updatedAt: number
   metadata: number
   _all: number
 }
@@ -97,12 +94,11 @@ export type DocumentMinAggregateInputType = {
   fileSize?: true
   mimeType?: true
   storageKey?: true
-  status?: true
+  sourceHash?: true
   errorMessage?: true
-  knowledgeBaseId?: true
   categoryId?: true
   createdAt?: true
-  processedAt?: true
+  updatedAt?: true
 }
 
 export type DocumentMaxAggregateInputType = {
@@ -112,12 +108,11 @@ export type DocumentMaxAggregateInputType = {
   fileSize?: true
   mimeType?: true
   storageKey?: true
-  status?: true
+  sourceHash?: true
   errorMessage?: true
-  knowledgeBaseId?: true
   categoryId?: true
   createdAt?: true
-  processedAt?: true
+  updatedAt?: true
 }
 
 export type DocumentCountAggregateInputType = {
@@ -127,12 +122,11 @@ export type DocumentCountAggregateInputType = {
   fileSize?: true
   mimeType?: true
   storageKey?: true
-  status?: true
+  sourceHash?: true
   errorMessage?: true
-  knowledgeBaseId?: true
   categoryId?: true
   createdAt?: true
-  processedAt?: true
+  updatedAt?: true
   metadata?: true
   _all?: true
 }
@@ -230,12 +224,11 @@ export type DocumentGroupByOutputType = {
   fileSize: number | null
   mimeType: string | null
   storageKey: string
-  status: $Enums.ProcessingStatus
+  sourceHash: string | null
   errorMessage: string | null
-  knowledgeBaseId: string | null
   categoryId: string | null
   createdAt: Date
-  processedAt: Date | null
+  updatedAt: Date
   metadata: runtime.JsonValue | null
   _count: DocumentCountAggregateOutputType | null
   _avg: DocumentAvgAggregateOutputType | null
@@ -269,17 +262,15 @@ export type DocumentWhereInput = {
   fileSize?: Prisma.IntNullableFilter<"Document"> | number | null
   mimeType?: Prisma.StringNullableFilter<"Document"> | string | null
   storageKey?: Prisma.StringFilter<"Document"> | string
-  status?: Prisma.EnumProcessingStatusFilter<"Document"> | $Enums.ProcessingStatus
+  sourceHash?: Prisma.StringNullableFilter<"Document"> | string | null
   errorMessage?: Prisma.StringNullableFilter<"Document"> | string | null
-  knowledgeBaseId?: Prisma.StringNullableFilter<"Document"> | string | null
   categoryId?: Prisma.StringNullableFilter<"Document"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
-  processedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
+  updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   metadata?: Prisma.JsonNullableFilter<"Document">
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  knowledgeBase?: Prisma.XOR<Prisma.KnowledgeBaseNullableScalarRelationFilter, Prisma.KnowledgeBaseWhereInput> | null
   category?: Prisma.XOR<Prisma.DocumentCategoryNullableScalarRelationFilter, Prisma.DocumentCategoryWhereInput> | null
-  chunks?: Prisma.ChunkListRelationFilter
+  knowledgeDocuments?: Prisma.KnowledgeDocumentListRelationFilter
 }
 
 export type DocumentOrderByWithRelationInput = {
@@ -289,17 +280,15 @@ export type DocumentOrderByWithRelationInput = {
   fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   storageKey?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  sourceHash?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
-  knowledgeBaseId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
-  knowledgeBase?: Prisma.KnowledgeBaseOrderByWithRelationInput
   category?: Prisma.DocumentCategoryOrderByWithRelationInput
-  chunks?: Prisma.ChunkOrderByRelationAggregateInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentOrderByRelationAggregateInput
 }
 
 export type DocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -312,17 +301,15 @@ export type DocumentWhereUniqueInput = Prisma.AtLeast<{
   fileSize?: Prisma.IntNullableFilter<"Document"> | number | null
   mimeType?: Prisma.StringNullableFilter<"Document"> | string | null
   storageKey?: Prisma.StringFilter<"Document"> | string
-  status?: Prisma.EnumProcessingStatusFilter<"Document"> | $Enums.ProcessingStatus
+  sourceHash?: Prisma.StringNullableFilter<"Document"> | string | null
   errorMessage?: Prisma.StringNullableFilter<"Document"> | string | null
-  knowledgeBaseId?: Prisma.StringNullableFilter<"Document"> | string | null
   categoryId?: Prisma.StringNullableFilter<"Document"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
-  processedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
+  updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   metadata?: Prisma.JsonNullableFilter<"Document">
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  knowledgeBase?: Prisma.XOR<Prisma.KnowledgeBaseNullableScalarRelationFilter, Prisma.KnowledgeBaseWhereInput> | null
   category?: Prisma.XOR<Prisma.DocumentCategoryNullableScalarRelationFilter, Prisma.DocumentCategoryWhereInput> | null
-  chunks?: Prisma.ChunkListRelationFilter
+  knowledgeDocuments?: Prisma.KnowledgeDocumentListRelationFilter
 }, "id">
 
 export type DocumentOrderByWithAggregationInput = {
@@ -332,12 +319,11 @@ export type DocumentOrderByWithAggregationInput = {
   fileSize?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   storageKey?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  sourceHash?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
-  knowledgeBaseId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.DocumentCountOrderByAggregateInput
   _avg?: Prisma.DocumentAvgOrderByAggregateInput
@@ -356,12 +342,11 @@ export type DocumentScalarWhereWithAggregatesInput = {
   fileSize?: Prisma.IntNullableWithAggregatesFilter<"Document"> | number | null
   mimeType?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   storageKey?: Prisma.StringWithAggregatesFilter<"Document"> | string
-  status?: Prisma.EnumProcessingStatusWithAggregatesFilter<"Document"> | $Enums.ProcessingStatus
+  sourceHash?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   errorMessage?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
-  knowledgeBaseId?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   categoryId?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
-  processedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Document"> | Date | string | null
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Document"> | Date | string
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"Document">
 }
 
@@ -371,15 +356,14 @@ export type DocumentCreateInput = {
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   user: Prisma.UserCreateNestedOneWithoutDocumentsInput
-  knowledgeBase?: Prisma.KnowledgeBaseCreateNestedOneWithoutDocumentsInput
   category?: Prisma.DocumentCategoryCreateNestedOneWithoutDocumentsInput
-  chunks?: Prisma.ChunkCreateNestedManyWithoutDocumentInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentUncheckedCreateInput = {
@@ -389,14 +373,13 @@ export type DocumentUncheckedCreateInput = {
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
-  knowledgeBaseId?: string | null
   categoryId?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  chunks?: Prisma.ChunkUncheckedCreateNestedManyWithoutDocumentInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentUpdateInput = {
@@ -405,15 +388,14 @@ export type DocumentUpdateInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   user?: Prisma.UserUpdateOneRequiredWithoutDocumentsNestedInput
-  knowledgeBase?: Prisma.KnowledgeBaseUpdateOneWithoutDocumentsNestedInput
   category?: Prisma.DocumentCategoryUpdateOneWithoutDocumentsNestedInput
-  chunks?: Prisma.ChunkUpdateManyWithoutDocumentNestedInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateInput = {
@@ -423,14 +405,13 @@ export type DocumentUncheckedUpdateInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  knowledgeBaseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  chunks?: Prisma.ChunkUncheckedUpdateManyWithoutDocumentNestedInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentCreateManyInput = {
@@ -440,12 +421,11 @@ export type DocumentCreateManyInput = {
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
-  knowledgeBaseId?: string | null
   categoryId?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -455,10 +435,10 @@ export type DocumentUpdateManyMutationInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -469,12 +449,11 @@ export type DocumentUncheckedUpdateManyInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  knowledgeBaseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -488,6 +467,11 @@ export type DocumentOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type DocumentScalarRelationFilter = {
+  is?: Prisma.DocumentWhereInput
+  isNot?: Prisma.DocumentWhereInput
+}
+
 export type DocumentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -495,12 +479,11 @@ export type DocumentCountOrderByAggregateInput = {
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   storageKey?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  sourceHash?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
-  knowledgeBaseId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  processedAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
 }
 
@@ -515,12 +498,11 @@ export type DocumentMaxOrderByAggregateInput = {
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   storageKey?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  sourceHash?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
-  knowledgeBaseId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  processedAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type DocumentMinOrderByAggregateInput = {
@@ -530,21 +512,15 @@ export type DocumentMinOrderByAggregateInput = {
   fileSize?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   storageKey?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  sourceHash?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
-  knowledgeBaseId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  processedAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type DocumentSumOrderByAggregateInput = {
   fileSize?: Prisma.SortOrder
-}
-
-export type DocumentScalarRelationFilter = {
-  is?: Prisma.DocumentWhereInput
-  isNot?: Prisma.DocumentWhereInput
 }
 
 export type DocumentCreateNestedManyWithoutUserInput = {
@@ -589,46 +565,18 @@ export type DocumentUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
 }
 
-export type DocumentCreateNestedManyWithoutKnowledgeBaseInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutKnowledgeBaseInput, Prisma.DocumentUncheckedCreateWithoutKnowledgeBaseInput> | Prisma.DocumentCreateWithoutKnowledgeBaseInput[] | Prisma.DocumentUncheckedCreateWithoutKnowledgeBaseInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutKnowledgeBaseInput | Prisma.DocumentCreateOrConnectWithoutKnowledgeBaseInput[]
-  createMany?: Prisma.DocumentCreateManyKnowledgeBaseInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
+export type DocumentCreateNestedOneWithoutKnowledgeDocumentsInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutKnowledgeDocumentsInput, Prisma.DocumentUncheckedCreateWithoutKnowledgeDocumentsInput>
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutKnowledgeDocumentsInput
+  connect?: Prisma.DocumentWhereUniqueInput
 }
 
-export type DocumentUncheckedCreateNestedManyWithoutKnowledgeBaseInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutKnowledgeBaseInput, Prisma.DocumentUncheckedCreateWithoutKnowledgeBaseInput> | Prisma.DocumentCreateWithoutKnowledgeBaseInput[] | Prisma.DocumentUncheckedCreateWithoutKnowledgeBaseInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutKnowledgeBaseInput | Prisma.DocumentCreateOrConnectWithoutKnowledgeBaseInput[]
-  createMany?: Prisma.DocumentCreateManyKnowledgeBaseInputEnvelope
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-}
-
-export type DocumentUpdateManyWithoutKnowledgeBaseNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutKnowledgeBaseInput, Prisma.DocumentUncheckedCreateWithoutKnowledgeBaseInput> | Prisma.DocumentCreateWithoutKnowledgeBaseInput[] | Prisma.DocumentUncheckedCreateWithoutKnowledgeBaseInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutKnowledgeBaseInput | Prisma.DocumentCreateOrConnectWithoutKnowledgeBaseInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutKnowledgeBaseInput | Prisma.DocumentUpsertWithWhereUniqueWithoutKnowledgeBaseInput[]
-  createMany?: Prisma.DocumentCreateManyKnowledgeBaseInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutKnowledgeBaseInput | Prisma.DocumentUpdateWithWhereUniqueWithoutKnowledgeBaseInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutKnowledgeBaseInput | Prisma.DocumentUpdateManyWithWhereWithoutKnowledgeBaseInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
-}
-
-export type DocumentUncheckedUpdateManyWithoutKnowledgeBaseNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutKnowledgeBaseInput, Prisma.DocumentUncheckedCreateWithoutKnowledgeBaseInput> | Prisma.DocumentCreateWithoutKnowledgeBaseInput[] | Prisma.DocumentUncheckedCreateWithoutKnowledgeBaseInput[]
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutKnowledgeBaseInput | Prisma.DocumentCreateOrConnectWithoutKnowledgeBaseInput[]
-  upsert?: Prisma.DocumentUpsertWithWhereUniqueWithoutKnowledgeBaseInput | Prisma.DocumentUpsertWithWhereUniqueWithoutKnowledgeBaseInput[]
-  createMany?: Prisma.DocumentCreateManyKnowledgeBaseInputEnvelope
-  set?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  disconnect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  delete?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  connect?: Prisma.DocumentWhereUniqueInput | Prisma.DocumentWhereUniqueInput[]
-  update?: Prisma.DocumentUpdateWithWhereUniqueWithoutKnowledgeBaseInput | Prisma.DocumentUpdateWithWhereUniqueWithoutKnowledgeBaseInput[]
-  updateMany?: Prisma.DocumentUpdateManyWithWhereWithoutKnowledgeBaseInput | Prisma.DocumentUpdateManyWithWhereWithoutKnowledgeBaseInput[]
-  deleteMany?: Prisma.DocumentScalarWhereInput | Prisma.DocumentScalarWhereInput[]
+export type DocumentUpdateOneRequiredWithoutKnowledgeDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentCreateWithoutKnowledgeDocumentsInput, Prisma.DocumentUncheckedCreateWithoutKnowledgeDocumentsInput>
+  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutKnowledgeDocumentsInput
+  upsert?: Prisma.DocumentUpsertWithoutKnowledgeDocumentsInput
+  connect?: Prisma.DocumentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentUpdateToOneWithWhereWithoutKnowledgeDocumentsInput, Prisma.DocumentUpdateWithoutKnowledgeDocumentsInput>, Prisma.DocumentUncheckedUpdateWithoutKnowledgeDocumentsInput>
 }
 
 export type DocumentCreateNestedManyWithoutCategoryInput = {
@@ -681,38 +629,19 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type EnumProcessingStatusFieldUpdateOperationsInput = {
-  set?: $Enums.ProcessingStatus
-}
-
-export type DocumentCreateNestedOneWithoutChunksInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutChunksInput, Prisma.DocumentUncheckedCreateWithoutChunksInput>
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutChunksInput
-  connect?: Prisma.DocumentWhereUniqueInput
-}
-
-export type DocumentUpdateOneRequiredWithoutChunksNestedInput = {
-  create?: Prisma.XOR<Prisma.DocumentCreateWithoutChunksInput, Prisma.DocumentUncheckedCreateWithoutChunksInput>
-  connectOrCreate?: Prisma.DocumentCreateOrConnectWithoutChunksInput
-  upsert?: Prisma.DocumentUpsertWithoutChunksInput
-  connect?: Prisma.DocumentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentUpdateToOneWithWhereWithoutChunksInput, Prisma.DocumentUpdateWithoutChunksInput>, Prisma.DocumentUncheckedUpdateWithoutChunksInput>
-}
-
 export type DocumentCreateWithoutUserInput = {
   id?: string
   filename: string
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  knowledgeBase?: Prisma.KnowledgeBaseCreateNestedOneWithoutDocumentsInput
   category?: Prisma.DocumentCategoryCreateNestedOneWithoutDocumentsInput
-  chunks?: Prisma.ChunkCreateNestedManyWithoutDocumentInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentUncheckedCreateWithoutUserInput = {
@@ -721,14 +650,13 @@ export type DocumentUncheckedCreateWithoutUserInput = {
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
-  knowledgeBaseId?: string | null
   categoryId?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  chunks?: Prisma.ChunkUncheckedCreateNestedManyWithoutDocumentInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentCreateOrConnectWithoutUserInput = {
@@ -767,71 +695,88 @@ export type DocumentScalarWhereInput = {
   fileSize?: Prisma.IntNullableFilter<"Document"> | number | null
   mimeType?: Prisma.StringNullableFilter<"Document"> | string | null
   storageKey?: Prisma.StringFilter<"Document"> | string
-  status?: Prisma.EnumProcessingStatusFilter<"Document"> | $Enums.ProcessingStatus
+  sourceHash?: Prisma.StringNullableFilter<"Document"> | string | null
   errorMessage?: Prisma.StringNullableFilter<"Document"> | string | null
-  knowledgeBaseId?: Prisma.StringNullableFilter<"Document"> | string | null
   categoryId?: Prisma.StringNullableFilter<"Document"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Document"> | Date | string
-  processedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
+  updatedAt?: Prisma.DateTimeFilter<"Document"> | Date | string
   metadata?: Prisma.JsonNullableFilter<"Document">
 }
 
-export type DocumentCreateWithoutKnowledgeBaseInput = {
+export type DocumentCreateWithoutKnowledgeDocumentsInput = {
   id?: string
   filename: string
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   user: Prisma.UserCreateNestedOneWithoutDocumentsInput
   category?: Prisma.DocumentCategoryCreateNestedOneWithoutDocumentsInput
-  chunks?: Prisma.ChunkCreateNestedManyWithoutDocumentInput
 }
 
-export type DocumentUncheckedCreateWithoutKnowledgeBaseInput = {
+export type DocumentUncheckedCreateWithoutKnowledgeDocumentsInput = {
   id?: string
   userId: string
   filename: string
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
   categoryId?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  chunks?: Prisma.ChunkUncheckedCreateNestedManyWithoutDocumentInput
 }
 
-export type DocumentCreateOrConnectWithoutKnowledgeBaseInput = {
+export type DocumentCreateOrConnectWithoutKnowledgeDocumentsInput = {
   where: Prisma.DocumentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutKnowledgeBaseInput, Prisma.DocumentUncheckedCreateWithoutKnowledgeBaseInput>
+  create: Prisma.XOR<Prisma.DocumentCreateWithoutKnowledgeDocumentsInput, Prisma.DocumentUncheckedCreateWithoutKnowledgeDocumentsInput>
 }
 
-export type DocumentCreateManyKnowledgeBaseInputEnvelope = {
-  data: Prisma.DocumentCreateManyKnowledgeBaseInput | Prisma.DocumentCreateManyKnowledgeBaseInput[]
-  skipDuplicates?: boolean
+export type DocumentUpsertWithoutKnowledgeDocumentsInput = {
+  update: Prisma.XOR<Prisma.DocumentUpdateWithoutKnowledgeDocumentsInput, Prisma.DocumentUncheckedUpdateWithoutKnowledgeDocumentsInput>
+  create: Prisma.XOR<Prisma.DocumentCreateWithoutKnowledgeDocumentsInput, Prisma.DocumentUncheckedCreateWithoutKnowledgeDocumentsInput>
+  where?: Prisma.DocumentWhereInput
 }
 
-export type DocumentUpsertWithWhereUniqueWithoutKnowledgeBaseInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  update: Prisma.XOR<Prisma.DocumentUpdateWithoutKnowledgeBaseInput, Prisma.DocumentUncheckedUpdateWithoutKnowledgeBaseInput>
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutKnowledgeBaseInput, Prisma.DocumentUncheckedCreateWithoutKnowledgeBaseInput>
+export type DocumentUpdateToOneWithWhereWithoutKnowledgeDocumentsInput = {
+  where?: Prisma.DocumentWhereInput
+  data: Prisma.XOR<Prisma.DocumentUpdateWithoutKnowledgeDocumentsInput, Prisma.DocumentUncheckedUpdateWithoutKnowledgeDocumentsInput>
 }
 
-export type DocumentUpdateWithWhereUniqueWithoutKnowledgeBaseInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  data: Prisma.XOR<Prisma.DocumentUpdateWithoutKnowledgeBaseInput, Prisma.DocumentUncheckedUpdateWithoutKnowledgeBaseInput>
+export type DocumentUpdateWithoutKnowledgeDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  user?: Prisma.UserUpdateOneRequiredWithoutDocumentsNestedInput
+  category?: Prisma.DocumentCategoryUpdateOneWithoutDocumentsNestedInput
 }
 
-export type DocumentUpdateManyWithWhereWithoutKnowledgeBaseInput = {
-  where: Prisma.DocumentScalarWhereInput
-  data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutKnowledgeBaseInput>
+export type DocumentUncheckedUpdateWithoutKnowledgeDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type DocumentCreateWithoutCategoryInput = {
@@ -840,14 +785,13 @@ export type DocumentCreateWithoutCategoryInput = {
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   user: Prisma.UserCreateNestedOneWithoutDocumentsInput
-  knowledgeBase?: Prisma.KnowledgeBaseCreateNestedOneWithoutDocumentsInput
-  chunks?: Prisma.ChunkCreateNestedManyWithoutDocumentInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentUncheckedCreateWithoutCategoryInput = {
@@ -857,13 +801,12 @@ export type DocumentUncheckedCreateWithoutCategoryInput = {
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
-  knowledgeBaseId?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  chunks?: Prisma.ChunkUncheckedCreateNestedManyWithoutDocumentInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type DocumentCreateOrConnectWithoutCategoryInput = {
@@ -892,98 +835,17 @@ export type DocumentUpdateManyWithWhereWithoutCategoryInput = {
   data: Prisma.XOR<Prisma.DocumentUpdateManyMutationInput, Prisma.DocumentUncheckedUpdateManyWithoutCategoryInput>
 }
 
-export type DocumentCreateWithoutChunksInput = {
-  id?: string
-  filename: string
-  fileSize?: number | null
-  mimeType?: string | null
-  storageKey: string
-  status?: $Enums.ProcessingStatus
-  errorMessage?: string | null
-  createdAt?: Date | string
-  processedAt?: Date | string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  user: Prisma.UserCreateNestedOneWithoutDocumentsInput
-  knowledgeBase?: Prisma.KnowledgeBaseCreateNestedOneWithoutDocumentsInput
-  category?: Prisma.DocumentCategoryCreateNestedOneWithoutDocumentsInput
-}
-
-export type DocumentUncheckedCreateWithoutChunksInput = {
-  id?: string
-  userId: string
-  filename: string
-  fileSize?: number | null
-  mimeType?: string | null
-  storageKey: string
-  status?: $Enums.ProcessingStatus
-  errorMessage?: string | null
-  knowledgeBaseId?: string | null
-  categoryId?: string | null
-  createdAt?: Date | string
-  processedAt?: Date | string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-}
-
-export type DocumentCreateOrConnectWithoutChunksInput = {
-  where: Prisma.DocumentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutChunksInput, Prisma.DocumentUncheckedCreateWithoutChunksInput>
-}
-
-export type DocumentUpsertWithoutChunksInput = {
-  update: Prisma.XOR<Prisma.DocumentUpdateWithoutChunksInput, Prisma.DocumentUncheckedUpdateWithoutChunksInput>
-  create: Prisma.XOR<Prisma.DocumentCreateWithoutChunksInput, Prisma.DocumentUncheckedCreateWithoutChunksInput>
-  where?: Prisma.DocumentWhereInput
-}
-
-export type DocumentUpdateToOneWithWhereWithoutChunksInput = {
-  where?: Prisma.DocumentWhereInput
-  data: Prisma.XOR<Prisma.DocumentUpdateWithoutChunksInput, Prisma.DocumentUncheckedUpdateWithoutChunksInput>
-}
-
-export type DocumentUpdateWithoutChunksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  filename?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  user?: Prisma.UserUpdateOneRequiredWithoutDocumentsNestedInput
-  knowledgeBase?: Prisma.KnowledgeBaseUpdateOneWithoutDocumentsNestedInput
-  category?: Prisma.DocumentCategoryUpdateOneWithoutDocumentsNestedInput
-}
-
-export type DocumentUncheckedUpdateWithoutChunksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  filename?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  knowledgeBaseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-}
-
 export type DocumentCreateManyUserInput = {
   id?: string
   filename: string
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
-  knowledgeBaseId?: string | null
   categoryId?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -993,14 +855,13 @@ export type DocumentUpdateWithoutUserInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  knowledgeBase?: Prisma.KnowledgeBaseUpdateOneWithoutDocumentsNestedInput
   category?: Prisma.DocumentCategoryUpdateOneWithoutDocumentsNestedInput
-  chunks?: Prisma.ChunkUpdateManyWithoutDocumentNestedInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateWithoutUserInput = {
@@ -1009,14 +870,13 @@ export type DocumentUncheckedUpdateWithoutUserInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  knowledgeBaseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  chunks?: Prisma.ChunkUncheckedUpdateManyWithoutDocumentNestedInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateManyWithoutUserInput = {
@@ -1025,74 +885,11 @@ export type DocumentUncheckedUpdateManyWithoutUserInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  knowledgeBaseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-}
-
-export type DocumentCreateManyKnowledgeBaseInput = {
-  id?: string
-  userId: string
-  filename: string
-  fileSize?: number | null
-  mimeType?: string | null
-  storageKey: string
-  status?: $Enums.ProcessingStatus
-  errorMessage?: string | null
-  categoryId?: string | null
-  createdAt?: Date | string
-  processedAt?: Date | string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-}
-
-export type DocumentUpdateWithoutKnowledgeBaseInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  filename?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  user?: Prisma.UserUpdateOneRequiredWithoutDocumentsNestedInput
-  category?: Prisma.DocumentCategoryUpdateOneWithoutDocumentsNestedInput
-  chunks?: Prisma.ChunkUpdateManyWithoutDocumentNestedInput
-}
-
-export type DocumentUncheckedUpdateWithoutKnowledgeBaseInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  filename?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  chunks?: Prisma.ChunkUncheckedUpdateManyWithoutDocumentNestedInput
-}
-
-export type DocumentUncheckedUpdateManyWithoutKnowledgeBaseInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  filename?: Prisma.StringFieldUpdateOperationsInput | string
-  fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
-  errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -1103,11 +900,10 @@ export type DocumentCreateManyCategoryInput = {
   fileSize?: number | null
   mimeType?: string | null
   storageKey: string
-  status?: $Enums.ProcessingStatus
+  sourceHash?: string | null
   errorMessage?: string | null
-  knowledgeBaseId?: string | null
   createdAt?: Date | string
-  processedAt?: Date | string | null
+  updatedAt?: Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -1117,14 +913,13 @@ export type DocumentUpdateWithoutCategoryInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   user?: Prisma.UserUpdateOneRequiredWithoutDocumentsNestedInput
-  knowledgeBase?: Prisma.KnowledgeBaseUpdateOneWithoutDocumentsNestedInput
-  chunks?: Prisma.ChunkUpdateManyWithoutDocumentNestedInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateWithoutCategoryInput = {
@@ -1134,13 +929,12 @@ export type DocumentUncheckedUpdateWithoutCategoryInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  knowledgeBaseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  chunks?: Prisma.ChunkUncheckedUpdateManyWithoutDocumentNestedInput
+  knowledgeDocuments?: Prisma.KnowledgeDocumentUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type DocumentUncheckedUpdateManyWithoutCategoryInput = {
@@ -1150,11 +944,10 @@ export type DocumentUncheckedUpdateManyWithoutCategoryInput = {
   fileSize?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumProcessingStatusFieldUpdateOperationsInput | $Enums.ProcessingStatus
+  sourceHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  knowledgeBaseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -1164,11 +957,11 @@ export type DocumentUncheckedUpdateManyWithoutCategoryInput = {
  */
 
 export type DocumentCountOutputType = {
-  chunks: number
+  knowledgeDocuments: number
 }
 
 export type DocumentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  chunks?: boolean | DocumentCountOutputTypeCountChunksArgs
+  knowledgeDocuments?: boolean | DocumentCountOutputTypeCountKnowledgeDocumentsArgs
 }
 
 /**
@@ -1184,8 +977,8 @@ export type DocumentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * DocumentCountOutputType without action
  */
-export type DocumentCountOutputTypeCountChunksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ChunkWhereInput
+export type DocumentCountOutputTypeCountKnowledgeDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KnowledgeDocumentWhereInput
 }
 
 
@@ -1196,17 +989,15 @@ export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   fileSize?: boolean
   mimeType?: boolean
   storageKey?: boolean
-  status?: boolean
+  sourceHash?: boolean
   errorMessage?: boolean
-  knowledgeBaseId?: boolean
   categoryId?: boolean
   createdAt?: boolean
-  processedAt?: boolean
+  updatedAt?: boolean
   metadata?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  knowledgeBase?: boolean | Prisma.Document$knowledgeBaseArgs<ExtArgs>
   category?: boolean | Prisma.Document$categoryArgs<ExtArgs>
-  chunks?: boolean | Prisma.Document$chunksArgs<ExtArgs>
+  knowledgeDocuments?: boolean | Prisma.Document$knowledgeDocumentsArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
@@ -1217,15 +1008,13 @@ export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   fileSize?: boolean
   mimeType?: boolean
   storageKey?: boolean
-  status?: boolean
+  sourceHash?: boolean
   errorMessage?: boolean
-  knowledgeBaseId?: boolean
   categoryId?: boolean
   createdAt?: boolean
-  processedAt?: boolean
+  updatedAt?: boolean
   metadata?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  knowledgeBase?: boolean | Prisma.Document$knowledgeBaseArgs<ExtArgs>
   category?: boolean | Prisma.Document$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
@@ -1236,15 +1025,13 @@ export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   fileSize?: boolean
   mimeType?: boolean
   storageKey?: boolean
-  status?: boolean
+  sourceHash?: boolean
   errorMessage?: boolean
-  knowledgeBaseId?: boolean
   categoryId?: boolean
   createdAt?: boolean
-  processedAt?: boolean
+  updatedAt?: boolean
   metadata?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  knowledgeBase?: boolean | Prisma.Document$knowledgeBaseArgs<ExtArgs>
   category?: boolean | Prisma.Document$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["document"]>
 
@@ -1255,31 +1042,27 @@ export type DocumentSelectScalar = {
   fileSize?: boolean
   mimeType?: boolean
   storageKey?: boolean
-  status?: boolean
+  sourceHash?: boolean
   errorMessage?: boolean
-  knowledgeBaseId?: boolean
   categoryId?: boolean
   createdAt?: boolean
-  processedAt?: boolean
+  updatedAt?: boolean
   metadata?: boolean
 }
 
-export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "filename" | "fileSize" | "mimeType" | "storageKey" | "status" | "errorMessage" | "knowledgeBaseId" | "categoryId" | "createdAt" | "processedAt" | "metadata", ExtArgs["result"]["document"]>
+export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "filename" | "fileSize" | "mimeType" | "storageKey" | "sourceHash" | "errorMessage" | "categoryId" | "createdAt" | "updatedAt" | "metadata", ExtArgs["result"]["document"]>
 export type DocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  knowledgeBase?: boolean | Prisma.Document$knowledgeBaseArgs<ExtArgs>
   category?: boolean | Prisma.Document$categoryArgs<ExtArgs>
-  chunks?: boolean | Prisma.Document$chunksArgs<ExtArgs>
+  knowledgeDocuments?: boolean | Prisma.Document$knowledgeDocumentsArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  knowledgeBase?: boolean | Prisma.Document$knowledgeBaseArgs<ExtArgs>
   category?: boolean | Prisma.Document$categoryArgs<ExtArgs>
 }
 export type DocumentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  knowledgeBase?: boolean | Prisma.Document$knowledgeBaseArgs<ExtArgs>
   category?: boolean | Prisma.Document$categoryArgs<ExtArgs>
 }
 
@@ -1287,9 +1070,8 @@ export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "Document"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
-    knowledgeBase: Prisma.$KnowledgeBasePayload<ExtArgs> | null
     category: Prisma.$DocumentCategoryPayload<ExtArgs> | null
-    chunks: Prisma.$ChunkPayload<ExtArgs>[]
+    knowledgeDocuments: Prisma.$KnowledgeDocumentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1298,12 +1080,11 @@ export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     fileSize: number | null
     mimeType: string | null
     storageKey: string
-    status: $Enums.ProcessingStatus
+    sourceHash: string | null
     errorMessage: string | null
-    knowledgeBaseId: string | null
     categoryId: string | null
     createdAt: Date
-    processedAt: Date | null
+    updatedAt: Date
     metadata: runtime.JsonValue | null
   }, ExtArgs["result"]["document"]>
   composites: {}
@@ -1700,9 +1481,8 @@ readonly fields: DocumentFieldRefs;
 export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  knowledgeBase<T extends Prisma.Document$knowledgeBaseArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$knowledgeBaseArgs<ExtArgs>>): Prisma.Prisma__KnowledgeBaseClient<runtime.Types.Result.GetResult<Prisma.$KnowledgeBasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.Document$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$categoryArgs<ExtArgs>>): Prisma.Prisma__DocumentCategoryClient<runtime.Types.Result.GetResult<Prisma.$DocumentCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  chunks<T extends Prisma.Document$chunksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$chunksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChunkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  knowledgeDocuments<T extends Prisma.Document$knowledgeDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Document$knowledgeDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KnowledgeDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1738,12 +1518,11 @@ export interface DocumentFieldRefs {
   readonly fileSize: Prisma.FieldRef<"Document", 'Int'>
   readonly mimeType: Prisma.FieldRef<"Document", 'String'>
   readonly storageKey: Prisma.FieldRef<"Document", 'String'>
-  readonly status: Prisma.FieldRef<"Document", 'ProcessingStatus'>
+  readonly sourceHash: Prisma.FieldRef<"Document", 'String'>
   readonly errorMessage: Prisma.FieldRef<"Document", 'String'>
-  readonly knowledgeBaseId: Prisma.FieldRef<"Document", 'String'>
   readonly categoryId: Prisma.FieldRef<"Document", 'String'>
   readonly createdAt: Prisma.FieldRef<"Document", 'DateTime'>
-  readonly processedAt: Prisma.FieldRef<"Document", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Document", 'DateTime'>
   readonly metadata: Prisma.FieldRef<"Document", 'Json'>
 }
     
@@ -2146,25 +1925,6 @@ export type DocumentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * Document.knowledgeBase
- */
-export type Document$knowledgeBaseArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the KnowledgeBase
-   */
-  select?: Prisma.KnowledgeBaseSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the KnowledgeBase
-   */
-  omit?: Prisma.KnowledgeBaseOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.KnowledgeBaseInclude<ExtArgs> | null
-  where?: Prisma.KnowledgeBaseWhereInput
-}
-
-/**
  * Document.category
  */
 export type Document$categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2184,27 +1944,27 @@ export type Document$categoryArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Document.chunks
+ * Document.knowledgeDocuments
  */
-export type Document$chunksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Document$knowledgeDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Chunk
+   * Select specific fields to fetch from the KnowledgeDocument
    */
-  select?: Prisma.ChunkSelect<ExtArgs> | null
+  select?: Prisma.KnowledgeDocumentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Chunk
+   * Omit specific fields from the KnowledgeDocument
    */
-  omit?: Prisma.ChunkOmit<ExtArgs> | null
+  omit?: Prisma.KnowledgeDocumentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ChunkInclude<ExtArgs> | null
-  where?: Prisma.ChunkWhereInput
-  orderBy?: Prisma.ChunkOrderByWithRelationInput | Prisma.ChunkOrderByWithRelationInput[]
-  cursor?: Prisma.ChunkWhereUniqueInput
+  include?: Prisma.KnowledgeDocumentInclude<ExtArgs> | null
+  where?: Prisma.KnowledgeDocumentWhereInput
+  orderBy?: Prisma.KnowledgeDocumentOrderByWithRelationInput | Prisma.KnowledgeDocumentOrderByWithRelationInput[]
+  cursor?: Prisma.KnowledgeDocumentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.ChunkScalarFieldEnum | Prisma.ChunkScalarFieldEnum[]
+  distinct?: Prisma.KnowledgeDocumentScalarFieldEnum | Prisma.KnowledgeDocumentScalarFieldEnum[]
 }
 
 /**

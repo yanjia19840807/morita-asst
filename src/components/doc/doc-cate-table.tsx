@@ -112,7 +112,7 @@ function DocCateTable({ data }: DocCateTableProps) {
 
   return (
     <DragDropProvider onDragEnd={handleDragEnd}>
-      <div className='px-2'>
+      <div className='flex min-h-0 flex-1 flex-col px-2'>
         <TableActionSection className='justify-between'>
           <div></div>
           <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>

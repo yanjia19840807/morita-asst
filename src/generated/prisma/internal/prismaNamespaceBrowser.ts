@@ -55,7 +55,11 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  KnowledgeBase: 'KnowledgeBase',
+  Agent: 'Agent',
+  AgentKnowledge: 'AgentKnowledge',
+  PromptProfile: 'PromptProfile',
+  Knowledge: 'Knowledge',
+  KnowledgeDocument: 'KnowledgeDocument',
   DocumentCategory: 'DocumentCategory',
   Document: 'Document',
   Chunk: 'Chunk'
@@ -140,7 +144,46 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
-export const KnowledgeBaseScalarFieldEnum = {
+export const AgentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  userId: 'userId',
+  status: 'status',
+  model: 'model',
+  promptProfileId: 'promptProfileId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AgentScalarFieldEnum = (typeof AgentScalarFieldEnum)[keyof typeof AgentScalarFieldEnum]
+
+
+export const AgentKnowledgeScalarFieldEnum = {
+  id: 'id',
+  agentId: 'agentId',
+  knowledgeId: 'knowledgeId',
+  priority: 'priority',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AgentKnowledgeScalarFieldEnum = (typeof AgentKnowledgeScalarFieldEnum)[keyof typeof AgentKnowledgeScalarFieldEnum]
+
+
+export const PromptProfileScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  userId: 'userId',
+  systemPrompt: 'systemPrompt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PromptProfileScalarFieldEnum = (typeof PromptProfileScalarFieldEnum)[keyof typeof PromptProfileScalarFieldEnum]
+
+
+export const KnowledgeScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
@@ -149,7 +192,25 @@ export const KnowledgeBaseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type KnowledgeBaseScalarFieldEnum = (typeof KnowledgeBaseScalarFieldEnum)[keyof typeof KnowledgeBaseScalarFieldEnum]
+export type KnowledgeScalarFieldEnum = (typeof KnowledgeScalarFieldEnum)[keyof typeof KnowledgeScalarFieldEnum]
+
+
+export const KnowledgeDocumentScalarFieldEnum = {
+  id: 'id',
+  knowledgeId: 'knowledgeId',
+  documentId: 'documentId',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  lastIndexedAt: 'lastIndexedAt',
+  chunkCount: 'chunkCount',
+  embeddingModel: 'embeddingModel',
+  splitConfig: 'splitConfig',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type KnowledgeDocumentScalarFieldEnum = (typeof KnowledgeDocumentScalarFieldEnum)[keyof typeof KnowledgeDocumentScalarFieldEnum]
 
 
 export const DocumentCategoryScalarFieldEnum = {
@@ -173,12 +234,11 @@ export const DocumentScalarFieldEnum = {
   fileSize: 'fileSize',
   mimeType: 'mimeType',
   storageKey: 'storageKey',
-  status: 'status',
+  sourceHash: 'sourceHash',
   errorMessage: 'errorMessage',
-  knowledgeBaseId: 'knowledgeBaseId',
   categoryId: 'categoryId',
   createdAt: 'createdAt',
-  processedAt: 'processedAt',
+  updatedAt: 'updatedAt',
   metadata: 'metadata'
 } as const
 
@@ -187,7 +247,7 @@ export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typ
 
 export const ChunkScalarFieldEnum = {
   id: 'id',
-  documentId: 'documentId',
+  knowledgeDocumentId: 'knowledgeDocumentId',
   content: 'content',
   metadata: 'metadata',
   embeddingStatus: 'embeddingStatus',

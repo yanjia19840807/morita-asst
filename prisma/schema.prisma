@@ -16,7 +16,9 @@ model User {
   id                 String             @id @default(uuid())
   email              String             @unique
   createdAt          DateTime           @default(now())
-  knowledgeBases     KnowledgeBase[]
+  agents             Agent[]
+  promptProfiles     PromptProfile[]
+  knowledges         Knowledge[]
   documents          Document[]
   documentCategories DocumentCategory[]
   name               String
@@ -84,7 +86,60 @@ model Verification {
   @@map("verification")
 }
 
-model KnowledgeBase {
+model Agent {
+  id              String           @id @default(uuid())
+  name            String
+  description     String?
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  knowledges      AgentKnowledge[]
+  status          AgentStatus      @default(DRAFT)
+  model           String?
+  promptProfileId String?
+  promptProfile   PromptProfile?   @relation(fields: [promptProfileId], references: [id], onDelete: SetNull)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([userId, name])
+  @@index([userId])
+  @@index([promptProfileId])
+  @@index([status])
+  @@map("agent")
+}
+
+model AgentKnowledge {
+  id          String    @id @default(uuid())
+  agentId     String
+  knowledgeId String
+  agent       Agent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  knowledge   Knowledge @relation(fields: [knowledgeId], references: [id], onDelete: Cascade)
+  priority    Int       @default(1)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([agentId, knowledgeId])
+  @@index([agentId])
+  @@index([knowledgeId])
+  @@index([priority])
+  @@map("agent-knowledge")
+}
+
+model PromptProfile {
+  id           String   @id @default(uuid())
+  name         String
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  systemPrompt String
+  agents       Agent[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, name])
+  @@index([userId])
+  @@map("prompt-profile")
+}
+
+model Knowledge {
   id          String  @id @default(uuid())
   name        String
   description String?
@@ -92,13 +147,38 @@ model KnowledgeBase {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  documents Document[]
+  agents    AgentKnowledge[]
+  documents KnowledgeDocument[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([userId])
-  @@map("knowledge-base")
+  @@map("knowledge")
+}
+
+model KnowledgeDocument {
+  id             String                  @id @default(uuid())
+  knowledgeId    String
+  documentId     String
+  knowledge      Knowledge               @relation(fields: [knowledgeId], references: [id], onDelete: Cascade)
+  document       Document                @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  status         KnowledgeDocumentStatus @default(UPLOADED)
+  errorMessage   String?
+  lastIndexedAt  DateTime?
+  chunkCount     Int                     @default(0)
+  embeddingModel String?
+  splitConfig    Json?
+  metadata       Json?
+  chunks         Chunk[]
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+
+  @@unique([knowledgeId, documentId])
+  @@index([knowledgeId])
+  @@index([documentId])
+  @@index([status])
+  @@map("knowledge-document")
 }
 
 model DocumentCategory {
@@ -130,25 +210,21 @@ model Document {
 
   storageKey String
 
-  status       ProcessingStatus @default(UPLOADED)
+  sourceHash   String?
   errorMessage String?
-
-  knowledgeBaseId String?
-  knowledgeBase   KnowledgeBase? @relation(fields: [knowledgeBaseId], references: [id], onDelete: Cascade)
 
   categoryId String?
   category   DocumentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
-  createdAt   DateTime  @default(now())
-  processedAt DateTime?
+  knowledgeDocuments KnowledgeDocument[]
 
-  // 可选：额外元数据（LangChain 会把 fileId、knowledgeBaseId 写到向量表的 metadata JSONB）
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   metadata Json?
-  chunks   Chunk[]
 
-  @@index([knowledgeBaseId])
   @@index([userId])
-  @@index([status])
+  @@index([sourceHash])
   @@index([categoryId])
   @@map("document")
 }
@@ -156,29 +232,42 @@ model Document {
 model Chunk {
   id String @id @default(uuid())
 
-  documentId String
-  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  knowledgeDocumentId String
+  knowledgeDocument   KnowledgeDocument @relation(fields: [knowledgeDocumentId], references: [id], onDelete: Cascade)
 
   content  String // Chunk 的实际文本内容（可编辑）
-  metadata Json // LangChain 用的 metadata（包含 knowledgeBaseId、documentId 等）
+  metadata Json // LangChain 用的 metadata（包含 knowledgeId、documentId 等）
 
   // 嵌入状态
-  embeddingStatus ProcessingStatus @default(NOT_EMBEDDED)
+  embeddingStatus ChunkEmbeddingStatus @default(PENDING)
   embeddingId     String? // 可选：LangChain pgvector 表里的 uuid，方便精准删除
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([documentId])
+  @@index([knowledgeDocumentId])
   @@index([embeddingStatus])
   @@map("chunk")
 }
 
-enum ProcessingStatus {
+enum KnowledgeDocumentStatus {
   UPLOADED // 已上传（文档初始状态）
+  SPLITTING // 切分中
   SPLITTED // 已切分（文档切分完成）
-  NOT_EMBEDDED // 未嵌入（Chunk 已切分但还未嵌入向量）
   EMBEDDING // 嵌入中（正在执行嵌入操作）
-  EMBEDDED // 已嵌入（可被 RAG 检索）
+  READY // 已完成嵌入，可被 RAG 检索
   FAILED // 失败（通用失败状态，文档或 Chunk 都可用）
+}
+
+enum ChunkEmbeddingStatus {
+  PENDING // 待嵌入
+  EMBEDDING // 嵌入中
+  EMBEDDED // 已嵌入
+  FAILED // 嵌入失败
+}
+
+enum AgentStatus {
+  DRAFT
+  ACTIVE
+  DISABLED
 }

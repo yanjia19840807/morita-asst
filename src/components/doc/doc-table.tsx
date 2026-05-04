@@ -37,11 +37,11 @@ import {
 import { toast } from 'sonner'
 import DocSearch from './doc-search'
 import { useTableSelection } from '@/hooks/use-table-selection'
-import { DocumentModel } from '@/generated/prisma/models'
 import { useTableSort } from '@/hooks/use-table-sort'
+import type { DocRow } from '@/data-access/doc'
 
 interface DocTableProps {
-  data: DocumentModel[]
+  data: DocRow[]
   total: number
   pageSize: number
 }
@@ -73,7 +73,7 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
 
   const table = useReactTable({
     data,
-    columns: docColumns as ColumnDef<DocumentModel>[],
+    columns: docColumns as ColumnDef<DocRow>[],
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: isBulkMode,
     state: {
@@ -86,7 +86,7 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
   })
 
   return (
-    <div className='px-2'>
+    <div className='flex min-h-0 flex-1 flex-col px-2'>
       <TableActionSection className='justify-between'>
         <DocSearch />
         <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>

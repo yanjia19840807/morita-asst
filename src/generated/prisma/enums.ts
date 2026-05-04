@@ -9,13 +9,32 @@
 * 🟢 You can import this file directly.
 */
 
-export const ProcessingStatus = {
+export const KnowledgeDocumentStatus = {
   UPLOADED: 'UPLOADED',
+  SPLITTING: 'SPLITTING',
   SPLITTED: 'SPLITTED',
-  NOT_EMBEDDED: 'NOT_EMBEDDED',
+  EMBEDDING: 'EMBEDDING',
+  READY: 'READY',
+  FAILED: 'FAILED'
+} as const
+
+export type KnowledgeDocumentStatus = (typeof KnowledgeDocumentStatus)[keyof typeof KnowledgeDocumentStatus]
+
+
+export const ChunkEmbeddingStatus = {
+  PENDING: 'PENDING',
   EMBEDDING: 'EMBEDDING',
   EMBEDDED: 'EMBEDDED',
   FAILED: 'FAILED'
 } as const
 
-export type ProcessingStatus = (typeof ProcessingStatus)[keyof typeof ProcessingStatus]
+export type ChunkEmbeddingStatus = (typeof ChunkEmbeddingStatus)[keyof typeof ChunkEmbeddingStatus]
+
+
+export const AgentStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  DISABLED: 'DISABLED'
+} as const
+
+export type AgentStatus = (typeof AgentStatus)[keyof typeof AgentStatus]

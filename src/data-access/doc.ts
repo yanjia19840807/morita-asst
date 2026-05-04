@@ -1,6 +1,6 @@
 import { pinyin } from 'pinyin-pro'
 import { prisma } from '@/lib/prisma'
-import { Document, DocumentCategory } from '@/generated/prisma/client'
+import { DocumentCategory } from '@/generated/prisma/client'
 import type { Prisma } from '@/generated/prisma/client'
 import {
   DocCateCreateFormValues,
@@ -15,6 +15,26 @@ import {
 import { requireRoles } from './auth'
 import { ValidationError } from '@/lib/api/errors'
 import z from 'zod'
+
+export type DocRow = Prisma.DocumentGetPayload<{
+  include: {
+    knowledgeDocuments: {
+      select: {
+        id: true
+        knowledgeId: true
+        status: true
+      }
+      orderBy: {
+        createdAt: 'desc'
+      }
+    }
+    _count: {
+      select: {
+        knowledgeDocuments: true
+      }
+    }
+  }
+}>
 
 async function generateUniqueSlug(name: string): Promise<string> {
   const base = pinyin(name, {
@@ -79,7 +99,7 @@ export async function fetchDocs({
   page = 1,
   pageSize = 10
 }: fetchDocsParams): Promise<{
-  documents: Document[]
+  documents: DocRow[]
   total: number
 }> {
   const where: Prisma.DocumentWhereInput = {
@@ -101,6 +121,23 @@ export async function fetchDocs({
   const [documents, total] = await Promise.all([
     prisma.document.findMany({
       where,
+      include: {
+        knowledgeDocuments: {
+          select: {
+            id: true,
+            knowledgeId: true,
+            status: true
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        },
+        _count: {
+          select: {
+            knowledgeDocuments: true
+          }
+        }
+      },
       orderBy,
       skip: (page - 1) * pageSize,
       take: pageSize

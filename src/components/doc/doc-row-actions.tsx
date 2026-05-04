@@ -1,22 +1,17 @@
 'use client'
 
 import { Row } from '@tanstack/react-table'
-import { Ellipsis, Loader2, Trash2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
 
+import ConfirmDialog from '@/components/confirm-dialog'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import { DocumentModel } from '@/generated/prisma/models'
+import type { DocRow } from '@/data-access/doc'
 
 interface DocRowActionsProps {
-  row: Row<DocumentModel>
+  row: Row<DocRow>
 }
 
 export function DocRowActions({ row }: DocRowActionsProps) {
@@ -37,34 +32,22 @@ export function DocRowActions({ row }: DocRowActionsProps) {
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant='ghost'
-          className='data-[state=open]:bg-muted flex h-8 w-8 p-0'
-          disabled={isPending}
-        >
-          {isPending ? (
-            <Loader2 className='h-4 w-4 animate-spin' />
-          ) : (
-            <Ellipsis />
-          )}
-          <span className='sr-only'>Open Menu</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
-        <DropdownMenuItem
-          disabled={isPending}
-          variant='destructive'
-          onSelect={event => {
-            event.preventDefault()
-            handleRemove()
-          }}
-        >
-          <Trash2 />
+    <div className='flex items-center justify-end gap-2 whitespace-nowrap'>
+      <ConfirmDialog
+        title='删除文档'
+        description={`确认删除文档"${row.original.filename}"吗？此操作不可撤销。`}
+        actions={{
+          label: '删除',
+          onClick: handleRemove,
+          className:
+            'bg-destructive text-destructive-foreground hover:bg-destructive/90'
+        }}
+      >
+        <Button size='sm' variant='destructive' disabled={isPending}>
+          {isPending && <Loader2 className='h-4 w-4 animate-spin' />}
           <span>删除</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </Button>
+      </ConfirmDialog>
+    </div>
   )
 }

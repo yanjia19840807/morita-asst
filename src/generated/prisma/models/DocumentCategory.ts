@@ -487,14 +487,6 @@ export type DocumentCategoryUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.DocumentCategoryScalarWhereInput | Prisma.DocumentCategoryScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type DocumentCategoryCreateNestedOneWithoutDocumentsInput = {
   create?: Prisma.XOR<Prisma.DocumentCategoryCreateWithoutDocumentsInput, Prisma.DocumentCategoryUncheckedCreateWithoutDocumentsInput>
   connectOrCreate?: Prisma.DocumentCategoryCreateOrConnectWithoutDocumentsInput

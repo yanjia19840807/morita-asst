@@ -1,4 +1,11 @@
-import { BookOpen, Database, LucideIcon, UserCircle } from 'lucide-react'
+import {
+  BookOpen,
+  Bot,
+  Database,
+  LucideIcon,
+  ScrollText,
+  UserCircle
+} from 'lucide-react'
 
 export type MenuConfig = {
   label: string
@@ -13,6 +20,18 @@ export type MenuConfig = {
 
 export const menuConfig: MenuConfig = [
   {
+    label: '智能',
+    items: [
+      {
+        title: '助手管理',
+        url: '/agents',
+        icon: Bot,
+        isActive: false,
+        items: []
+      }
+    ]
+  },
+  {
     label: '数据',
     items: [
       {
@@ -24,8 +43,15 @@ export const menuConfig: MenuConfig = [
       },
       {
         title: '知识库',
-        url: '/knowledge-base',
+        url: '/knowledge',
         icon: Database,
+        isActive: false,
+        items: []
+      },
+      {
+        title: '提示词管理',
+        url: '/prompt-profiles',
+        icon: ScrollText,
         isActive: false,
         items: []
       }

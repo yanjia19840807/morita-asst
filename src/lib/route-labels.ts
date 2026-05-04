@@ -1,7 +1,9 @@
 export const routeLabels: Record<string, string> = {
   dashboard: '仪表盘',
+  agents: '助手管理',
   documents: '文档数据',
-  'knowledge-base': '知识库',
+  knowledge: '知识库',
+  'prompt-profiles': '提示词管理',
   users: '用户',
   new: '新增',
   profile: '个人资料',

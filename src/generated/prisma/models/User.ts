@@ -230,7 +230,9 @@ export type UserWhereInput = {
   banned?: Prisma.BoolNullableFilter<"User"> | boolean | null
   banReason?: Prisma.StringNullableFilter<"User"> | string | null
   banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseListRelationFilter
+  agents?: Prisma.AgentListRelationFilter
+  promptProfiles?: Prisma.PromptProfileListRelationFilter
+  knowledges?: Prisma.KnowledgeListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
   documentCategories?: Prisma.DocumentCategoryListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
@@ -249,7 +251,9 @@ export type UserOrderByWithRelationInput = {
   banned?: Prisma.SortOrderInput | Prisma.SortOrder
   banReason?: Prisma.SortOrderInput | Prisma.SortOrder
   banExpires?: Prisma.SortOrderInput | Prisma.SortOrder
-  knowledgeBases?: Prisma.KnowledgeBaseOrderByRelationAggregateInput
+  agents?: Prisma.AgentOrderByRelationAggregateInput
+  promptProfiles?: Prisma.PromptProfileOrderByRelationAggregateInput
+  knowledges?: Prisma.KnowledgeOrderByRelationAggregateInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
   documentCategories?: Prisma.DocumentCategoryOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
@@ -271,7 +275,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   banned?: Prisma.BoolNullableFilter<"User"> | boolean | null
   banReason?: Prisma.StringNullableFilter<"User"> | string | null
   banExpires?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseListRelationFilter
+  agents?: Prisma.AgentListRelationFilter
+  promptProfiles?: Prisma.PromptProfileListRelationFilter
+  knowledges?: Prisma.KnowledgeListRelationFilter
   documents?: Prisma.DocumentListRelationFilter
   documentCategories?: Prisma.DocumentCategoryListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
@@ -324,7 +330,9 @@ export type UserCreateInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseCreateNestedManyWithoutUserInput
+  agents?: Prisma.AgentCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUserInput
   documentCategories?: Prisma.DocumentCategoryCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -343,7 +351,9 @@ export type UserUncheckedCreateInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUncheckedCreateNestedManyWithoutUserInput
+  agents?: Prisma.AgentUncheckedCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUserInput
   documentCategories?: Prisma.DocumentCategoryUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -362,7 +372,9 @@ export type UserUpdateInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUpdateManyWithoutUserNestedInput
+  agents?: Prisma.AgentUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUserNestedInput
   documentCategories?: Prisma.DocumentCategoryUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -381,7 +393,9 @@ export type UserUncheckedUpdateInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUncheckedUpdateManyWithoutUserNestedInput
+  agents?: Prisma.AgentUncheckedUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUserNestedInput
   documentCategories?: Prisma.DocumentCategoryUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -529,18 +543,46 @@ export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
 }
 
-export type UserCreateNestedOneWithoutKnowledgeBasesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutKnowledgeBasesInput, Prisma.UserUncheckedCreateWithoutKnowledgeBasesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutKnowledgeBasesInput
+export type UserCreateNestedOneWithoutAgentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAgentsInput, Prisma.UserUncheckedCreateWithoutAgentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAgentsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutKnowledgeBasesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutKnowledgeBasesInput, Prisma.UserUncheckedCreateWithoutKnowledgeBasesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutKnowledgeBasesInput
-  upsert?: Prisma.UserUpsertWithoutKnowledgeBasesInput
+export type UserUpdateOneRequiredWithoutAgentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAgentsInput, Prisma.UserUncheckedCreateWithoutAgentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAgentsInput
+  upsert?: Prisma.UserUpsertWithoutAgentsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutKnowledgeBasesInput, Prisma.UserUpdateWithoutKnowledgeBasesInput>, Prisma.UserUncheckedUpdateWithoutKnowledgeBasesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAgentsInput, Prisma.UserUpdateWithoutAgentsInput>, Prisma.UserUncheckedUpdateWithoutAgentsInput>
+}
+
+export type UserCreateNestedOneWithoutPromptProfilesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPromptProfilesInput, Prisma.UserUncheckedCreateWithoutPromptProfilesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPromptProfilesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPromptProfilesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPromptProfilesInput, Prisma.UserUncheckedCreateWithoutPromptProfilesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPromptProfilesInput
+  upsert?: Prisma.UserUpsertWithoutPromptProfilesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPromptProfilesInput, Prisma.UserUpdateWithoutPromptProfilesInput>, Prisma.UserUncheckedUpdateWithoutPromptProfilesInput>
+}
+
+export type UserCreateNestedOneWithoutKnowledgesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutKnowledgesInput, Prisma.UserUncheckedCreateWithoutKnowledgesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutKnowledgesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutKnowledgesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutKnowledgesInput, Prisma.UserUncheckedCreateWithoutKnowledgesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutKnowledgesInput
+  upsert?: Prisma.UserUpsertWithoutKnowledgesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutKnowledgesInput, Prisma.UserUpdateWithoutKnowledgesInput>, Prisma.UserUncheckedUpdateWithoutKnowledgesInput>
 }
 
 export type UserCreateNestedOneWithoutDocumentCategoriesInput = {
@@ -583,7 +625,9 @@ export type UserCreateWithoutSessionsInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseCreateNestedManyWithoutUserInput
+  agents?: Prisma.AgentCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUserInput
   documentCategories?: Prisma.DocumentCategoryCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -601,7 +645,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUncheckedCreateNestedManyWithoutUserInput
+  agents?: Prisma.AgentUncheckedCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUserInput
   documentCategories?: Prisma.DocumentCategoryUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -635,7 +681,9 @@ export type UserUpdateWithoutSessionsInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUpdateManyWithoutUserNestedInput
+  agents?: Prisma.AgentUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUserNestedInput
   documentCategories?: Prisma.DocumentCategoryUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -653,7 +701,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUncheckedUpdateManyWithoutUserNestedInput
+  agents?: Prisma.AgentUncheckedUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUserNestedInput
   documentCategories?: Prisma.DocumentCategoryUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -671,7 +721,9 @@ export type UserCreateWithoutAccountsInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseCreateNestedManyWithoutUserInput
+  agents?: Prisma.AgentCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUserInput
   documentCategories?: Prisma.DocumentCategoryCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -689,7 +741,9 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUncheckedCreateNestedManyWithoutUserInput
+  agents?: Prisma.AgentUncheckedCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUserInput
   documentCategories?: Prisma.DocumentCategoryUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -723,7 +777,9 @@ export type UserUpdateWithoutAccountsInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUpdateManyWithoutUserNestedInput
+  agents?: Prisma.AgentUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUserNestedInput
   documentCategories?: Prisma.DocumentCategoryUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -741,13 +797,15 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUncheckedUpdateManyWithoutUserNestedInput
+  agents?: Prisma.AgentUncheckedUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUserNestedInput
   documentCategories?: Prisma.DocumentCategoryUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutKnowledgeBasesInput = {
+export type UserCreateWithoutAgentsInput = {
   id?: string
   email: string
   createdAt?: Date | string
@@ -759,13 +817,15 @@ export type UserCreateWithoutKnowledgeBasesInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
+  promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUserInput
   documentCategories?: Prisma.DocumentCategoryCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutKnowledgeBasesInput = {
+export type UserUncheckedCreateWithoutAgentsInput = {
   id?: string
   email: string
   createdAt?: Date | string
@@ -777,29 +837,31 @@ export type UserUncheckedCreateWithoutKnowledgeBasesInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
+  promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUserInput
   documentCategories?: Prisma.DocumentCategoryUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutKnowledgeBasesInput = {
+export type UserCreateOrConnectWithoutAgentsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutKnowledgeBasesInput, Prisma.UserUncheckedCreateWithoutKnowledgeBasesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAgentsInput, Prisma.UserUncheckedCreateWithoutAgentsInput>
 }
 
-export type UserUpsertWithoutKnowledgeBasesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutKnowledgeBasesInput, Prisma.UserUncheckedUpdateWithoutKnowledgeBasesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutKnowledgeBasesInput, Prisma.UserUncheckedCreateWithoutKnowledgeBasesInput>
+export type UserUpsertWithoutAgentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAgentsInput, Prisma.UserUncheckedUpdateWithoutAgentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAgentsInput, Prisma.UserUncheckedCreateWithoutAgentsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutKnowledgeBasesInput = {
+export type UserUpdateToOneWithWhereWithoutAgentsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutKnowledgeBasesInput, Prisma.UserUncheckedUpdateWithoutKnowledgeBasesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAgentsInput, Prisma.UserUncheckedUpdateWithoutAgentsInput>
 }
 
-export type UserUpdateWithoutKnowledgeBasesInput = {
+export type UserUpdateWithoutAgentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -811,13 +873,15 @@ export type UserUpdateWithoutKnowledgeBasesInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUserNestedInput
   documentCategories?: Prisma.DocumentCategoryUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutKnowledgeBasesInput = {
+export type UserUncheckedUpdateWithoutAgentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -829,6 +893,200 @@ export type UserUncheckedUpdateWithoutKnowledgeBasesInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUserNestedInput
+  documentCategories?: Prisma.DocumentCategoryUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPromptProfilesInput = {
+  id?: string
+  email: string
+  createdAt?: Date | string
+  name: string
+  emailVerified?: boolean
+  image?: string | null
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  agents?: Prisma.AgentCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUserInput
+  documentCategories?: Prisma.DocumentCategoryCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPromptProfilesInput = {
+  id?: string
+  email: string
+  createdAt?: Date | string
+  name: string
+  emailVerified?: boolean
+  image?: string | null
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  agents?: Prisma.AgentUncheckedCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUserInput
+  documentCategories?: Prisma.DocumentCategoryUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPromptProfilesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPromptProfilesInput, Prisma.UserUncheckedCreateWithoutPromptProfilesInput>
+}
+
+export type UserUpsertWithoutPromptProfilesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPromptProfilesInput, Prisma.UserUncheckedUpdateWithoutPromptProfilesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPromptProfilesInput, Prisma.UserUncheckedCreateWithoutPromptProfilesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPromptProfilesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPromptProfilesInput, Prisma.UserUncheckedUpdateWithoutPromptProfilesInput>
+}
+
+export type UserUpdateWithoutPromptProfilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  agents?: Prisma.AgentUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUserNestedInput
+  documentCategories?: Prisma.DocumentCategoryUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPromptProfilesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  agents?: Prisma.AgentUncheckedUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutUserNestedInput
+  documentCategories?: Prisma.DocumentCategoryUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutKnowledgesInput = {
+  id?: string
+  email: string
+  createdAt?: Date | string
+  name: string
+  emailVerified?: boolean
+  image?: string | null
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  agents?: Prisma.AgentCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutUserInput
+  documentCategories?: Prisma.DocumentCategoryCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutKnowledgesInput = {
+  id?: string
+  email: string
+  createdAt?: Date | string
+  name: string
+  emailVerified?: boolean
+  image?: string | null
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  agents?: Prisma.AgentUncheckedCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUserInput
+  documentCategories?: Prisma.DocumentCategoryUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutKnowledgesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutKnowledgesInput, Prisma.UserUncheckedCreateWithoutKnowledgesInput>
+}
+
+export type UserUpsertWithoutKnowledgesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutKnowledgesInput, Prisma.UserUncheckedUpdateWithoutKnowledgesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutKnowledgesInput, Prisma.UserUncheckedCreateWithoutKnowledgesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutKnowledgesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutKnowledgesInput, Prisma.UserUncheckedUpdateWithoutKnowledgesInput>
+}
+
+export type UserUpdateWithoutKnowledgesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  agents?: Prisma.AgentUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutUserNestedInput
+  documentCategories?: Prisma.DocumentCategoryUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutKnowledgesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  agents?: Prisma.AgentUncheckedUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUserNestedInput
   documentCategories?: Prisma.DocumentCategoryUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -847,7 +1105,9 @@ export type UserCreateWithoutDocumentCategoriesInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseCreateNestedManyWithoutUserInput
+  agents?: Prisma.AgentCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -865,7 +1125,9 @@ export type UserUncheckedCreateWithoutDocumentCategoriesInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUncheckedCreateNestedManyWithoutUserInput
+  agents?: Prisma.AgentUncheckedCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -899,7 +1161,9 @@ export type UserUpdateWithoutDocumentCategoriesInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUpdateManyWithoutUserNestedInput
+  agents?: Prisma.AgentUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -917,7 +1181,9 @@ export type UserUncheckedUpdateWithoutDocumentCategoriesInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUncheckedUpdateManyWithoutUserNestedInput
+  agents?: Prisma.AgentUncheckedUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -935,7 +1201,9 @@ export type UserCreateWithoutDocumentsInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseCreateNestedManyWithoutUserInput
+  agents?: Prisma.AgentCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   documentCategories?: Prisma.DocumentCategoryCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -953,7 +1221,9 @@ export type UserUncheckedCreateWithoutDocumentsInput = {
   banned?: boolean | null
   banReason?: string | null
   banExpires?: Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUncheckedCreateNestedManyWithoutUserInput
+  agents?: Prisma.AgentUncheckedCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   documentCategories?: Prisma.DocumentCategoryUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -987,7 +1257,9 @@ export type UserUpdateWithoutDocumentsInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUpdateManyWithoutUserNestedInput
+  agents?: Prisma.AgentUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   documentCategories?: Prisma.DocumentCategoryUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -1005,7 +1277,9 @@ export type UserUncheckedUpdateWithoutDocumentsInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  knowledgeBases?: Prisma.KnowledgeBaseUncheckedUpdateManyWithoutUserNestedInput
+  agents?: Prisma.AgentUncheckedUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   documentCategories?: Prisma.DocumentCategoryUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -1017,7 +1291,9 @@ export type UserUncheckedUpdateWithoutDocumentsInput = {
  */
 
 export type UserCountOutputType = {
-  knowledgeBases: number
+  agents: number
+  promptProfiles: number
+  knowledges: number
   documents: number
   documentCategories: number
   sessions: number
@@ -1025,7 +1301,9 @@ export type UserCountOutputType = {
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  knowledgeBases?: boolean | UserCountOutputTypeCountKnowledgeBasesArgs
+  agents?: boolean | UserCountOutputTypeCountAgentsArgs
+  promptProfiles?: boolean | UserCountOutputTypeCountPromptProfilesArgs
+  knowledges?: boolean | UserCountOutputTypeCountKnowledgesArgs
   documents?: boolean | UserCountOutputTypeCountDocumentsArgs
   documentCategories?: boolean | UserCountOutputTypeCountDocumentCategoriesArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
@@ -1045,8 +1323,22 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountKnowledgeBasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.KnowledgeBaseWhereInput
+export type UserCountOutputTypeCountAgentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPromptProfilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PromptProfileWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountKnowledgesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KnowledgeWhereInput
 }
 
 /**
@@ -1090,7 +1382,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   banned?: boolean
   banReason?: boolean
   banExpires?: boolean
-  knowledgeBases?: boolean | Prisma.User$knowledgeBasesArgs<ExtArgs>
+  agents?: boolean | Prisma.User$agentsArgs<ExtArgs>
+  promptProfiles?: boolean | Prisma.User$promptProfilesArgs<ExtArgs>
+  knowledges?: boolean | Prisma.User$knowledgesArgs<ExtArgs>
   documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
   documentCategories?: boolean | Prisma.User$documentCategoriesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -1142,7 +1436,9 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "createdAt" | "name" | "emailVerified" | "image" | "updatedAt" | "role" | "banned" | "banReason" | "banExpires", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  knowledgeBases?: boolean | Prisma.User$knowledgeBasesArgs<ExtArgs>
+  agents?: boolean | Prisma.User$agentsArgs<ExtArgs>
+  promptProfiles?: boolean | Prisma.User$promptProfilesArgs<ExtArgs>
+  knowledges?: boolean | Prisma.User$knowledgesArgs<ExtArgs>
   documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
   documentCategories?: boolean | Prisma.User$documentCategoriesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -1155,7 +1451,9 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    knowledgeBases: Prisma.$KnowledgeBasePayload<ExtArgs>[]
+    agents: Prisma.$AgentPayload<ExtArgs>[]
+    promptProfiles: Prisma.$PromptProfilePayload<ExtArgs>[]
+    knowledges: Prisma.$KnowledgePayload<ExtArgs>[]
     documents: Prisma.$DocumentPayload<ExtArgs>[]
     documentCategories: Prisma.$DocumentCategoryPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
@@ -1567,7 +1865,9 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  knowledgeBases<T extends Prisma.User$knowledgeBasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$knowledgeBasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KnowledgeBasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  agents<T extends Prisma.User$agentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$agentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  promptProfiles<T extends Prisma.User$promptProfilesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$promptProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromptProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  knowledges<T extends Prisma.User$knowledgesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$knowledgesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KnowledgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.User$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documentCategories<T extends Prisma.User$documentCategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$documentCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2005,27 +2305,75 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.knowledgeBases
+ * User.agents
  */
-export type User$knowledgeBasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$agentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the KnowledgeBase
+   * Select specific fields to fetch from the Agent
    */
-  select?: Prisma.KnowledgeBaseSelect<ExtArgs> | null
+  select?: Prisma.AgentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the KnowledgeBase
+   * Omit specific fields from the Agent
    */
-  omit?: Prisma.KnowledgeBaseOmit<ExtArgs> | null
+  omit?: Prisma.AgentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.KnowledgeBaseInclude<ExtArgs> | null
-  where?: Prisma.KnowledgeBaseWhereInput
-  orderBy?: Prisma.KnowledgeBaseOrderByWithRelationInput | Prisma.KnowledgeBaseOrderByWithRelationInput[]
-  cursor?: Prisma.KnowledgeBaseWhereUniqueInput
+  include?: Prisma.AgentInclude<ExtArgs> | null
+  where?: Prisma.AgentWhereInput
+  orderBy?: Prisma.AgentOrderByWithRelationInput | Prisma.AgentOrderByWithRelationInput[]
+  cursor?: Prisma.AgentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.KnowledgeBaseScalarFieldEnum | Prisma.KnowledgeBaseScalarFieldEnum[]
+  distinct?: Prisma.AgentScalarFieldEnum | Prisma.AgentScalarFieldEnum[]
+}
+
+/**
+ * User.promptProfiles
+ */
+export type User$promptProfilesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PromptProfile
+   */
+  select?: Prisma.PromptProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PromptProfile
+   */
+  omit?: Prisma.PromptProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PromptProfileInclude<ExtArgs> | null
+  where?: Prisma.PromptProfileWhereInput
+  orderBy?: Prisma.PromptProfileOrderByWithRelationInput | Prisma.PromptProfileOrderByWithRelationInput[]
+  cursor?: Prisma.PromptProfileWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PromptProfileScalarFieldEnum | Prisma.PromptProfileScalarFieldEnum[]
+}
+
+/**
+ * User.knowledges
+ */
+export type User$knowledgesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Knowledge
+   */
+  select?: Prisma.KnowledgeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Knowledge
+   */
+  omit?: Prisma.KnowledgeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KnowledgeInclude<ExtArgs> | null
+  where?: Prisma.KnowledgeWhereInput
+  orderBy?: Prisma.KnowledgeOrderByWithRelationInput | Prisma.KnowledgeOrderByWithRelationInput[]
+  cursor?: Prisma.KnowledgeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KnowledgeScalarFieldEnum | Prisma.KnowledgeScalarFieldEnum[]
 }
 
 /**

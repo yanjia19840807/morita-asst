@@ -62,10 +62,30 @@ export type Account = Prisma.AccountModel
  */
 export type Verification = Prisma.VerificationModel
 /**
- * Model KnowledgeBase
+ * Model Agent
  * 
  */
-export type KnowledgeBase = Prisma.KnowledgeBaseModel
+export type Agent = Prisma.AgentModel
+/**
+ * Model AgentKnowledge
+ * 
+ */
+export type AgentKnowledge = Prisma.AgentKnowledgeModel
+/**
+ * Model PromptProfile
+ * 
+ */
+export type PromptProfile = Prisma.PromptProfileModel
+/**
+ * Model Knowledge
+ * 
+ */
+export type Knowledge = Prisma.KnowledgeModel
+/**
+ * Model KnowledgeDocument
+ * 
+ */
+export type KnowledgeDocument = Prisma.KnowledgeDocumentModel
 /**
  * Model DocumentCategory
  * 
