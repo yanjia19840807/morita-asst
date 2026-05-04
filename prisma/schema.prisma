@@ -102,12 +102,13 @@ model KnowledgeBase {
 }
 
 model DocumentCategory {
-  id     String @id @default(uuid())
-  name   String
-  slug   String @unique
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id        String     @id @default(uuid())
+  name      String
+  slug      String     @unique
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order     Int        @default(1)
+  isDefault Boolean    @default(false)
   documents Document[]
 
   createdAt DateTime @default(now())

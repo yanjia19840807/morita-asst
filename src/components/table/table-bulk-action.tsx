@@ -14,7 +14,10 @@ export default function TableBulkAction({
   return (
     <div className='flex flex-row items-center gap-2'>
       {children}
-      <Button variant='secondary' onClick={handleToggle}>
+      <Button
+        variant={isBulkMode ? 'secondary' : 'ghost'}
+        onClick={handleToggle}
+      >
         {isBulkMode ? '取消批量操作' : '批量操作'}
       </Button>
     </div>

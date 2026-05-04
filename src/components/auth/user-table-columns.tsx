@@ -43,6 +43,7 @@ export const userColumns: ColumnDef<UserRow>[] = [
   },
   {
     accessorKey: 'name',
+    enableSorting: false,
     header: ({ column }) => (
       <TableColumnHeader column={column} title={'名称'} />
     ),
@@ -57,6 +58,7 @@ export const userColumns: ColumnDef<UserRow>[] = [
   },
   {
     accessorKey: 'email',
+    enableSorting: false,
     header: ({ column }) => (
       <TableColumnHeader column={column} title={'邮箱地址'} />
     )
@@ -102,7 +104,6 @@ export const userColumns: ColumnDef<UserRow>[] = [
   },
   {
     accessorKey: 'banExpires',
-    enableSorting: false,
     header: ({ column }) => (
       <TableColumnHeader column={column} title={'禁止期限'} />
     ),

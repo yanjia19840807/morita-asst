@@ -2,8 +2,6 @@
 
 import {
   ColumnDef,
-  OnChangeFn,
-  SortingState,
   flexRender,
   getCoreRowModel,
   useReactTable
@@ -40,7 +38,7 @@ import { toast } from 'sonner'
 import DocSearch from './doc-search'
 import { useTableSelection } from '@/hooks/use-table-selection'
 import { DocumentModel } from '@/generated/prisma/models'
-import { useDocumentsParams } from '@/hooks/use-documents-params'
+import { useTableSort } from '@/hooks/use-table-sort'
 
 interface DocTableProps {
   data: DocumentModel[]
@@ -53,37 +51,19 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
     isBulkMode,
     setIsBulkMode,
     selectedIds,
-    setSelectedIds,
     rowSelection,
-    onRowSelectionChange
+    onRowSelectionChange,
+    clearSelection,
+    handleToggle
   } = useTableSelection(data)
-  const { sortBy, sortDirection, setSorting } = useDocumentsParams()
+  const { sorting, onSortingChange } = useTableSort()
 
   const [, startTransition] = useTransition()
-
-  const sorting: SortingState = sortBy
-    ? [{ id: sortBy, desc: sortDirection === 'desc' }]
-    : []
-
-  const handleToggle = () => {
-    if (isBulkMode) setSelectedIds([])
-    setIsBulkMode(v => !v)
-  }
-
-  const onSortingChange: OnChangeFn<SortingState> = updater => {
-    const newSorting =
-      typeof updater === 'function' ? updater(sorting) : updater
-    if (newSorting.length > 0) {
-      setSorting(newSorting[0].id, newSorting[0].desc ? 'desc' : 'asc')
-    } else {
-      setSorting(null, null)
-    }
-  }
 
   const handleBulkRemove = () => {
     startTransition(async () => {
       try {
-        setSelectedIds([])
+        clearSelection()
         setIsBulkMode(false)
       } catch {
         toast.error('操作失败，请稍后重试')
@@ -108,38 +88,34 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
   return (
     <div className='px-2'>
       <TableActionSection className='justify-between'>
-        <div>
-          <DocSearch />
-        </div>
-        <div>
-          <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
-            {isBulkMode && selectedIds.length > 0 && (
-              <>
-                <TableSelectionText count={selectedIds.length} />
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant='destructive'>批量删除</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>确认批量删除</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        即将删除 {selectedIds.length}
-                        个用户，此操作不可撤销，是否继续？
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>取消</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleBulkRemove}>
-                        确认删除
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </>
-            )}
-          </TableBulkAction>
-        </div>
+        <DocSearch />
+        <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
+          {isBulkMode && selectedIds.length > 0 && (
+            <>
+              <TableSelectionText count={selectedIds.length} />
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant='destructive'>批量删除</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>确认批量删除</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      即将删除 {selectedIds.length}
+                      个用户，此操作不可撤销，是否继续？
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>取消</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleBulkRemove}>
+                      确认删除
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
+          )}
+        </TableBulkAction>
       </TableActionSection>
       <Table>
         <TableHeader>

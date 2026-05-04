@@ -1,0 +1,54 @@
+'use client'
+
+import { ColumnDef } from '@tanstack/react-table'
+import { TableColumnHeader } from '../table/table-column-header'
+import { Checkbox } from '../ui/checkbox'
+import { DocumentCategory } from '@/generated/prisma/client'
+import RowDragHandle from '../row-drag-handle'
+
+export const docCateColumns: ColumnDef<DocumentCategory>[] = [
+  {
+    id: 'select',
+    size: 80,
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={checked => table.toggleAllPageRowsSelected(!!checked)}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        disabled={!row.getCanSelect()}
+        onCheckedChange={checked => row.toggleSelected(!!checked)}
+      />
+    )
+  },
+  {
+    id: 'sort',
+    size: 80,
+    header: '排序',
+    cell: ({ row }) => <RowDragHandle disabled={row.original.isDefault} />
+  },
+  {
+    accessorKey: 'name',
+    enableSorting: false,
+    header: ({ column }) => <TableColumnHeader column={column} title='名称' />,
+    cell: ({ row }) => row.original.name
+  },
+  {
+    accessorKey: 'createdAt',
+    enableSorting: false,
+    header: ({ column }) => (
+      <TableColumnHeader column={column} title={'创建时间'} />
+    ),
+    cell: ({ row }) => new Date(row.original.createdAt).toLocaleString('zh-CN')
+  },
+  {
+    id: 'actions',
+    cell: () => <></>
+  }
+]

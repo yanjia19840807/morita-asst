@@ -65,7 +65,7 @@ export function UserCreateForm() {
     formState: UseFormStateReturn<UserCreateFormValues>
   }) {
     return (
-      <Field data-invalid={fieldState.invalid}>
+      <Field data-invalid={fieldState.invalid} className='w-1/2'>
         <FieldLabel htmlFor={field.name}>头像</FieldLabel>
         <AvatarInput {...field} />
         {fieldState.invalid && fieldState.error && (
@@ -84,7 +84,7 @@ export function UserCreateForm() {
     formState: UseFormStateReturn<UserCreateFormValues>
   }) {
     return (
-      <Field data-invalid={fieldState.invalid}>
+      <Field data-invalid={fieldState.invalid} className='w-1/2'>
         <FieldLabel htmlFor={field.name}>邮箱地址</FieldLabel>
         <Input
           id={field.name}
@@ -108,7 +108,7 @@ export function UserCreateForm() {
     formState: UseFormStateReturn<UserCreateFormValues>
   }) {
     return (
-      <Field data-invalid={fieldState.invalid}>
+      <Field data-invalid={fieldState.invalid} className='w-1/2'>
         <FieldLabel htmlFor={field.name}>用户名</FieldLabel>
         <Input
           id={field.name}
@@ -133,7 +133,7 @@ export function UserCreateForm() {
     formState: UseFormStateReturn<UserCreateFormValues>
   }) {
     return (
-      <Field data-invalid={fieldState.invalid}>
+      <Field data-invalid={fieldState.invalid} className='w-1/2'>
         <FieldLabel htmlFor={field.name}>密码</FieldLabel>
         <Input
           id={field.name}
@@ -162,7 +162,7 @@ export function UserCreateForm() {
     formState: UseFormStateReturn<UserCreateFormValues>
   }) {
     return (
-      <Field data-invalid={fieldState.invalid}>
+      <Field data-invalid={fieldState.invalid} className='w-1/2'>
         <FieldLabel htmlFor={field.name}>角色</FieldLabel>
         <Select
           value={field.value ?? ''}

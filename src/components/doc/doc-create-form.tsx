@@ -67,7 +67,7 @@ export default function DocCreateForm({
     formState: UseFormStateReturn<DocCreateFormValues>
   }) => {
     return (
-      <Field data-invalid={fieldState.invalid}>
+      <Field data-invalid={fieldState.invalid} className='w-1/2'>
         <FieldLabel htmlFor={field.name}>类目</FieldLabel>
         <DocCateCombobox
           docCatesPromise={docCatesPromise}
@@ -77,16 +77,11 @@ export default function DocCreateForm({
           invalid={fieldState.invalid}
         />
         <FieldDescription>
-          <DocCateDialog
-            trigger={
-              <Button type='button' variant='link' size='sm'>
-                新增类目
-              </Button>
-            }
-          />
-          <Button type='button' variant='link' size='sm'>
-            管理类目
-          </Button>
+          <DocCateDialog>
+            <Button type='button' variant='link' size='sm'>
+              新增类目
+            </Button>
+          </DocCateDialog>
         </FieldDescription>
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
@@ -104,7 +99,7 @@ export default function DocCreateForm({
     formState: UseFormStateReturn<DocCreateFormValues>
   }) => {
     return (
-      <Field data-invalid={fieldState.invalid}>
+      <Field data-invalid={fieldState.invalid} className='w-1/2'>
         <FieldLabel htmlFor={field.name}>选择文件</FieldLabel>
         <DocUpload
           ref={e => {

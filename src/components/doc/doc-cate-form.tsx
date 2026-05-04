@@ -1,7 +1,10 @@
-import React, { useImperativeHandle } from 'react'
+'use client'
+
+import { useTransition } from 'react'
 import { DocCateCreateFormValues, docCateCreateSchema } from '@/schemas/doc'
 import {
   Field,
+  FieldContent,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -18,24 +21,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { createDocCateAction } from '@/app/(dashboard)/documents/actions'
 import { toast } from 'sonner'
 import { Input } from '../ui/input'
+import { Button } from '../ui/button'
+import { LoaderCircle, Save } from 'lucide-react'
 
-export interface DocCateCreateFormRef {
-  submit: () => void
-}
+function DocCateForm() {
+  const [isPending, startTransition] = useTransition()
 
-interface DocCateCreateFormProps {
-  onClose: () => void
-  onSuccess?: () => void
-  startTransition: (callback: () => void) => void
-  ref: React.Ref<DocCateCreateFormRef>
-}
-
-function DocCateCreateForm({
-  onClose,
-  onSuccess,
-  startTransition,
-  ref
-}: DocCateCreateFormProps) {
   const form = useForm({
     resolver: zodResolver(docCateCreateSchema),
     defaultValues: {
@@ -52,15 +43,25 @@ function DocCateCreateForm({
     formState: UseFormStateReturn<DocCateCreateFormValues>
   }) {
     return (
-      <Field data-invalid={fieldState.invalid}>
-        <FieldLabel htmlFor={field.name}>名称</FieldLabel>
-        <Input
-          id={field.name}
-          type='text'
-          placeholder='请填写类目名称'
-          aria-invalid={fieldState.invalid}
-          {...field}
-        />
+      <Field data-invalid={fieldState.invalid} className='w-1/2'>
+        <div className='flex flex-1 flex-row gap-3'>
+          <FieldLabel htmlFor={field.name} className='whitespace-nowrap'>
+            名称
+          </FieldLabel>
+          <Input
+            id={field.name}
+            type='text'
+            placeholder='填写类目名称'
+            aria-invalid={fieldState.invalid}
+            {...field}
+          />
+
+          <Button type='submit' disabled={isPending}>
+            {isPending && <LoaderCircle className='animate-spin' />}
+            <Save />
+            保存
+          </Button>
+        </div>
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
         )}
@@ -78,26 +79,18 @@ function DocCateCreateForm({
 
         if (result.success) {
           toast.success('保存成功')
-          onSuccess?.()
-          onClose?.()
         } else {
           toast.error(result.error.message)
         }
       } catch (error) {
         console.error(error)
-        toast.error('创建文档类目失败')
+        toast.error('操作失败，请稍后重试')
       }
     })
   }
 
-  useImperativeHandle(ref, () => ({
-    submit: () => {
-      void form.handleSubmit(onSubmit)()
-    }
-  }))
-
   return (
-    <form id='docCateForm'>
+    <form id='docCateForm' onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
         <FieldSet>
           <Controller
@@ -111,4 +104,4 @@ function DocCateCreateForm({
   )
 }
 
-export default DocCateCreateForm
+export default DocCateForm

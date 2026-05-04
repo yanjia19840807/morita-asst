@@ -20,8 +20,18 @@ export type DocumentCategoryModel = runtime.Types.Result.DefaultSelection<Prisma
 
 export type AggregateDocumentCategory = {
   _count: DocumentCategoryCountAggregateOutputType | null
+  _avg: DocumentCategoryAvgAggregateOutputType | null
+  _sum: DocumentCategorySumAggregateOutputType | null
   _min: DocumentCategoryMinAggregateOutputType | null
   _max: DocumentCategoryMaxAggregateOutputType | null
+}
+
+export type DocumentCategoryAvgAggregateOutputType = {
+  order: number | null
+}
+
+export type DocumentCategorySumAggregateOutputType = {
+  order: number | null
 }
 
 export type DocumentCategoryMinAggregateOutputType = {
@@ -29,6 +39,8 @@ export type DocumentCategoryMinAggregateOutputType = {
   name: string | null
   slug: string | null
   userId: string | null
+  order: number | null
+  isDefault: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +50,8 @@ export type DocumentCategoryMaxAggregateOutputType = {
   name: string | null
   slug: string | null
   userId: string | null
+  order: number | null
+  isDefault: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,17 +61,29 @@ export type DocumentCategoryCountAggregateOutputType = {
   name: number
   slug: number
   userId: number
+  order: number
+  isDefault: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
 
+export type DocumentCategoryAvgAggregateInputType = {
+  order?: true
+}
+
+export type DocumentCategorySumAggregateInputType = {
+  order?: true
+}
+
 export type DocumentCategoryMinAggregateInputType = {
   id?: true
   name?: true
   slug?: true
   userId?: true
+  order?: true
+  isDefault?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -67,6 +93,8 @@ export type DocumentCategoryMaxAggregateInputType = {
   name?: true
   slug?: true
   userId?: true
+  order?: true
+  isDefault?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,6 +104,8 @@ export type DocumentCategoryCountAggregateInputType = {
   name?: true
   slug?: true
   userId?: true
+  order?: true
+  isDefault?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -119,6 +149,18 @@ export type DocumentCategoryAggregateArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: DocumentCategoryAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: DocumentCategorySumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: DocumentCategoryMinAggregateInputType
@@ -149,6 +191,8 @@ export type DocumentCategoryGroupByArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   _count?: DocumentCategoryCountAggregateInputType | true
+  _avg?: DocumentCategoryAvgAggregateInputType
+  _sum?: DocumentCategorySumAggregateInputType
   _min?: DocumentCategoryMinAggregateInputType
   _max?: DocumentCategoryMaxAggregateInputType
 }
@@ -158,9 +202,13 @@ export type DocumentCategoryGroupByOutputType = {
   name: string
   slug: string
   userId: string
+  order: number
+  isDefault: boolean
   createdAt: Date
   updatedAt: Date
   _count: DocumentCategoryCountAggregateOutputType | null
+  _avg: DocumentCategoryAvgAggregateOutputType | null
+  _sum: DocumentCategorySumAggregateOutputType | null
   _min: DocumentCategoryMinAggregateOutputType | null
   _max: DocumentCategoryMaxAggregateOutputType | null
 }
@@ -188,6 +236,8 @@ export type DocumentCategoryWhereInput = {
   name?: Prisma.StringFilter<"DocumentCategory"> | string
   slug?: Prisma.StringFilter<"DocumentCategory"> | string
   userId?: Prisma.StringFilter<"DocumentCategory"> | string
+  order?: Prisma.IntFilter<"DocumentCategory"> | number
+  isDefault?: Prisma.BoolFilter<"DocumentCategory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DocumentCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DocumentCategory"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -199,6 +249,8 @@ export type DocumentCategoryOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  order?: Prisma.SortOrder
+  isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -214,6 +266,8 @@ export type DocumentCategoryWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DocumentCategoryWhereInput | Prisma.DocumentCategoryWhereInput[]
   name?: Prisma.StringFilter<"DocumentCategory"> | string
   userId?: Prisma.StringFilter<"DocumentCategory"> | string
+  order?: Prisma.IntFilter<"DocumentCategory"> | number
+  isDefault?: Prisma.BoolFilter<"DocumentCategory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DocumentCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DocumentCategory"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -225,11 +279,15 @@ export type DocumentCategoryOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  order?: Prisma.SortOrder
+  isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.DocumentCategoryCountOrderByAggregateInput
+  _avg?: Prisma.DocumentCategoryAvgOrderByAggregateInput
   _max?: Prisma.DocumentCategoryMaxOrderByAggregateInput
   _min?: Prisma.DocumentCategoryMinOrderByAggregateInput
+  _sum?: Prisma.DocumentCategorySumOrderByAggregateInput
 }
 
 export type DocumentCategoryScalarWhereWithAggregatesInput = {
@@ -240,6 +298,8 @@ export type DocumentCategoryScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"DocumentCategory"> | string
   slug?: Prisma.StringWithAggregatesFilter<"DocumentCategory"> | string
   userId?: Prisma.StringWithAggregatesFilter<"DocumentCategory"> | string
+  order?: Prisma.IntWithAggregatesFilter<"DocumentCategory"> | number
+  isDefault?: Prisma.BoolWithAggregatesFilter<"DocumentCategory"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"DocumentCategory"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"DocumentCategory"> | Date | string
 }
@@ -248,6 +308,8 @@ export type DocumentCategoryCreateInput = {
   id?: string
   name: string
   slug: string
+  order?: number
+  isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutDocumentCategoriesInput
@@ -259,6 +321,8 @@ export type DocumentCategoryUncheckedCreateInput = {
   name: string
   slug: string
   userId: string
+  order?: number
+  isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCategoryInput
@@ -268,6 +332,8 @@ export type DocumentCategoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutDocumentCategoriesNestedInput
@@ -279,6 +345,8 @@ export type DocumentCategoryUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCategoryNestedInput
@@ -289,6 +357,8 @@ export type DocumentCategoryCreateManyInput = {
   name: string
   slug: string
   userId: string
+  order?: number
+  isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -297,6 +367,8 @@ export type DocumentCategoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -306,6 +378,8 @@ export type DocumentCategoryUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -330,8 +404,14 @@ export type DocumentCategoryCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  order?: Prisma.SortOrder
+  isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type DocumentCategoryAvgOrderByAggregateInput = {
+  order?: Prisma.SortOrder
 }
 
 export type DocumentCategoryMaxOrderByAggregateInput = {
@@ -339,6 +419,8 @@ export type DocumentCategoryMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  order?: Prisma.SortOrder
+  isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -348,8 +430,14 @@ export type DocumentCategoryMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  order?: Prisma.SortOrder
+  isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type DocumentCategorySumOrderByAggregateInput = {
+  order?: Prisma.SortOrder
 }
 
 export type DocumentCategoryNullableScalarRelationFilter = {
@@ -399,6 +487,14 @@ export type DocumentCategoryUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.DocumentCategoryScalarWhereInput | Prisma.DocumentCategoryScalarWhereInput[]
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type DocumentCategoryCreateNestedOneWithoutDocumentsInput = {
   create?: Prisma.XOR<Prisma.DocumentCategoryCreateWithoutDocumentsInput, Prisma.DocumentCategoryUncheckedCreateWithoutDocumentsInput>
   connectOrCreate?: Prisma.DocumentCategoryCreateOrConnectWithoutDocumentsInput
@@ -419,6 +515,8 @@ export type DocumentCategoryCreateWithoutUserInput = {
   id?: string
   name: string
   slug: string
+  order?: number
+  isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   documents?: Prisma.DocumentCreateNestedManyWithoutCategoryInput
@@ -428,6 +526,8 @@ export type DocumentCategoryUncheckedCreateWithoutUserInput = {
   id?: string
   name: string
   slug: string
+  order?: number
+  isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCategoryInput
@@ -467,6 +567,8 @@ export type DocumentCategoryScalarWhereInput = {
   name?: Prisma.StringFilter<"DocumentCategory"> | string
   slug?: Prisma.StringFilter<"DocumentCategory"> | string
   userId?: Prisma.StringFilter<"DocumentCategory"> | string
+  order?: Prisma.IntFilter<"DocumentCategory"> | number
+  isDefault?: Prisma.BoolFilter<"DocumentCategory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DocumentCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DocumentCategory"> | Date | string
 }
@@ -475,6 +577,8 @@ export type DocumentCategoryCreateWithoutDocumentsInput = {
   id?: string
   name: string
   slug: string
+  order?: number
+  isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutDocumentCategoriesInput
@@ -485,6 +589,8 @@ export type DocumentCategoryUncheckedCreateWithoutDocumentsInput = {
   name: string
   slug: string
   userId: string
+  order?: number
+  isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -509,6 +615,8 @@ export type DocumentCategoryUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutDocumentCategoriesNestedInput
@@ -519,6 +627,8 @@ export type DocumentCategoryUncheckedUpdateWithoutDocumentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -527,6 +637,8 @@ export type DocumentCategoryCreateManyUserInput = {
   id?: string
   name: string
   slug: string
+  order?: number
+  isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -535,6 +647,8 @@ export type DocumentCategoryUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.DocumentUpdateManyWithoutCategoryNestedInput
@@ -544,6 +658,8 @@ export type DocumentCategoryUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCategoryNestedInput
@@ -553,6 +669,8 @@ export type DocumentCategoryUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -593,6 +711,8 @@ export type DocumentCategorySelect<ExtArgs extends runtime.Types.Extensions.Inte
   name?: boolean
   slug?: boolean
   userId?: boolean
+  order?: boolean
+  isDefault?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -605,6 +725,8 @@ export type DocumentCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   name?: boolean
   slug?: boolean
   userId?: boolean
+  order?: boolean
+  isDefault?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -615,6 +737,8 @@ export type DocumentCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   name?: boolean
   slug?: boolean
   userId?: boolean
+  order?: boolean
+  isDefault?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -625,11 +749,13 @@ export type DocumentCategorySelectScalar = {
   name?: boolean
   slug?: boolean
   userId?: boolean
+  order?: boolean
+  isDefault?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DocumentCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["documentCategory"]>
+export type DocumentCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "userId" | "order" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["documentCategory"]>
 export type DocumentCategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.DocumentCategory$documentsArgs<ExtArgs>
@@ -653,6 +779,8 @@ export type $DocumentCategoryPayload<ExtArgs extends runtime.Types.Extensions.In
     name: string
     slug: string
     userId: string
+    order: number
+    isDefault: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["documentCategory"]>
@@ -1084,6 +1212,8 @@ export interface DocumentCategoryFieldRefs {
   readonly name: Prisma.FieldRef<"DocumentCategory", 'String'>
   readonly slug: Prisma.FieldRef<"DocumentCategory", 'String'>
   readonly userId: Prisma.FieldRef<"DocumentCategory", 'String'>
+  readonly order: Prisma.FieldRef<"DocumentCategory", 'Int'>
+  readonly isDefault: Prisma.FieldRef<"DocumentCategory", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"DocumentCategory", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"DocumentCategory", 'DateTime'>
 }

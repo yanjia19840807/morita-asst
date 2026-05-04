@@ -2,8 +2,6 @@
 
 import {
   ColumnDef,
-  OnChangeFn,
-  SortingState,
   flexRender,
   getCoreRowModel,
   useReactTable
@@ -34,7 +32,7 @@ import {
 import { toast } from 'sonner'
 import ConfirmDialog from '../confirm-dialog'
 import { useTableSelection } from '@/hooks/use-table-selection'
-import { useUserParams } from '@/hooks/use-user-params'
+import { useTableSort } from '@/hooks/use-table-sort'
 
 interface UserTableProps {
   data: UserRow[]
@@ -47,28 +45,13 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
     isBulkMode,
     setIsBulkMode,
     selectedIds,
-    setSelectedIds,
     handleToggle,
     rowSelection,
+    clearSelection,
     onRowSelectionChange
   } = useTableSelection(data)
-  const { sortBy, sortDirection, setSorting } = useUserParams()
   const [isPending, startTransition] = useTransition()
-
-  const sorting: SortingState = sortBy
-    ? [{ id: sortBy, desc: sortDirection === 'desc' }]
-    : []
-
-  const onSortingChange: OnChangeFn<SortingState> = updater => {
-    const nextSorting =
-      typeof updater === 'function' ? updater(sorting) : updater
-
-    if (nextSorting.length > 0) {
-      setSorting(nextSorting[0].id, nextSorting[0].desc ? 'desc' : 'asc')
-    } else {
-      setSorting(null, null)
-    }
-  }
+  const { sorting, onSortingChange } = useTableSort()
 
   const handleBulkRemove = () => {
     startTransition(async () => {
@@ -76,7 +59,7 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
         const result = await bulkRemoveUsersAction(selectedIds)
         if (result.success) {
           toast.success(`已删除 ${selectedIds.length} 个用户`)
-          setSelectedIds([])
+          clearSelection()
           setIsBulkMode(false)
         } else {
           toast.error(result.error.message)
@@ -93,7 +76,7 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
         const result = await bulkBanUsersAction(selectedIds)
         if (result.success) {
           toast.success(`已禁用 ${selectedIds.length} 个用户`)
-          setSelectedIds([])
+          clearSelection()
           setIsBulkMode(false)
         } else {
           toast.error(result.error.message)
@@ -110,7 +93,7 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
         const result = await bulkUnbanUsersAction(selectedIds)
         if (result.success) {
           toast.success(`已启用 ${selectedIds.length} 个用户`)
-          setSelectedIds([])
+          clearSelection()
           setIsBulkMode(false)
         } else {
           toast.error(result.error.message)
@@ -127,6 +110,7 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
     enableRowSelection: isBulkMode,
+    getRowId: row => row.id,
     state: {
       sorting,
       rowSelection,
@@ -139,53 +123,49 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
   return (
     <div>
       <TableActionSection className='justify-between'>
-        <div>
-          <UserSearch />
-        </div>
-        <div>
-          <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
-            {isBulkMode && selectedIds.length > 0 && (
-              <>
-                <TableSelectionText count={selectedIds.length} />
-                <ConfirmDialog
-                  title='确认批量删除'
-                  description={`即将删除 ${selectedIds.length}
+        <UserSearch />
+        <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
+          {isBulkMode && selectedIds.length > 0 && (
+            <>
+              <TableSelectionText count={selectedIds.length} />
+              <ConfirmDialog
+                title='确认批量删除'
+                description={`即将删除 ${selectedIds.length}
                         个用户，此操作不可撤销，是否继续？`}
-                  actions={{
-                    label: '确认删除',
-                    onClick: handleBulkRemove
-                  }}
-                >
-                  <Button variant='destructive'>批量删除</Button>
-                </ConfirmDialog>
-                <ConfirmDialog
-                  title='批量禁用'
-                  description={`即将禁用 ${selectedIds.length} 个用户，是否继续？`}
-                  actions={{
-                    label: '确认禁用',
-                    onClick: handleBulkBan
-                  }}
-                >
-                  <Button variant='destructive' disabled={isPending}>
-                    批量禁用
-                  </Button>
-                </ConfirmDialog>
-                <ConfirmDialog
-                  title='批量启用'
-                  description={`即将启用 ${selectedIds.length} 个用户，是否继续？`}
-                  actions={{
-                    label: '确认启用',
-                    onClick: handleBulkUnban
-                  }}
-                >
-                  <Button variant='secondary' disabled={isPending}>
-                    批量启用
-                  </Button>
-                </ConfirmDialog>
-              </>
-            )}
-          </TableBulkAction>
-        </div>
+                actions={{
+                  label: '确认删除',
+                  onClick: handleBulkRemove
+                }}
+              >
+                <Button variant='destructive'>批量删除</Button>
+              </ConfirmDialog>
+              <ConfirmDialog
+                title='批量禁用'
+                description={`即将禁用 ${selectedIds.length} 个用户，是否继续？`}
+                actions={{
+                  label: '确认禁用',
+                  onClick: handleBulkBan
+                }}
+              >
+                <Button variant='destructive' disabled={isPending}>
+                  批量禁用
+                </Button>
+              </ConfirmDialog>
+              <ConfirmDialog
+                title='批量启用'
+                description={`即将启用 ${selectedIds.length} 个用户，是否继续？`}
+                actions={{
+                  label: '确认启用',
+                  onClick: handleBulkUnban
+                }}
+              >
+                <Button variant='secondary' disabled={isPending}>
+                  批量启用
+                </Button>
+              </ConfirmDialog>
+            </>
+          )}
+        </TableBulkAction>
       </TableActionSection>
       <Table>
         <TableHeader>

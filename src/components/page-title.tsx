@@ -3,7 +3,7 @@ import React from 'react'
 interface PageTitleProps {
   title?: string
   children: React.ReactNode
-  actionButtons: React.ReactNode
+  actionButtons?: React.ReactNode
 }
 
 export default function PageTitle({ children, actionButtons }: PageTitleProps) {

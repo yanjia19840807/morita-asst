@@ -57,8 +57,15 @@ export const docCateCreateSchema = docCateSchema.omit({ id: true })
 
 export const docCateEditSchema = docCateSchema.extend({})
 
+export const docCateReorderSchema = z.object({
+  sourceId: z.uuid('源类目ID不能为空'),
+  targetId: z.uuid('目标类目ID不能为空')
+})
+
 export type DocCateCreateFormValues = z.infer<typeof docCateCreateSchema>
 
 export type DocCateEditFormValues = z.infer<typeof docCateEditSchema>
+
+export type DocCateReorderValues = z.infer<typeof docCateReorderSchema>
 
 export type DocCateFormValues = z.infer<typeof docCateSchema>

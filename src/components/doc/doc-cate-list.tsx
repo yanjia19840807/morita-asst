@@ -6,23 +6,23 @@ import { cn } from '@/lib/utils'
 import { useDocumentsParams } from '@/hooks/use-documents-params'
 import { DocumentCategory } from '@/generated/prisma/client'
 
-export default function DocCateList({ cates }: { cates: DocumentCategory[] }) {
+export default function DocCateList({ data }: { data: DocumentCategory[] }) {
   const { categoryId, setCategoryId } = useDocumentsParams()
 
   return (
     <ScrollArea className='h-full'>
       <div className='space-y-4 p-4'>
-        {cates.map(cate => (
-          <div key={cate.id}>
+        {data.map(item => (
+          <div key={item.id}>
             <Link
               href='#'
               className={cn(
                 'text-muted-foreground hover:text-foreground text-sm transition-colors',
-                categoryId === cate.id && 'text-foreground font-medium'
+                categoryId === item.id && 'text-foreground font-medium'
               )}
-              onClick={() => setCategoryId(cate.id)}
+              onClick={() => setCategoryId(item.id)}
             >
-              {cate.name}
+              {item.name}
             </Link>
           </div>
         ))}

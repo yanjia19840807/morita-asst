@@ -6,8 +6,9 @@ import {
   SidebarGroupContent,
   SidebarHeader
 } from '@/components/ui/sidebar'
-import DocCateDialog from './doc-cate-dialog'
 import { fetchDocCates } from '@/data-access/doc'
+import Link from 'next/link'
+import { Button } from '../ui/button'
 
 export default async function DocCateSidebar() {
   const cates = await fetchDocCates()
@@ -16,12 +17,14 @@ export default async function DocCateSidebar() {
     <Sidebar collapsible='none' className='flex w-56 border-r'>
       <SidebarHeader className='flex flex-row items-center justify-between gap-3 p-2'>
         <span className='text-base font-medium'>类目</span>
-        <DocCateDialog />
+        <Button size='sm' variant='link' asChild>
+          <Link href='/documents/categories'>管理</Link>
+        </Button>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup className='min-h-0 flex-1 px-0 pt-0'>
           <SidebarGroupContent className='h-full'>
-            <DocCateList cates={cates} />
+            <DocCateList data={cates} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

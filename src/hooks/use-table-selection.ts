@@ -1,40 +1,48 @@
 import { OnChangeFn, RowSelectionState } from '@tanstack/react-table'
-import _ from 'lodash'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
-export function useTableSelection(data: { id: string }[]) {
+export function useTableSelection<T extends { id: string }>(data: T[]) {
   const [isBulkMode, setIsBulkMode] = useState(false)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds])
+  const selectedLength = selectedIds.length
 
-  const rowSelection = useMemo(
-    () =>
-      _.transform(
-        data,
-        (acc: RowSelectionState, row, i) => {
-          if (selectedIdSet.has(row.id)) acc[i] = true
-        },
-        {}
-      ),
-    [data, selectedIdSet]
+  const pageIds = new Set(data.map(item => item.id))
+  const rowSelection = selectedIds.reduce<RowSelectionState>(
+    (selection, id) => {
+      if (pageIds.has(id)) {
+        selection[id] = true
+      }
+
+      return selection
+    },
+    {}
   )
 
   const onRowSelectionChange: OnChangeFn<RowSelectionState> = updater => {
-    const newSelection =
+    const nextSelection =
       typeof updater === 'function' ? updater(rowSelection) : updater
-    setSelectedIds(prev => {
-      const ids = prev.filter(id => !data.some(row => row.id === id))
-      _.each(newSelection, (checked, i) => {
-        if (!checked) return
-        const rowId = data[Number(i)]?.id
-        if (rowId) ids.push(rowId)
-      })
-      return _.uniq(ids)
+
+    setSelectedIds(previousIds => {
+      const nextIds = new Set(previousIds)
+
+      for (const id of pageIds) {
+        nextIds.delete(id)
+      }
+
+      for (const [id, isSelected] of Object.entries(nextSelection)) {
+        if (isSelected) {
+          nextIds.add(id)
+        }
+      }
+
+      return Array.from(nextIds)
     })
   }
 
+  const clearSelection = () => setSelectedIds([])
+
   const handleToggle = () => {
-    if (isBulkMode) setSelectedIds([])
+    if (isBulkMode) clearSelection()
     setIsBulkMode(v => !v)
   }
 
@@ -42,9 +50,10 @@ export function useTableSelection(data: { id: string }[]) {
     isBulkMode,
     setIsBulkMode,
     selectedIds,
-    setSelectedIds,
+    selectedLength,
     rowSelection,
     onRowSelectionChange,
+    clearSelection,
     handleToggle
   }
 }

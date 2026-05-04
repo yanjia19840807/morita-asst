@@ -1122,6 +1122,8 @@ export const DocumentCategoryScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   userId: 'userId',
+  order: 'order',
+  isDefault: 'isDefault',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

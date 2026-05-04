@@ -1,13 +1,18 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { createDocCate, createDoc, editDocCate } from '@/data-access/doc'
+import {
+  createDocCate,
+  createDoc,
+  editDocCate,
+  reorderDocCates
+} from '@/data-access/doc'
 import {
   DocCreateActionValues,
   DocCateCreateFormValues,
-  DocCateEditFormValues
+  DocCateEditFormValues,
+  DocCateReorderValues
 } from '@/schemas/doc'
-import z from 'zod'
 import { DocumentCategory } from '@/generated/prisma/client'
 import {
   handleActionError,
@@ -48,6 +53,18 @@ export async function editDocCateAction(
     const cate = await editDocCate(data)
     revalidatePath(docPath)
     return handleActionResult(cate)
+  } catch (error) {
+    return handleActionError(error)
+  }
+}
+
+export async function reorderDocCatesAction(
+  data: DocCateReorderValues
+): Promise<ResponseResult<DocumentCategory[]>> {
+  try {
+    const categories = await reorderDocCates(data)
+    revalidatePath(docPath)
+    return handleActionResult(categories)
   } catch (error) {
     return handleActionError(error)
   }

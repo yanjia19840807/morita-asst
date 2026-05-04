@@ -7,6 +7,8 @@ import {
   docCateCreateSchema,
   DocCateEditFormValues,
   docCateEditSchema,
+  DocCateReorderValues,
+  docCateReorderSchema,
   docCreateActionSchema,
   DocCreateActionValues
 } from '@/schemas/doc'
@@ -119,9 +121,19 @@ export async function createDocCate(data: DocCateCreateFormValues) {
   const { name } = validation.data
   const slug = await generateUniqueSlug(name)
   const userId = user.id
+  const maxOrder = await prisma.documentCategory.aggregate({
+    where: {
+      userId,
+      isDefault: false
+    },
+    _max: {
+      order: true
+    }
+  })
+  const nextOrder = (maxOrder._max.order ?? 0) + 1
 
   return prisma.documentCategory.create({
-    data: { userId, name, slug }
+    data: { userId, name, slug, order: nextOrder }
   })
 }
 
@@ -143,7 +155,99 @@ export async function editDocCate(data: DocCateEditFormValues) {
 }
 
 export async function fetchDocCates(): Promise<DocumentCategory[]> {
+  const user = await requireRoles(['admin'])
+
   return prisma.documentCategory.findMany({
-    orderBy: { createdAt: 'desc' }
+    where: {
+      userId: user.id
+    },
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
+  })
+}
+
+export async function reorderDocCates(
+  data: DocCateReorderValues
+): Promise<DocumentCategory[]> {
+  await requireRoles(['admin'])
+  const validation = docCateReorderSchema.safeParse(data)
+
+  if (!validation.success) {
+    throw new ValidationError(z.prettifyError(validation.error))
+  }
+
+  const { sourceId, targetId } = validation.data
+  const categories = await prisma.documentCategory.findMany({
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
+  })
+
+  const sourceCate = categories.find(category => category.id === sourceId)
+  const targetCate = categories.find(category => category.id === targetId)
+
+  if (!sourceCate || !targetCate) {
+    throw new ValidationError('排序数据无效')
+  }
+
+  if (sourceCate.isDefault || targetCate.isDefault) {
+    throw new ValidationError('默认类目不能拖动')
+  }
+
+  if (sourceCate.order === targetCate.order) {
+    return categories
+  }
+
+  if (sourceCate.order < targetCate.order) {
+    await prisma.$transaction([
+      prisma.documentCategory.updateMany({
+        where: {
+          isDefault: false,
+          order: {
+            gt: sourceCate.order,
+            lte: targetCate.order
+          }
+        },
+        data: {
+          order: {
+            decrement: 1
+          }
+        }
+      }),
+      prisma.documentCategory.update({
+        where: {
+          id: sourceCate.id
+        },
+        data: {
+          order: targetCate.order
+        }
+      })
+    ])
+  } else {
+    await prisma.$transaction([
+      prisma.documentCategory.updateMany({
+        where: {
+          isDefault: false,
+          order: {
+            gte: targetCate.order,
+            lt: sourceCate.order
+          }
+        },
+        data: {
+          order: {
+            increment: 1
+          }
+        }
+      }),
+      prisma.documentCategory.update({
+        where: {
+          id: sourceCate.id
+        },
+        data: {
+          order: targetCate.order
+        }
+      })
+    ])
+  }
+
+  return prisma.documentCategory.findMany({
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
   })
 }

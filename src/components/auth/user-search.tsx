@@ -14,14 +14,14 @@ export default function UserSearch() {
   const { searchValue, searchField, setSearch } = useUserParams()
 
   return (
-    <div className='flex flex-row gap-2'>
+    <div className='flex w-1/2 flex-row gap-2'>
       <Select
         value={searchField}
         onValueChange={value => {
           setSearch(value as 'name' | 'email', searchValue)
         }}
       >
-        <SelectTrigger className='w-full max-w-32'>
+        <SelectTrigger>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -34,7 +34,6 @@ export default function UserSearch() {
         value={searchValue}
         onChange={e => setSearch(searchField, e.target.value || null)}
         placeholder={searchField === 'name' ? '搜索用户名' : '搜索邮箱'}
-        className='w-64'
       />
     </div>
   )
