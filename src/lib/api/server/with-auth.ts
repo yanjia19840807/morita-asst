@@ -1,9 +1,8 @@
-// lib/api/with-auth.ts
 import { headers } from 'next/headers'
 import { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
-import { UnauthorizedError } from './errors'
-import { handleApiError } from './response'
+import { UnauthorizedError } from '@/lib/api/server/errors'
+import { handleApiError } from '@/lib/api/server/response'
 
 type SessionData = Awaited<ReturnType<typeof auth.api.getSession>>
 type SessionUser = NonNullable<SessionData>['user']

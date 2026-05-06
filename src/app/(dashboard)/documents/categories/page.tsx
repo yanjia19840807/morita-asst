@@ -37,9 +37,7 @@ export default async function DocsPage({
       >
         文档类目
       </PageTitle>
-      <div className='h-16'>
-        <DocCateForm />
-      </div>
+      <DocCateForm className='h-min-16' />
       <DocCateTable data={cates} />
     </div>
   )

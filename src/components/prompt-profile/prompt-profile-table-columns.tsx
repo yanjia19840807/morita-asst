@@ -39,7 +39,7 @@ export const promptProfileColumns: ColumnDef<PromptProfileRow>[] = [
     header: ({ column }) => (
       <TableColumnHeader column={column} title='关联助手数' />
     ),
-    cell: ({ row }) => row.original._count.agents
+    cell: ({ row }) => row.original.refAgentCount
   },
   {
     accessorKey: 'updatedAt',

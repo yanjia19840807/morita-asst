@@ -1,5 +1,5 @@
 import type { Prisma } from '@/generated/prisma/client'
-import { NotFoundError, ValidationError } from '@/lib/api/errors'
+import { NotFoundError, ValidationError } from '@/lib/api/server/errors'
 import { prisma } from '@/lib/prisma'
 import { AgentCreateFormValues, agentCreateSchema } from '@/schemas/agent'
 import { requireRoles } from './auth'

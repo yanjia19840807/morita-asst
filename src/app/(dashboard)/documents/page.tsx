@@ -8,16 +8,7 @@ import DocCateSidebar from '@/components/doc/doc-cate-sidebar'
 import { SidebarInset } from '@/components/ui/sidebar'
 import { fetchDocs } from '@/data-access/doc'
 import { getPage } from '@/lib/pagination'
-
-interface DocsPageProps {
-  page?: number
-  categoryId?: string
-  filename?: string
-  sortBy?: string
-  sortDirection?: 'asc' | 'desc'
-}
-
-const pageSize = 10
+import { FetchDocsParams } from '@/schemas/doc'
 
 function ImportBtn() {
   return (
@@ -33,10 +24,11 @@ function ImportBtn() {
 export default async function DocsPage({
   searchParams
 }: {
-  searchParams: Promise<DocsPageProps>
+  searchParams: Promise<FetchDocsParams>
 }) {
   const { categoryId, page, filename, sortBy, sortDirection } =
     await searchParams
+  const pageSize = 10
 
   const data = await fetchDocs({
     page: getPage(page),

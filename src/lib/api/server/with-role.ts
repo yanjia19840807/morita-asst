@@ -1,8 +1,7 @@
-import { AuthenticatedHandler, withAuth } from './with-auth'
-import { ForbiddenError } from './errors'
-import { handleApiError } from './response'
+import { AuthenticatedHandler, withAuth } from '@/lib/api/server/with-auth'
+import { ForbiddenError } from '@/lib/api/server/errors'
+import { handleApiError } from '@/lib/api/server/response'
 
-// lib/api/with-role.ts
 export function withRole(roles: string[], handler: AuthenticatedHandler) {
   return withAuth(async (request, context) => {
     if (!roles.includes(context.user.role || '')) {

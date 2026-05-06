@@ -3,7 +3,7 @@
 import type { KnowledgeRow } from '@/data-access/knowledge'
 import TableActionSection from '../table/table-action-section'
 import TableFooterSection from '../table/table-footer-section'
-import { TablePagination } from '../table/table-pagination'
+import { TableQsPagination } from '../table/table-qs-pagination'
 import KnowledgeCard from './knowledge-card'
 import KnowledgeSearch from './knowledge-search'
 
@@ -35,7 +35,7 @@ export default function KnowledgeGrid({
         </div>
       )}
       <TableFooterSection className='mt-4 justify-end px-0'>
-        <TablePagination pageSize={pageSize} total={total} />
+        <TableQsPagination pageSize={pageSize} total={total} />
       </TableFooterSection>
     </div>
   )

@@ -1,8 +1,7 @@
 import { parseAsInteger, useQueryState } from 'nuqs'
-import { useTransition } from 'react'
+import { startTransition } from 'react'
 
-export function useTablePagination() {
-  const [, startTransition] = useTransition()
+export function useTableQsPagination() {
   const [page, setPage] = useQueryState(
     'page',
     parseAsInteger.withDefault(1).withOptions({

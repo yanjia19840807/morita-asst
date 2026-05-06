@@ -1,6 +1,6 @@
 'use client'
 
-import { docCreateSchema, DocCreateFormValues } from '@/schemas/doc'
+import { docCreateFormSchema, DocCreateFormValues } from '@/schemas/doc'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { DocumentCategory } from '@/generated/prisma/client'
 import { useRouter } from 'next/navigation'
@@ -36,7 +36,7 @@ import { uploadDocs } from '@/lib/oss'
 import DocCateCombobox from './doc-cate-combobox'
 import PageTitle from '../page-title'
 import { Button, buttonVariants } from '../ui/button'
-import { ChevronLeft, Save } from 'lucide-react'
+import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
 import Link from 'next/link'
 import DocCateDialog from './doc-cate-dialog'
 
@@ -51,7 +51,7 @@ export default function DocCreateForm({
   const fileUploadRef = useRef<FileUploadRef>(null)
 
   const form = useForm({
-    resolver: zodResolver(docCreateSchema),
+    resolver: zodResolver(docCreateFormSchema),
     defaultValues: {
       categoryId: undefined,
       files: []
@@ -67,7 +67,7 @@ export default function DocCreateForm({
     formState: UseFormStateReturn<DocCreateFormValues>
   }) => {
     return (
-      <Field data-invalid={fieldState.invalid} className='w-1/2'>
+      <Field data-invalid={fieldState.invalid}>
         <FieldLabel htmlFor={field.name}>类目</FieldLabel>
         <DocCateCombobox
           docCatesPromise={docCatesPromise}
@@ -99,7 +99,7 @@ export default function DocCreateForm({
     formState: UseFormStateReturn<DocCreateFormValues>
   }) => {
     return (
-      <Field data-invalid={fieldState.invalid} className='w-1/2'>
+      <Field data-invalid={fieldState.invalid}>
         <FieldLabel htmlFor={field.name}>选择文件</FieldLabel>
         <DocUpload
           ref={e => {
@@ -179,12 +179,12 @@ export default function DocCreateForm({
   }
 
   return (
-    <div>
+    <div className='flex min-h-0 flex-1 flex-col gap-3'>
       <PageTitle
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
-            <Button type='submit' form='docForm'>
-              <Save />
+            <Button type='submit' form='docForm' disabled={isPending}>
+              {isPending && <LoaderCircle className='animate-spin' />}
               保存
             </Button>
             <Link
@@ -210,16 +210,20 @@ export default function DocCreateForm({
           <CardContent>
             <FieldGroup>
               <FieldSet>
-                <Controller
-                  name='categoryId'
-                  control={form.control}
-                  render={renderDocCateCombobox}
-                />
-                <Controller
-                  name='files'
-                  control={form.control}
-                  render={renderFileInput}
-                />
+                <div className='flex w-1/2 flex-col gap-6 md:flex-row'>
+                  <Controller
+                    name='categoryId'
+                    control={form.control}
+                    render={renderDocCateCombobox}
+                  />
+                </div>
+                <div className='flex w-1/2 flex-col gap-6 md:flex-row'>
+                  <Controller
+                    name='files'
+                    control={form.control}
+                    render={renderFileInput}
+                  />
+                </div>
               </FieldSet>
             </FieldGroup>
           </CardContent>

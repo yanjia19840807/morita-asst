@@ -17,10 +17,10 @@ import {
 } from '@/components/ui/table'
 import TableActionSection from '../table/table-action-section'
 import TableFooterSection from '../table/table-footer-section'
-import { TablePagination } from '../table/table-pagination'
+import { TableQsPagination } from '../table/table-qs-pagination'
 import PromptProfileSearch from './prompt-profile-search'
 import { promptProfileColumns } from './prompt-profile-table-columns'
-import { useTableSort } from '@/hooks/use-table-sort'
+import { useTableQsSort } from '@/hooks/use-table-qs-sort'
 
 interface PromptProfileTableProps {
   data: PromptProfileRow[]
@@ -33,7 +33,7 @@ export function PromptProfileTable({
   total,
   pageSize
 }: PromptProfileTableProps) {
-  const { sorting, onSortingChange } = useTableSort()
+  const { sorting, onSortingChange } = useTableQsSort()
 
   const table = useReactTable({
     data,
@@ -95,7 +95,7 @@ export function PromptProfileTable({
       <TableFooterSection className='justify-between'>
         <div></div>
         <div>
-          <TablePagination pageSize={pageSize} total={total} />
+          <TableQsPagination pageSize={pageSize} total={total} />
         </div>
       </TableFooterSection>
     </div>

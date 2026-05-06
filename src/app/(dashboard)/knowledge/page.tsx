@@ -23,7 +23,7 @@ const CreateBtn = function () {
   )
 }
 
-const pageSize = 12
+const pageSize = 10
 
 export default async function KnowledgePage({
   searchParams

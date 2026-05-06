@@ -3,7 +3,7 @@
 import type { AgentRow } from '@/data-access/agent'
 import TableActionSection from '../table/table-action-section'
 import TableFooterSection from '../table/table-footer-section'
-import { TablePagination } from '../table/table-pagination'
+import { TableQsPagination } from '../table/table-qs-pagination'
 import AgentCard from './agent-card'
 import AgentSearch from './agent-search'
 
@@ -31,7 +31,7 @@ export default function AgentGrid({ data, total, pageSize }: AgentGridProps) {
         </div>
       )}
       <TableFooterSection className='mt-4 justify-end px-0'>
-        <TablePagination pageSize={pageSize} total={total} />
+        <TableQsPagination pageSize={pageSize} total={total} />
       </TableFooterSection>
     </div>
   )

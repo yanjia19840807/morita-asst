@@ -1,11 +1,11 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { ResponseResult } from '@/lib/api/shared/response'
 import {
   handleActionError,
-  handleActionResult,
-  ResponseResult
-} from '@/lib/api/response'
+  handleActionResult
+} from '@/lib/api/server/response'
 import { createAgent } from '@/data-access/agent'
 import { AgentCreateFormValues } from '@/schemas/agent'
 import type { Agent } from '@/generated/prisma/client'

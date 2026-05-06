@@ -1,6 +1,6 @@
-import type { Prisma } from '@/generated/prisma/client'
+import type { Prisma, PromptProfile } from '@/generated/prisma/client'
 import { prisma } from '@/lib/prisma'
-import { NotFoundError, ValidationError } from '@/lib/api/errors'
+import { NotFoundError, ValidationError } from '@/lib/api/server/errors'
 import {
   PromptProfileCreateFormValues,
   PromptProfileEditFormValues,
@@ -11,7 +11,7 @@ import {
 import { requireRoles } from './auth'
 import z from 'zod'
 
-export type PromptProfileRow = Prisma.PromptProfileGetPayload<{
+type PromptProfileListQueryRow = Prisma.PromptProfileGetPayload<{
   include: {
     _count: {
       select: {
@@ -20,6 +20,10 @@ export type PromptProfileRow = Prisma.PromptProfileGetPayload<{
     }
   }
 }>
+
+export type PromptProfileRow = PromptProfile & {
+  refAgentCount: number
+}
 
 export type FetchPromptProfilesParams = {
   page?: number
@@ -86,7 +90,15 @@ export async function fetchPromptProfiles({
     prisma.promptProfile.count({ where })
   ])
 
-  return { promptProfiles, total }
+  return {
+    promptProfiles: promptProfiles.map(
+      ({ _count, ...promptProfile }: PromptProfileListQueryRow) => ({
+        ...promptProfile,
+        refAgentCount: _count.agents
+      })
+    ),
+    total
+  }
 }
 
 export async function createPromptProfile(data: PromptProfileCreateFormValues) {

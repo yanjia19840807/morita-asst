@@ -18,7 +18,7 @@ import {
 import { useTransition } from 'react'
 import { docColumns } from './doc-table-columns'
 import TableFooterSection from '../table/table-footer-section'
-import { TablePagination } from '../table/table-pagination'
+import { TableQsPagination } from '../table/table-qs-pagination'
 import TableActionSection from '../table/table-action-section'
 import TableSelectionText from '../table/table-selection-text'
 import TableBulkAction from '../table/table-bulk-action'
@@ -37,7 +37,7 @@ import {
 import { toast } from 'sonner'
 import DocSearch from './doc-search'
 import { useTableSelection } from '@/hooks/use-table-selection'
-import { useTableSort } from '@/hooks/use-table-sort'
+import { useTableQsSort } from '@/hooks/use-table-qs-sort'
 import type { DocRow } from '@/data-access/doc'
 
 interface DocTableProps {
@@ -56,7 +56,7 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
     clearSelection,
     handleToggle
   } = useTableSelection(data)
-  const { sorting, onSortingChange } = useTableSort()
+  const { sorting, onSortingChange } = useTableQsSort()
 
   const [, startTransition] = useTransition()
 
@@ -86,7 +86,7 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
   })
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col px-2'>
+    <div className='flex min-h-0 flex-1 flex-col gap-3 px-2'>
       <TableActionSection className='justify-between'>
         <DocSearch />
         <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
@@ -165,7 +165,7 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
       <TableFooterSection className='justify-between'>
         <div></div>
         <div>
-          <TablePagination pageSize={pageSize} total={total} />
+          <TableQsPagination pageSize={pageSize} total={total} />
         </div>
       </TableFooterSection>
     </div>

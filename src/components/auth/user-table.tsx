@@ -18,7 +18,7 @@ import { useTransition } from 'react'
 import { userColumns } from './user-table-columns'
 import type { UserRow } from '@/data-access/auth'
 import TableFooterSection from '../table/table-footer-section'
-import { TablePagination } from '../table/table-pagination'
+import { TableQsPagination } from '../table/table-qs-pagination'
 import TableActionSection from '../table/table-action-section'
 import UserSearch from './user-search'
 import TableSelectionText from '../table/table-selection-text'
@@ -32,7 +32,7 @@ import {
 import { toast } from 'sonner'
 import ConfirmDialog from '../confirm-dialog'
 import { useTableSelection } from '@/hooks/use-table-selection'
-import { useTableSort } from '@/hooks/use-table-sort'
+import { useTableQsSort } from '@/hooks/use-table-qs-sort'
 
 interface UserTableProps {
   data: UserRow[]
@@ -51,7 +51,7 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
     onRowSelectionChange
   } = useTableSelection(data)
   const [isPending, startTransition] = useTransition()
-  const { sorting, onSortingChange } = useTableSort()
+  const { sorting, onSortingChange } = useTableQsSort()
 
   const handleBulkRemove = () => {
     startTransition(async () => {
@@ -215,7 +215,7 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
       <TableFooterSection className='justify-between'>
         <div></div>
         <div>
-          <TablePagination pageSize={pageSize} total={total} />
+          <TableQsPagination pageSize={pageSize} total={total} />
         </div>
       </TableFooterSection>
     </div>

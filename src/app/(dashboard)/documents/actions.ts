@@ -8,22 +8,22 @@ import {
   reorderDocCates
 } from '@/data-access/doc'
 import {
-  DocCreateActionValues,
+  DocCreateValues,
   DocCateCreateFormValues,
   DocCateEditFormValues,
   DocCateReorderValues
 } from '@/schemas/doc'
 import { DocumentCategory } from '@/generated/prisma/client'
+import { ResponseResult } from '@/lib/api/shared/response'
 import {
   handleActionError,
-  handleActionResult,
-  ResponseResult
-} from '@/lib/api/response'
+  handleActionResult
+} from '@/lib/api/server/response'
 
 const docPath = '/documents'
 
 export async function createDocAction(
-  data: DocCreateActionValues
+  data: DocCreateValues
 ): Promise<ResponseResult> {
   try {
     await createDoc(data)

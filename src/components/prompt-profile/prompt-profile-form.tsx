@@ -16,13 +16,7 @@ import { toast } from 'sonner'
 import type z from 'zod'
 import PageTitle from '@/components/page-title'
 import { Button, buttonVariants } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Field,
   FieldDescription,
@@ -32,10 +26,10 @@ import {
   FieldSet
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { PromptProfileFormValues } from '@/schemas/prompt-profile'
 import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
-import { ResponseResult } from '@/lib/api/response'
+import { ResponseResult } from '@/lib/api/shared/response'
+import MDEditor from '@/components/md-editor'
 
 type PromptProfileFormInput = PromptProfileFormValues & {
   id?: string
@@ -85,9 +79,7 @@ export function PromptProfileForm({
           aria-invalid={fieldState.invalid}
           {...field}
         />
-        <FieldDescription>
-          用于在助手配置里识别这套提示词模板。
-        </FieldDescription>
+        <FieldDescription>用于在助手配置里识别这套提示词模板</FieldDescription>
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
         )}
@@ -105,21 +97,14 @@ export function PromptProfileForm({
   }) => {
     return (
       <Field data-invalid={fieldState.invalid}>
-        <FieldLabel htmlFor={field.name}>提示词正文</FieldLabel>
-        <Textarea
-          id={field.name}
-          placeholder='填写要直接传给模型的提示词内容，下一步可替换为所见即所得 Markdown 编辑器'
-          aria-invalid={fieldState.invalid}
+        <FieldLabel htmlFor={field.name}>提示词</FieldLabel>
+        <MDEditor
           value={field.value}
-          onBlur={field.onBlur}
-          name={field.name}
-          ref={field.ref}
-          onChange={event => field.onChange(event.target.value)}
-          rows={12}
-          className='min-h-48'
+          fieldChange={field.onChange}
+          invalid={fieldState.invalid}
         />
         <FieldDescription>
-          直接保存最终提示词原文，后续模型调用将直接使用这段内容。
+          后续模型调用将使用这段内容作为系统提示词
         </FieldDescription>
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
@@ -147,7 +132,7 @@ export function PromptProfileForm({
   }
 
   return (
-    <div>
+    <div className='flex min-h-0 flex-1 flex-col gap-3'>
       <PageTitle
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
@@ -175,13 +160,6 @@ export function PromptProfileForm({
           <input type='hidden' {...form.register('id')} />
         )}
         <Card className='w-full'>
-          <CardHeader>
-            <CardTitle>提示词内容</CardTitle>
-            <CardDescription>
-              填写提示词模板名称和最终提示词原文，后续会切换成所见即所得
-              Markdown 编辑器。
-            </CardDescription>
-          </CardHeader>
           <CardContent>
             <FieldGroup>
               <FieldSet>

@@ -14,10 +14,12 @@ import {
   UserBanValues
 } from '@/schemas/auth'
 import {
-  handleActionError,
-  handleActionResult,
   ResponseResult
-} from '@/lib/api/response'
+} from '@/lib/api/shared/response'
+import {
+  handleActionError,
+  handleActionResult
+} from '@/lib/api/server/response'
 import { revalidatePath } from 'next/cache'
 import {
   banUser,

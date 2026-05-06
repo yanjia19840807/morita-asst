@@ -2,7 +2,7 @@ import { OnChangeFn, SortingState } from '@tanstack/react-table'
 import { parseAsString, parseAsStringEnum, useQueryStates } from 'nuqs'
 import { startTransition } from 'react'
 
-export function useTableSort() {
+export function useTableQsSort() {
   const [{ sortBy, sortDirection }, setSortParams] = useQueryStates(
     {
       sortBy: parseAsString,

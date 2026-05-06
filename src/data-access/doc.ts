@@ -4,16 +4,18 @@ import { DocumentCategory } from '@/generated/prisma/client'
 import type { Prisma } from '@/generated/prisma/client'
 import {
   DocCateCreateFormValues,
-  docCateCreateSchema,
+  docCateCreateFormSchema,
   DocCateEditFormValues,
-  docCateEditSchema,
+  docCateEditFormSchema,
   DocCateReorderValues,
   docCateReorderSchema,
-  docCreateActionSchema,
-  DocCreateActionValues
+  docCreateSchema,
+  DocCreateValues,
+  fetchDocsParamsSchema,
+  FetchDocsParams
 } from '@/schemas/doc'
 import { requireRoles } from './auth'
-import { ValidationError } from '@/lib/api/errors'
+import { ValidationError } from '@/lib/api/server/errors'
 import z from 'zod'
 
 export type DocRow = Prisma.DocumentGetPayload<{
@@ -35,6 +37,11 @@ export type DocRow = Prisma.DocumentGetPayload<{
     }
   }
 }>
+
+export type FetchDocsResult = {
+  documents: DocRow[]
+  total: number
+}
 
 async function generateUniqueSlug(name: string): Promise<string> {
   const base = pinyin(name, {
@@ -59,9 +66,9 @@ async function generateUniqueSlug(name: string): Promise<string> {
   return `${base}-${i}`
 }
 
-export async function createDoc(data: DocCreateActionValues) {
+export async function createDoc(data: DocCreateValues) {
   const user = await requireRoles(['admin'])
-  const validation = docCreateActionSchema.safeParse(data)
+  const validation = docCreateSchema.safeParse(data)
 
   if (!validation.success) {
     throw new ValidationError(z.prettifyError(validation.error))
@@ -82,26 +89,25 @@ export async function createDoc(data: DocCreateActionValues) {
   })
 }
 
-export type fetchDocsParams = {
-  filename?: string
-  categoryId?: string
-  sortBy?: string
-  sortDirection?: 'asc' | 'desc'
-  page: number
-  pageSize: number
-}
+export async function fetchDocs(
+  params: FetchDocsParams
+): Promise<FetchDocsResult> {
+  await requireRoles(['admin'])
 
-export async function fetchDocs({
-  filename,
-  categoryId,
-  sortBy = 'createdAt',
-  sortDirection = 'desc',
-  page = 1,
-  pageSize = 10
-}: fetchDocsParams): Promise<{
-  documents: DocRow[]
-  total: number
-}> {
+  const validation = fetchDocsParamsSchema.safeParse(params)
+  if (!validation.success) {
+    throw new ValidationError(z.prettifyError(validation.error))
+  }
+
+  const {
+    filename,
+    categoryId,
+    sortBy = 'createdAt',
+    sortDirection = 'desc',
+    page = 1,
+    pageSize = 10
+  } = params
+
   const where: Prisma.DocumentWhereInput = {
     ...(categoryId ? { categoryId } : {}),
     ...(filename
@@ -113,9 +119,9 @@ export async function fetchDocs({
         }
       : {})
   }
-  const orderByField = sortBy
+
   const orderBy = {
-    [orderByField]: sortDirection
+    [sortBy]: sortDirection
   }
 
   const [documents, total] = await Promise.all([
@@ -150,7 +156,7 @@ export async function fetchDocs({
 
 export async function createDocCate(data: DocCateCreateFormValues) {
   const user = await requireRoles(['admin'])
-  const validation = docCateCreateSchema.safeParse(data)
+  const validation = docCateCreateFormSchema.safeParse(data)
   if (!validation.success) {
     throw new ValidationError(z.prettifyError(validation.error))
   }
@@ -176,7 +182,7 @@ export async function createDocCate(data: DocCateCreateFormValues) {
 
 export async function editDocCate(data: DocCateEditFormValues) {
   const user = await requireRoles(['admin'])
-  const validation = docCateEditSchema.safeParse(data)
+  const validation = docCateEditFormSchema.safeParse(data)
   if (!validation.success) {
     throw new ValidationError(z.prettifyError(validation.error))
   }
@@ -192,12 +198,9 @@ export async function editDocCate(data: DocCateEditFormValues) {
 }
 
 export async function fetchDocCates(): Promise<DocumentCategory[]> {
-  const user = await requireRoles(['admin'])
+  await requireRoles(['admin'])
 
   return prisma.documentCategory.findMany({
-    where: {
-      userId: user.id
-    },
     orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
   })
 }

@@ -15,14 +15,14 @@ export default async function DocCateSidebar() {
 
   return (
     <Sidebar collapsible='none' className='flex w-56 border-r'>
-      <SidebarHeader className='flex flex-row items-center justify-between gap-3 p-2'>
+      <SidebarHeader className='flex flex-row items-center justify-between gap-3'>
         <span className='text-base font-medium'>类目</span>
         <Button size='sm' variant='link' asChild>
           <Link href='/documents/categories'>管理</Link>
         </Button>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup className='min-h-0 flex-1 px-0 pt-0'>
+        <SidebarGroup className='min-h-0 flex-1'>
           <SidebarGroupContent className='h-full'>
             <DocCateList data={cates} />
           </SidebarGroupContent>

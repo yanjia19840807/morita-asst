@@ -2,7 +2,7 @@ import {
   ForbiddenError,
   UnauthorizedError,
   ValidationError
-} from '@/lib/api/errors'
+} from '@/lib/api/server/errors'
 import { auth } from '@/lib/auth'
 import {
   EmailSignInFormValues,

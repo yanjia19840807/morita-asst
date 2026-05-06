@@ -13,8 +13,12 @@ export const DOC_ACCEPT_MINE_TYPES = [
 ]
 export const DOC_ACCEPT_TYPES = ['PDF', 'DOC', 'TXT']
 
-export const docCreateSchema = z.object({
-  categoryId: z.uuid('类目不能为空'),
+const docSchemaId = z.string().min(1, '文档ID不能为空')
+
+const docSchemaCategoryId = z.string().min(1, '类目ID不能为空')
+
+export const docCreateFormSchema = z.object({
+  categoryId: docSchemaCategoryId,
   files: z
     .array(
       z
@@ -31,8 +35,17 @@ export const docCreateSchema = z.object({
     .min(1, '请至少上传一个文件')
 })
 
-export const docCreateActionSchema = z.object({
-  categoryId: z.uuid('类目不能为空'),
+export const fetchDocsParamsSchema = z.object({
+  filename: z.string().trim().optional(),
+  categoryId: z.string().trim().optional(),
+  sortBy: z.enum(['filename', 'fileSize', 'mimeType', 'createdAt']).optional(),
+  sortDirection: z.enum(['asc', 'desc']).optional(),
+  page: z.coerce.number().int().positive(),
+  pageSize: z.coerce.number().int().positive()
+})
+
+export const docCreateSchema = z.object({
+  categoryId: docSchemaCategoryId,
   files: z
     .array(
       z.object({
@@ -45,27 +58,34 @@ export const docCreateActionSchema = z.object({
     .min(1, '至少需要一个文件')
 })
 
-export type DocCreateFormValues = z.infer<typeof docCreateSchema>
-export type DocCreateActionValues = z.infer<typeof docCreateActionSchema>
-
 export const docCateSchema = z.object({
   id: z.string().min(1, '类目ID不能为空'),
   name: z.string().min(1, '类目名称不能为空')
 })
 
-export const docCateCreateSchema = docCateSchema.omit({ id: true })
+export const docCateCreateFormSchema = docCateSchema.omit({ id: true })
 
-export const docCateEditSchema = docCateSchema.extend({})
+export const docCateEditFormSchema = docCateSchema.extend({})
 
 export const docCateReorderSchema = z.object({
-  sourceId: z.uuid('源类目ID不能为空'),
-  targetId: z.uuid('目标类目ID不能为空')
+  sourceId: docSchemaCategoryId.refine(() => true, {
+    message: '源类目不能为空'
+  }),
+  targetId: docSchemaCategoryId.refine(() => true, {
+    message: '目标类目不能为空'
+  })
 })
 
-export type DocCateCreateFormValues = z.infer<typeof docCateCreateSchema>
+export type DocCreateValues = z.infer<typeof docCreateSchema>
 
-export type DocCateEditFormValues = z.infer<typeof docCateEditSchema>
+export type FetchDocsParams = z.infer<typeof fetchDocsParamsSchema>
 
 export type DocCateReorderValues = z.infer<typeof docCateReorderSchema>
+
+export type DocCreateFormValues = z.infer<typeof docCreateFormSchema>
+
+export type DocCateCreateFormValues = z.infer<typeof docCateCreateFormSchema>
+
+export type DocCateEditFormValues = z.infer<typeof docCateEditFormSchema>
 
 export type DocCateFormValues = z.infer<typeof docCateSchema>

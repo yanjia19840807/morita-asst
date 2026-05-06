@@ -1,7 +1,7 @@
 'use client'
 
 import { useTransition } from 'react'
-import { DocCateCreateFormValues, docCateCreateSchema } from '@/schemas/doc'
+import { DocCateCreateFormValues, docCateCreateFormSchema } from '@/schemas/doc'
 import {
   Field,
   FieldContent,
@@ -23,12 +23,13 @@ import { toast } from 'sonner'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { LoaderCircle, Save } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-function DocCateForm() {
+function DocCateForm({ className }: { className: string }) {
   const [isPending, startTransition] = useTransition()
 
   const form = useForm({
-    resolver: zodResolver(docCateCreateSchema),
+    resolver: zodResolver(docCateCreateFormSchema),
     defaultValues: {
       name: ''
     }
@@ -55,7 +56,6 @@ function DocCateForm() {
             aria-invalid={fieldState.invalid}
             {...field}
           />
-
           <Button type='submit' disabled={isPending}>
             {isPending && <LoaderCircle className='animate-spin' />}
             <Save />
@@ -90,17 +90,19 @@ function DocCateForm() {
   }
 
   return (
-    <form id='docCateForm' onSubmit={form.handleSubmit(onSubmit)}>
-      <FieldGroup>
-        <FieldSet>
-          <Controller
-            name='name'
-            control={form.control}
-            render={renderNameInput}
-          />
-        </FieldSet>
-      </FieldGroup>
-    </form>
+    <div className={cn(className)}>
+      <form id='docCateForm' onSubmit={form.handleSubmit(onSubmit)}>
+        <FieldGroup>
+          <FieldSet>
+            <Controller
+              name='name'
+              control={form.control}
+              render={renderNameInput}
+            />
+          </FieldSet>
+        </FieldGroup>
+      </form>
+    </div>
   )
 }
 
