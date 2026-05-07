@@ -35,6 +35,7 @@ import {
   KnowledgeCreateFormValues
 } from '@/schemas/knowledge'
 import DocSelect, { type DocSelectValue } from '../doc/doc-select'
+import { createKnowledgeAction } from '@/app/(dashboard)/knowledge/actions'
 
 export default function KnowledgeForm() {
   const [isPending, startTransition] = useTransition()
@@ -134,9 +135,13 @@ export default function KnowledgeForm() {
     )
   }
 
-  const onSubmit = () => {
+  console.log(form.formState.errors)
+
+  const onSubmit = (values: KnowledgeCreateFormValues) => {
     startTransition(async () => {
+      debugger
       try {
+        await createKnowledgeAction(values)
       } catch {}
     })
   }

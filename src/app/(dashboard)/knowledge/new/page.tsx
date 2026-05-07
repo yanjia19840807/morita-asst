@@ -5,6 +5,10 @@ import {
   getDocsQueryKey,
   initialDocsParams
 } from '@/lib/api/client/doc'
+import {
+  toFetchSelectDocsResult,
+  toSelectDocCateItems
+} from '@/lib/api/shared/doc'
 import { getQueryClient } from '@/lib/get-query-client'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 
@@ -13,12 +17,13 @@ export default async function KnowledgeNewPage() {
 
   await queryClient.prefetchQuery({
     queryKey: docCatesQueryKey,
-    queryFn: fetchDocCates
+    queryFn: async () => toSelectDocCateItems(await fetchDocCates())
   })
 
   await queryClient.prefetchQuery({
     queryKey: getDocsQueryKey(initialDocsParams),
-    queryFn: () => fetchDocs(initialDocsParams)
+    queryFn: async () =>
+      toFetchSelectDocsResult(await fetchDocs(initialDocsParams))
   })
 
   return (

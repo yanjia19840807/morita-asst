@@ -1,8 +1,7 @@
 import qs from 'qs'
-import type { DocumentCategory } from '@/generated/prisma/client'
 import { FetchDocsParams } from '@/schemas/doc'
+import { FetchSelectDocsResult, SelectDocCateItem } from '@/lib/api/shared/doc'
 import { getErrorMessage, ResponseResult } from '@/lib/api/shared/response'
-import { FetchDocsResult } from '@/data-access/doc'
 import _ from 'lodash'
 
 export const docCatesQueryKey = ['docCates'] as const
@@ -21,13 +20,13 @@ export function getDocsQueryKey(params: FetchDocsParams) {
   ] as const
 }
 
-export async function fetchSelectDocCates(): Promise<DocumentCategory[]> {
+export async function fetchSelectDocCates(): Promise<SelectDocCateItem[]> {
   const response = await fetch('/api/docs/select/cates', {
     method: 'GET',
     cache: 'no-store'
   })
 
-  const payload = (await response.json()) as ResponseResult<DocumentCategory[]>
+  const payload = (await response.json()) as ResponseResult<SelectDocCateItem[]>
 
   if (!response.ok) {
     throw new Error(
@@ -44,7 +43,7 @@ export async function fetchSelectDocCates(): Promise<DocumentCategory[]> {
 
 export async function fetchSelectDocs(
   params: FetchDocsParams
-): Promise<FetchDocsResult> {
+): Promise<FetchSelectDocsResult> {
   const searchParams = qs.stringify(
     _.omitBy(params, value => _.isNil(value) || value === '')
   )
@@ -54,7 +53,8 @@ export async function fetchSelectDocs(
     cache: 'no-store'
   })
 
-  const payload = (await response.json()) as ResponseResult<FetchDocsResult>
+  const payload =
+    (await response.json()) as ResponseResult<FetchSelectDocsResult>
 
   if (!response.ok) {
     throw new Error(

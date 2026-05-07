@@ -1,6 +1,5 @@
 'use client'
 
-import type { FetchDocsResult } from '@/data-access/doc'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -8,6 +7,7 @@ import {
   getDocsQueryKey,
   initialDocsParams
 } from '@/lib/api/client/doc'
+import type { FetchSelectDocsResult } from '@/lib/api/shared/doc'
 import { getErrorMessage } from '@/lib/api/shared/response'
 import {
   type ColumnDef,
@@ -32,7 +32,7 @@ import {
 import { TableColumnHeader } from '../table/table-column-header'
 import TablePagination from '../table/table-pagination'
 
-type SelectableDocument = FetchDocsResult['documents'][number]
+type SelectableDocument = FetchSelectDocsResult['documents'][number]
 
 const docSelectColumns: ColumnDef<SelectableDocument>[] = [
   {
@@ -196,7 +196,7 @@ export function DocSelectTable({
   })
 
   return (
-    <SidebarInset className='flex min-h-0 flex-1 flex-col gap-3 p-4'>
+    <SidebarInset className='flex h-full min-h-0 flex-1 flex-col gap-3 p-4'>
       <div className='w-1/2'>
         <Input
           onKeyDown={event =>

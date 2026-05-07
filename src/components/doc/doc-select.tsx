@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { DocSelectTable } from './doc-select-table'
 import { DocSelectTab } from './doc-select-tab'
 import { DocSelectCate } from './doc-select-cate'
@@ -9,7 +10,7 @@ export type DocSelectMode = 'docCate' | 'doc'
 export type DocSelectValue = {
   mode: DocSelectMode
   categoryId?: string
-  documentIds: string[]
+  documentIds?: string[]
 }
 
 const pageSize = 10
@@ -31,27 +32,47 @@ export default function DocSelect({
   onBlur,
   disabled = false
 }: DocSelectProps) {
+  const [browseCategoryId, setBrowseCategoryId] = useState(value.categoryId)
+  const selectedCategoryId =
+    value.mode === 'docCate' ? value.categoryId : browseCategoryId
+
   const handleModeChange = (mode: DocSelectMode) => {
-    onChange({
-      mode,
-      categoryId: value.categoryId,
-      documentIds: []
-    })
+    if (mode === 'docCate') {
+      onChange({
+        mode,
+        categoryId: selectedCategoryId,
+        documentIds: undefined
+      })
+    } else {
+      setBrowseCategoryId(value.categoryId)
+      onChange({
+        mode,
+        categoryId: undefined,
+        documentIds: value.documentIds ?? []
+      })
+    }
+
     onBlur?.()
   }
 
   const handleCategoryChange = (categoryId: string) => {
-    onChange({
-      ...value,
-      categoryId,
-      documentIds: value.mode === 'doc' ? [] : value.documentIds
-    })
+    setBrowseCategoryId(categoryId)
+
+    if (value.mode === 'docCate') {
+      onChange({
+        mode: 'docCate',
+        categoryId,
+        documentIds: undefined
+      })
+    }
+
     onBlur?.()
   }
 
   const handleSelectedDocumentIdsChange = (documentIds: string[]) => {
     onChange({
-      ...value,
+      mode: 'doc',
+      categoryId: undefined,
       documentIds
     })
     onBlur?.()
@@ -66,14 +87,14 @@ export default function DocSelect({
       />
       <div className='flex min-h-0 flex-1 overflow-hidden rounded-md border'>
         <DocSelectCate
-          selectedCategoryId={value.categoryId}
+          selectedCategoryId={selectedCategoryId}
           onSelectCategory={handleCategoryChange}
           disabled={disabled}
         />
         <DocSelectTable
           pageSize={pageSize}
-          categoryId={value.categoryId}
-          selectedDocumentIds={value.documentIds}
+          categoryId={selectedCategoryId}
+          selectedDocumentIds={value.documentIds ?? []}
           onSelectedDocumentIdsChange={handleSelectedDocumentIdsChange}
           disabled={disabled || value.mode !== 'doc'}
         />
