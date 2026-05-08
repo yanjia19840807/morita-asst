@@ -1,5 +1,6 @@
 'use client'
 
+import { format } from 'date-fns'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -82,7 +83,8 @@ const docSelectColumns: ColumnDef<SelectableDocument>[] = [
     header: ({ column }) => (
       <TableColumnHeader column={column} title='创建时间' />
     ),
-    cell: ({ row }) => new Date(row.original.createdAt).toLocaleString('zh-CN')
+    cell: ({ row }) =>
+      format(new Date(row.original.createdAt), 'yyyy/MM/dd HH:mm')
   }
 ]
 

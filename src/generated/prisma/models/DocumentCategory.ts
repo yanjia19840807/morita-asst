@@ -242,6 +242,7 @@ export type DocumentCategoryWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"DocumentCategory"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   documents?: Prisma.DocumentListRelationFilter
+  knowledge?: Prisma.KnowledgeListRelationFilter
 }
 
 export type DocumentCategoryOrderByWithRelationInput = {
@@ -255,16 +256,16 @@ export type DocumentCategoryOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   documents?: Prisma.DocumentOrderByRelationAggregateInput
+  knowledge?: Prisma.KnowledgeOrderByRelationAggregateInput
 }
 
 export type DocumentCategoryWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  name?: string
   slug?: string
-  userId_name?: Prisma.DocumentCategoryUserIdNameCompoundUniqueInput
   AND?: Prisma.DocumentCategoryWhereInput | Prisma.DocumentCategoryWhereInput[]
   OR?: Prisma.DocumentCategoryWhereInput[]
   NOT?: Prisma.DocumentCategoryWhereInput | Prisma.DocumentCategoryWhereInput[]
-  name?: Prisma.StringFilter<"DocumentCategory"> | string
   userId?: Prisma.StringFilter<"DocumentCategory"> | string
   order?: Prisma.IntFilter<"DocumentCategory"> | number
   isDefault?: Prisma.BoolFilter<"DocumentCategory"> | boolean
@@ -272,7 +273,8 @@ export type DocumentCategoryWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"DocumentCategory"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   documents?: Prisma.DocumentListRelationFilter
-}, "id" | "slug" | "userId_name">
+  knowledge?: Prisma.KnowledgeListRelationFilter
+}, "id" | "slug" | "name">
 
 export type DocumentCategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -314,6 +316,7 @@ export type DocumentCategoryCreateInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutDocumentCategoriesInput
   documents?: Prisma.DocumentCreateNestedManyWithoutCategoryInput
+  knowledge?: Prisma.KnowledgeCreateNestedManyWithoutCategoryInput
 }
 
 export type DocumentCategoryUncheckedCreateInput = {
@@ -326,6 +329,7 @@ export type DocumentCategoryUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCategoryInput
+  knowledge?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type DocumentCategoryUpdateInput = {
@@ -338,6 +342,7 @@ export type DocumentCategoryUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutDocumentCategoriesNestedInput
   documents?: Prisma.DocumentUpdateManyWithoutCategoryNestedInput
+  knowledge?: Prisma.KnowledgeUpdateManyWithoutCategoryNestedInput
 }
 
 export type DocumentCategoryUncheckedUpdateInput = {
@@ -350,6 +355,7 @@ export type DocumentCategoryUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  knowledge?: Prisma.KnowledgeUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type DocumentCategoryCreateManyInput = {
@@ -394,9 +400,9 @@ export type DocumentCategoryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type DocumentCategoryUserIdNameCompoundUniqueInput = {
-  userId: string
-  name: string
+export type DocumentCategoryNullableScalarRelationFilter = {
+  is?: Prisma.DocumentCategoryWhereInput | null
+  isNot?: Prisma.DocumentCategoryWhereInput | null
 }
 
 export type DocumentCategoryCountOrderByAggregateInput = {
@@ -438,11 +444,6 @@ export type DocumentCategoryMinOrderByAggregateInput = {
 
 export type DocumentCategorySumOrderByAggregateInput = {
   order?: Prisma.SortOrder
-}
-
-export type DocumentCategoryNullableScalarRelationFilter = {
-  is?: Prisma.DocumentCategoryWhereInput | null
-  isNot?: Prisma.DocumentCategoryWhereInput | null
 }
 
 export type DocumentCategoryCreateNestedManyWithoutUserInput = {
@@ -487,6 +488,22 @@ export type DocumentCategoryUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.DocumentCategoryScalarWhereInput | Prisma.DocumentCategoryScalarWhereInput[]
 }
 
+export type DocumentCategoryCreateNestedOneWithoutKnowledgeInput = {
+  create?: Prisma.XOR<Prisma.DocumentCategoryCreateWithoutKnowledgeInput, Prisma.DocumentCategoryUncheckedCreateWithoutKnowledgeInput>
+  connectOrCreate?: Prisma.DocumentCategoryCreateOrConnectWithoutKnowledgeInput
+  connect?: Prisma.DocumentCategoryWhereUniqueInput
+}
+
+export type DocumentCategoryUpdateOneWithoutKnowledgeNestedInput = {
+  create?: Prisma.XOR<Prisma.DocumentCategoryCreateWithoutKnowledgeInput, Prisma.DocumentCategoryUncheckedCreateWithoutKnowledgeInput>
+  connectOrCreate?: Prisma.DocumentCategoryCreateOrConnectWithoutKnowledgeInput
+  upsert?: Prisma.DocumentCategoryUpsertWithoutKnowledgeInput
+  disconnect?: Prisma.DocumentCategoryWhereInput | boolean
+  delete?: Prisma.DocumentCategoryWhereInput | boolean
+  connect?: Prisma.DocumentCategoryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DocumentCategoryUpdateToOneWithWhereWithoutKnowledgeInput, Prisma.DocumentCategoryUpdateWithoutKnowledgeInput>, Prisma.DocumentCategoryUncheckedUpdateWithoutKnowledgeInput>
+}
+
 export type DocumentCategoryCreateNestedOneWithoutDocumentsInput = {
   create?: Prisma.XOR<Prisma.DocumentCategoryCreateWithoutDocumentsInput, Prisma.DocumentCategoryUncheckedCreateWithoutDocumentsInput>
   connectOrCreate?: Prisma.DocumentCategoryCreateOrConnectWithoutDocumentsInput
@@ -512,6 +529,7 @@ export type DocumentCategoryCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   documents?: Prisma.DocumentCreateNestedManyWithoutCategoryInput
+  knowledge?: Prisma.KnowledgeCreateNestedManyWithoutCategoryInput
 }
 
 export type DocumentCategoryUncheckedCreateWithoutUserInput = {
@@ -523,6 +541,7 @@ export type DocumentCategoryUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCategoryInput
+  knowledge?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type DocumentCategoryCreateOrConnectWithoutUserInput = {
@@ -565,6 +584,70 @@ export type DocumentCategoryScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"DocumentCategory"> | Date | string
 }
 
+export type DocumentCategoryCreateWithoutKnowledgeInput = {
+  id?: string
+  name: string
+  slug: string
+  order?: number
+  isDefault?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutDocumentCategoriesInput
+  documents?: Prisma.DocumentCreateNestedManyWithoutCategoryInput
+}
+
+export type DocumentCategoryUncheckedCreateWithoutKnowledgeInput = {
+  id?: string
+  name: string
+  slug: string
+  userId: string
+  order?: number
+  isDefault?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  documents?: Prisma.DocumentUncheckedCreateNestedManyWithoutCategoryInput
+}
+
+export type DocumentCategoryCreateOrConnectWithoutKnowledgeInput = {
+  where: Prisma.DocumentCategoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.DocumentCategoryCreateWithoutKnowledgeInput, Prisma.DocumentCategoryUncheckedCreateWithoutKnowledgeInput>
+}
+
+export type DocumentCategoryUpsertWithoutKnowledgeInput = {
+  update: Prisma.XOR<Prisma.DocumentCategoryUpdateWithoutKnowledgeInput, Prisma.DocumentCategoryUncheckedUpdateWithoutKnowledgeInput>
+  create: Prisma.XOR<Prisma.DocumentCategoryCreateWithoutKnowledgeInput, Prisma.DocumentCategoryUncheckedCreateWithoutKnowledgeInput>
+  where?: Prisma.DocumentCategoryWhereInput
+}
+
+export type DocumentCategoryUpdateToOneWithWhereWithoutKnowledgeInput = {
+  where?: Prisma.DocumentCategoryWhereInput
+  data: Prisma.XOR<Prisma.DocumentCategoryUpdateWithoutKnowledgeInput, Prisma.DocumentCategoryUncheckedUpdateWithoutKnowledgeInput>
+}
+
+export type DocumentCategoryUpdateWithoutKnowledgeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutDocumentCategoriesNestedInput
+  documents?: Prisma.DocumentUpdateManyWithoutCategoryNestedInput
+}
+
+export type DocumentCategoryUncheckedUpdateWithoutKnowledgeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  documents?: Prisma.DocumentUncheckedUpdateManyWithoutCategoryNestedInput
+}
+
 export type DocumentCategoryCreateWithoutDocumentsInput = {
   id?: string
   name: string
@@ -574,6 +657,7 @@ export type DocumentCategoryCreateWithoutDocumentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutDocumentCategoriesInput
+  knowledge?: Prisma.KnowledgeCreateNestedManyWithoutCategoryInput
 }
 
 export type DocumentCategoryUncheckedCreateWithoutDocumentsInput = {
@@ -585,6 +669,7 @@ export type DocumentCategoryUncheckedCreateWithoutDocumentsInput = {
   isDefault?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  knowledge?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type DocumentCategoryCreateOrConnectWithoutDocumentsInput = {
@@ -612,6 +697,7 @@ export type DocumentCategoryUpdateWithoutDocumentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutDocumentCategoriesNestedInput
+  knowledge?: Prisma.KnowledgeUpdateManyWithoutCategoryNestedInput
 }
 
 export type DocumentCategoryUncheckedUpdateWithoutDocumentsInput = {
@@ -623,6 +709,7 @@ export type DocumentCategoryUncheckedUpdateWithoutDocumentsInput = {
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  knowledge?: Prisma.KnowledgeUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type DocumentCategoryCreateManyUserInput = {
@@ -644,6 +731,7 @@ export type DocumentCategoryUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.DocumentUpdateManyWithoutCategoryNestedInput
+  knowledge?: Prisma.KnowledgeUpdateManyWithoutCategoryNestedInput
 }
 
 export type DocumentCategoryUncheckedUpdateWithoutUserInput = {
@@ -655,6 +743,7 @@ export type DocumentCategoryUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.DocumentUncheckedUpdateManyWithoutCategoryNestedInput
+  knowledge?: Prisma.KnowledgeUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type DocumentCategoryUncheckedUpdateManyWithoutUserInput = {
@@ -674,10 +763,12 @@ export type DocumentCategoryUncheckedUpdateManyWithoutUserInput = {
 
 export type DocumentCategoryCountOutputType = {
   documents: number
+  knowledge: number
 }
 
 export type DocumentCategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   documents?: boolean | DocumentCategoryCountOutputTypeCountDocumentsArgs
+  knowledge?: boolean | DocumentCategoryCountOutputTypeCountKnowledgeArgs
 }
 
 /**
@@ -697,6 +788,13 @@ export type DocumentCategoryCountOutputTypeCountDocumentsArgs<ExtArgs extends ru
   where?: Prisma.DocumentWhereInput
 }
 
+/**
+ * DocumentCategoryCountOutputType without action
+ */
+export type DocumentCategoryCountOutputTypeCountKnowledgeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KnowledgeWhereInput
+}
+
 
 export type DocumentCategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -709,6 +807,7 @@ export type DocumentCategorySelect<ExtArgs extends runtime.Types.Extensions.Inte
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.DocumentCategory$documentsArgs<ExtArgs>
+  knowledge?: boolean | Prisma.DocumentCategory$knowledgeArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentCategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["documentCategory"]>
 
@@ -751,6 +850,7 @@ export type DocumentCategoryOmit<ExtArgs extends runtime.Types.Extensions.Intern
 export type DocumentCategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   documents?: boolean | Prisma.DocumentCategory$documentsArgs<ExtArgs>
+  knowledge?: boolean | Prisma.DocumentCategory$knowledgeArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentCategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DocumentCategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -765,6 +865,7 @@ export type $DocumentCategoryPayload<ExtArgs extends runtime.Types.Extensions.In
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     documents: Prisma.$DocumentPayload<ExtArgs>[]
+    knowledge: Prisma.$KnowledgePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1171,6 +1272,7 @@ export interface Prisma__DocumentCategoryClient<T, Null = never, ExtArgs extends
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   documents<T extends Prisma.DocumentCategory$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentCategory$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  knowledge<T extends Prisma.DocumentCategory$knowledgeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DocumentCategory$knowledgeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KnowledgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1630,6 +1732,30 @@ export type DocumentCategory$documentsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.DocumentScalarFieldEnum | Prisma.DocumentScalarFieldEnum[]
+}
+
+/**
+ * DocumentCategory.knowledge
+ */
+export type DocumentCategory$knowledgeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Knowledge
+   */
+  select?: Prisma.KnowledgeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Knowledge
+   */
+  omit?: Prisma.KnowledgeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KnowledgeInclude<ExtArgs> | null
+  where?: Prisma.KnowledgeWhereInput
+  orderBy?: Prisma.KnowledgeOrderByWithRelationInput | Prisma.KnowledgeOrderByWithRelationInput[]
+  cursor?: Prisma.KnowledgeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KnowledgeScalarFieldEnum | Prisma.KnowledgeScalarFieldEnum[]
 }
 
 /**

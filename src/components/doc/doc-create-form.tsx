@@ -4,7 +4,7 @@ import { docCreateFormSchema, DocCreateFormValues } from '@/schemas/doc'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { DocumentCategory } from '@/generated/prisma/client'
 import { useRouter } from 'next/navigation'
-import { use, useRef, useState, useTransition } from 'react'
+import { useRef, useTransition } from 'react'
 import {
   Controller,
   ControllerFieldState,
@@ -32,11 +32,11 @@ import DocUpload from '@/components/doc/doc-upload'
 import { createDocAction } from '@/app/(dashboard)/documents/actions'
 import { authClient } from '@/lib/auth-client'
 import { FileUploadRef } from '@/components/ui/file-upload'
-import { uploadDocs } from '@/lib/oss'
+import { uploadDocs } from '@/services/oss-client'
 import DocCateCombobox from './doc-cate-combobox'
 import PageTitle from '../page-title'
 import { Button, buttonVariants } from '../ui/button'
-import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
+import { ChevronLeft, LoaderCircle } from 'lucide-react'
 import Link from 'next/link'
 import DocCateDialog from './doc-cate-dialog'
 

@@ -5,6 +5,7 @@ import PageTitle from '../page-title'
 import { Button, buttonVariants } from '../ui/button'
 import Link from 'next/link'
 import { useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Card,
   CardContent,
@@ -31,20 +32,23 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import {
+  KNOWLEDGE_SOURCE_MODE,
   knowledgeCreateSchema,
   KnowledgeCreateFormValues
 } from '@/schemas/knowledge'
 import DocSelect, { type DocSelectValue } from '../doc/doc-select'
 import { createKnowledgeAction } from '@/app/(dashboard)/knowledge/actions'
+import { toast } from 'sonner'
 
 export default function KnowledgeForm() {
   const [isPending, startTransition] = useTransition()
+  const router = useRouter()
 
   const defaultValues: KnowledgeCreateFormValues = {
     name: '',
     description: '',
     docSource: {
-      mode: 'docCate',
+      mode: KNOWLEDGE_SOURCE_MODE.DOC_CATE,
       categoryId: '',
       documentIds: undefined
     }
@@ -135,14 +139,21 @@ export default function KnowledgeForm() {
     )
   }
 
-  console.log(form.formState.errors)
-
   const onSubmit = (values: KnowledgeCreateFormValues) => {
     startTransition(async () => {
-      debugger
       try {
-        await createKnowledgeAction(values)
-      } catch {}
+        const result = await createKnowledgeAction(values)
+
+        if (result.success) {
+          toast.success('知识库创建成功')
+          router.replace(`/knowledge/${result.data.id}`)
+        } else {
+          toast.error(result.error.message)
+        }
+      } catch (error) {
+        console.error(error)
+        toast.error('操作失败，请稍后重试')
+      }
     })
   }
 
@@ -151,13 +162,17 @@ export default function KnowledgeForm() {
       <PageTitle
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
-            <Button type='submit' form='agentCreateForm' disabled={isPending}>
+            <Button
+              type='submit'
+              form='knowledgeCreateForm'
+              disabled={isPending}
+            >
               {isPending && <LoaderCircle className='animate-spin' />}
               <Save />
               保存
             </Button>
             <Link
-              href='/agents'
+              href='/knowledge'
               className={buttonVariants({ variant: 'ghost' })}
             >
               <ChevronLeft />
@@ -169,7 +184,7 @@ export default function KnowledgeForm() {
         新建知识库
       </PageTitle>
 
-      <form id='agentCreateForm' onSubmit={form.handleSubmit(onSubmit)}>
+      <form id='knowledgeCreateForm' onSubmit={form.handleSubmit(onSubmit)}>
         <div className='h-min-0 flex flex-col gap-3'>
           <Card className='w-full'>
             <CardHeader>

@@ -1,6 +1,10 @@
 'use client'
 
 import {
+  KNOWLEDGE_SOURCE_MODE,
+  type KnowledgeSourceModeValues
+} from '@/schemas/knowledge'
+import {
   Field,
   FieldContent,
   FieldDescription,
@@ -9,7 +13,7 @@ import {
 } from '@/components/ui/field'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
-export type DocSelectMode = 'docCate' | 'doc'
+export type DocSelectMode = KnowledgeSourceModeValues
 
 export type DocSelectValue = {
   mode: DocSelectMode
@@ -48,7 +52,10 @@ export function DocSelectTab({
               选择数据中心的文件类目，将类目下的所有文件导入并构建索引
             </FieldDescription>
           </FieldContent>
-          <RadioGroupItem value='docCate' id='doc-select-mode-category' />
+          <RadioGroupItem
+            value={KNOWLEDGE_SOURCE_MODE.DOC_CATE}
+            id='doc-select-mode-category'
+          />
         </Field>
       </FieldLabel>
       <FieldLabel htmlFor='doc-select-mode-file' className='max-w-sm flex-1'>
@@ -59,7 +66,10 @@ export function DocSelectTab({
               选择应用数据类目下的文件构建索引
             </FieldDescription>
           </FieldContent>
-          <RadioGroupItem value='doc' id='doc-select-mode-file' />
+          <RadioGroupItem
+            value={KNOWLEDGE_SOURCE_MODE.DOC}
+            id='doc-select-mode-file'
+          />
         </Field>
       </FieldLabel>
     </RadioGroup>

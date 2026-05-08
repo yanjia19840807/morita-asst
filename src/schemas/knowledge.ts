@@ -13,25 +13,41 @@ export const knowledgeDocCateIdSchema = z
   .trim()
   .min(1, '文档类目ID不能为空')
 
+export const KNOWLEDGE_SOURCE_MODE = {
+  DOC_CATE: 'DOC_CATE',
+  DOC: 'DOC'
+} as const
+
+export const knowledgeSourceModeSchema = z.enum([
+  KNOWLEDGE_SOURCE_MODE.DOC_CATE,
+  KNOWLEDGE_SOURCE_MODE.DOC
+])
+
 export const knowledgeDocSourceSchema = z.discriminatedUnion('mode', [
   z.object({
-    mode: z.literal('docCate'),
+    mode: z.literal(KNOWLEDGE_SOURCE_MODE.DOC_CATE),
     categoryId: knowledgeDocCateIdSchema,
     documentIds: z.undefined()
   }),
   z.object({
-    mode: z.literal('doc'),
+    mode: z.literal(KNOWLEDGE_SOURCE_MODE.DOC),
     categoryId: z.undefined(),
     documentIds: z.array(knowledgeDocIdSchema).min(1, '至少需要一个文档ID')
   })
 ])
 
-export const knowledgeSchema = z.object({
-  id: knowledgeIdSchema,
-  user: z.object({
-    id: userIdSchema,
-    name: z.string().trim().min(1, '用户名不能为空')
+export const knowledgeSourceSchema = z.discriminatedUnion('sourceMode', [
+  z.object({
+    sourceMode: z.literal(KNOWLEDGE_SOURCE_MODE.DOC_CATE),
+    categoryId: knowledgeDocCateIdSchema
   }),
+  z.object({
+    sourceMode: z.literal(KNOWLEDGE_SOURCE_MODE.DOC),
+    categoryId: z.null().optional()
+  })
+])
+
+const knowledgeBaseSchema = z.object({
   name: z
     .string()
     .trim()
@@ -49,14 +65,34 @@ export const knowledgeSchema = z.object({
         name: z.string().trim().min(1, '助手名称不能为空')
       })
     )
-    .default([]),
+    .default([])
+})
+
+export const knowledgeSchema = knowledgeBaseSchema
+  .extend({
+    id: knowledgeIdSchema,
+    user: z.object({
+      id: userIdSchema,
+      name: z.string().trim().min(1, '用户名不能为空')
+    })
+  })
+  .and(knowledgeSourceSchema)
+
+export const knowledgeCreateSchema = z.object({
+  name: knowledgeBaseSchema.shape.name,
+  description: knowledgeBaseSchema.shape.description,
   docSource: knowledgeDocSourceSchema
 })
 
-export const knowledgeCreateSchema = knowledgeSchema.omit({
-  id: true,
-  user: true,
-  agent: true
+export const fetchKnowledgeDocumentsParamsSchema = z.object({
+  knowledgeId: knowledgeIdSchema,
+  filename: z.string().trim().optional(),
+  sortBy: z
+    .enum(['filename', 'status', 'chunkCount', 'lastIndexedAt', 'createdAt'])
+    .optional(),
+  sortDirection: z.enum(['asc', 'desc']).optional(),
+  page: z.coerce.number().int().positive(),
+  pageSize: z.coerce.number().int().positive()
 })
 
 export const knowledgeEditSchema = knowledgeSchema
@@ -74,3 +110,13 @@ export type KnowledgeViewValues = z.infer<typeof knowledgeViewSchema>
 export type KnowledgeValues = z.infer<typeof knowledgeSchema>
 
 export type KnowledgeDocSourceValues = z.infer<typeof knowledgeDocSourceSchema>
+
+export type KnowledgeSourceValues = z.infer<typeof knowledgeSourceSchema>
+
+export type KnowledgeSourceModeValues = z.infer<
+  typeof knowledgeSourceModeSchema
+>
+
+export type FetchKnowledgeDocumentsParams = z.infer<
+  typeof fetchKnowledgeDocumentsParamsSchema
+>

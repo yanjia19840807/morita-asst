@@ -1449,6 +1449,8 @@ export const KnowledgeScalarFieldEnum = {
   name: 'name',
   description: 'description',
   userId: 'userId',
+  sourceMode: 'sourceMode',
+  categoryId: 'categoryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1634,6 +1636,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'KnowledgeSourceMode'
+ */
+export type EnumKnowledgeSourceModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeSourceMode'>
+    
+
+
+/**
+ * Reference to a field of type 'KnowledgeSourceMode[]'
+ */
+export type ListEnumKnowledgeSourceModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeSourceMode[]'>
     
 
 

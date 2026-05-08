@@ -35,10 +35,9 @@ export async function fetchAgents({
   agents: AgentRow[]
   total: number
 }> {
-  const user = await requireRoles(['admin'])
+  await requireRoles(['admin'])
 
   const where: Prisma.AgentWhereInput = {
-    userId: user.id,
     ...(searchValue
       ? {
           OR: [
@@ -92,7 +91,6 @@ export async function fetchAgentFormOptions() {
 
   const [promptProfiles, knowledges] = await Promise.all([
     prisma.promptProfile.findMany({
-      where: { userId: user.id },
       select: {
         id: true,
         name: true
@@ -130,7 +128,6 @@ export async function createAgent(data: AgentCreateFormValues) {
 
   const existingAgent = await prisma.agent.findFirst({
     where: {
-      userId: user.id,
       name
     },
     select: {
@@ -145,8 +142,7 @@ export async function createAgent(data: AgentCreateFormValues) {
   if (promptProfileId) {
     const promptProfile = await prisma.promptProfile.findFirst({
       where: {
-        id: promptProfileId,
-        userId: user.id
+        id: promptProfileId
       },
       select: {
         id: true

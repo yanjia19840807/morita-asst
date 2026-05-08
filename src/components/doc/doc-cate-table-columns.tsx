@@ -1,5 +1,6 @@
 'use client'
 
+import { format } from 'date-fns'
 import { ColumnDef } from '@tanstack/react-table'
 import { TableColumnHeader } from '../table/table-column-header'
 import { Checkbox } from '../ui/checkbox'
@@ -45,7 +46,8 @@ export const docCateColumns: ColumnDef<DocumentCategory>[] = [
     header: ({ column }) => (
       <TableColumnHeader column={column} title={'创建时间'} />
     ),
-    cell: ({ row }) => new Date(row.original.createdAt).toLocaleString('zh-CN')
+    cell: ({ row }) =>
+      format(new Date(row.original.createdAt), 'yyyy/MM/dd HH:mm')
   },
   {
     id: 'actions',

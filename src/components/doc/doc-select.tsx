@@ -1,17 +1,18 @@
 'use client'
 
 import { useState } from 'react'
+import {
+  KNOWLEDGE_SOURCE_MODE,
+  type KnowledgeCreateFormValues,
+  type KnowledgeSourceModeValues
+} from '@/schemas/knowledge'
 import { DocSelectTable } from './doc-select-table'
 import { DocSelectTab } from './doc-select-tab'
 import { DocSelectCate } from './doc-select-cate'
 
-export type DocSelectMode = 'docCate' | 'doc'
+export type DocSelectMode = KnowledgeSourceModeValues
 
-export type DocSelectValue = {
-  mode: DocSelectMode
-  categoryId?: string
-  documentIds?: string[]
-}
+export type DocSelectValue = KnowledgeCreateFormValues['docSource']
 
 const pageSize = 10
 
@@ -34,13 +35,15 @@ export default function DocSelect({
 }: DocSelectProps) {
   const [browseCategoryId, setBrowseCategoryId] = useState(value.categoryId)
   const selectedCategoryId =
-    value.mode === 'docCate' ? value.categoryId : browseCategoryId
+    value.mode === KNOWLEDGE_SOURCE_MODE.DOC_CATE
+      ? value.categoryId
+      : browseCategoryId
 
   const handleModeChange = (mode: DocSelectMode) => {
-    if (mode === 'docCate') {
+    if (mode === KNOWLEDGE_SOURCE_MODE.DOC_CATE) {
       onChange({
         mode,
-        categoryId: selectedCategoryId,
+        categoryId: selectedCategoryId ?? '',
         documentIds: undefined
       })
     } else {
@@ -58,9 +61,9 @@ export default function DocSelect({
   const handleCategoryChange = (categoryId: string) => {
     setBrowseCategoryId(categoryId)
 
-    if (value.mode === 'docCate') {
+    if (value.mode === KNOWLEDGE_SOURCE_MODE.DOC_CATE) {
       onChange({
-        mode: 'docCate',
+        mode: KNOWLEDGE_SOURCE_MODE.DOC_CATE,
         categoryId,
         documentIds: undefined
       })
@@ -71,7 +74,7 @@ export default function DocSelect({
 
   const handleSelectedDocumentIdsChange = (documentIds: string[]) => {
     onChange({
-      mode: 'doc',
+      mode: KNOWLEDGE_SOURCE_MODE.DOC,
       categoryId: undefined,
       documentIds
     })
@@ -96,7 +99,7 @@ export default function DocSelect({
           categoryId={selectedCategoryId}
           selectedDocumentIds={value.documentIds ?? []}
           onSelectedDocumentIdsChange={handleSelectedDocumentIdsChange}
-          disabled={disabled || value.mode !== 'doc'}
+          disabled={disabled || value.mode !== KNOWLEDGE_SOURCE_MODE.DOC}
         />
       </div>
     </div>

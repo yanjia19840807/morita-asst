@@ -45,12 +45,11 @@ export async function fetchPromptProfiles({
   promptProfiles: PromptProfileRow[]
   total: number
 }> {
-  const user = await requireRoles(['admin'])
+  await requireRoles(['admin'])
   const keyword = searchValue?.trim()
   const orderByField = sortableFields.has(sortBy) ? sortBy : 'updatedAt'
 
   const where: Prisma.PromptProfileWhereInput = {
-    userId: user.id,
     ...(keyword
       ? {
           OR: [
@@ -113,7 +112,6 @@ export async function createPromptProfile(data: PromptProfileCreateFormValues) {
 
   const existing = await prisma.promptProfile.findFirst({
     where: {
-      userId: user.id,
       name
     },
     select: {
@@ -135,7 +133,7 @@ export async function createPromptProfile(data: PromptProfileCreateFormValues) {
 }
 
 export async function fetchPromptProfileById(id: string) {
-  const user = await requireRoles(['admin'])
+  await requireRoles(['admin'])
   const validation = promptProfileIdSchema.safeParse(id)
 
   if (!validation.success) {
@@ -144,8 +142,7 @@ export async function fetchPromptProfileById(id: string) {
 
   const promptProfile = await prisma.promptProfile.findFirst({
     where: {
-      id: validation.data,
-      userId: user.id
+      id: validation.data
     }
   })
 
@@ -157,7 +154,7 @@ export async function fetchPromptProfileById(id: string) {
 }
 
 export async function editPromptProfile(data: PromptProfileEditFormValues) {
-  const user = await requireRoles(['admin'])
+  await requireRoles(['admin'])
   const validation = promptProfileEditSchema.safeParse(data)
 
   if (!validation.success) {
@@ -168,7 +165,6 @@ export async function editPromptProfile(data: PromptProfileEditFormValues) {
 
   const existing = await prisma.promptProfile.findFirst({
     where: {
-      userId: user.id,
       name,
       id: {
         not: id

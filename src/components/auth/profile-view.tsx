@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
@@ -81,7 +82,7 @@ export default async function ProfileView({
                 <FieldLabel>禁用截止</FieldLabel>
                 <FieldDescription>
                   {user.banExpires
-                    ? new Date(user.banExpires).toLocaleString()
+                    ? format(new Date(user.banExpires), 'yyyy/MM/dd HH:mm')
                     : '-'}
                 </FieldDescription>
               </Field>

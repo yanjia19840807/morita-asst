@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { format } from 'date-fns'
 
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
@@ -22,7 +23,7 @@ interface UserDetailViewProps {
 
 export function UserDetail({ user }: UserDetailViewProps) {
   return (
-    <div>
+    <div className='flex min-h-0 flex-1 flex-col gap-3'>
       <PageTitle
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
@@ -90,7 +91,7 @@ export function UserDetail({ user }: UserDetailViewProps) {
                 <FieldLabel>禁用截止</FieldLabel>
                 <FieldDescription>
                   {user.banExpires
-                    ? new Date(user.banExpires).toLocaleString()
+                    ? format(new Date(user.banExpires), 'yyyy/MM/dd HH:mm')
                     : '-'}
                 </FieldDescription>
               </Field>

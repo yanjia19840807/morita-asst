@@ -31,6 +31,14 @@ export const ChunkEmbeddingStatus = {
 export type ChunkEmbeddingStatus = (typeof ChunkEmbeddingStatus)[keyof typeof ChunkEmbeddingStatus]
 
 
+export const KnowledgeSourceMode = {
+  DOC_CATE: 'DOC_CATE',
+  DOC: 'DOC'
+} as const
+
+export type KnowledgeSourceMode = (typeof KnowledgeSourceMode)[keyof typeof KnowledgeSourceMode]
+
+
 export const AgentStatus = {
   DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE',

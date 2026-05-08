@@ -36,7 +36,7 @@ import {
 } from '@/components/ui/select'
 import { authClient } from '@/lib/auth-client'
 import { ResponseResult } from '@/lib/api/shared/response'
-import { uploadAvatar } from '@/lib/oss'
+import { uploadAvatar } from '@/services/oss-client'
 import { UserEditFormValues } from '@/schemas/auth'
 import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
 

@@ -1,5 +1,6 @@
 'use client'
 
+import { format } from 'date-fns'
 import { ColumnDef } from '@tanstack/react-table'
 import type { PromptProfileRow } from '@/data-access/prompt-profile'
 import { TableColumnHeader } from '../table/table-column-header'
@@ -46,6 +47,7 @@ export const promptProfileColumns: ColumnDef<PromptProfileRow>[] = [
     header: ({ column }) => (
       <TableColumnHeader column={column} title='更新时间' />
     ),
-    cell: ({ row }) => new Date(row.original.updatedAt).toLocaleString('zh-CN')
+    cell: ({ row }) =>
+      format(new Date(row.original.updatedAt), 'yyyy/MM/dd HH:mm')
   }
 ]

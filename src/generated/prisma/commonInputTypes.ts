@@ -205,6 +205,23 @@ export type IntWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntFilter<$PrismaModel>
 }
 
+export type EnumKnowledgeSourceModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.KnowledgeSourceMode | Prisma.EnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  in?: $Enums.KnowledgeSourceMode[] | Prisma.ListEnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.KnowledgeSourceMode[] | Prisma.ListEnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumKnowledgeSourceModeFilter<$PrismaModel> | $Enums.KnowledgeSourceMode
+}
+
+export type EnumKnowledgeSourceModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.KnowledgeSourceMode | Prisma.EnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  in?: $Enums.KnowledgeSourceMode[] | Prisma.ListEnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.KnowledgeSourceMode[] | Prisma.ListEnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumKnowledgeSourceModeWithAggregatesFilter<$PrismaModel> | $Enums.KnowledgeSourceMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumKnowledgeSourceModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumKnowledgeSourceModeFilter<$PrismaModel>
+}
+
 export type EnumKnowledgeDocumentStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.KnowledgeDocumentStatus | Prisma.EnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
   in?: $Enums.KnowledgeDocumentStatus[] | Prisma.ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
@@ -570,6 +587,23 @@ export type NestedFloatFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
+}
+
+export type NestedEnumKnowledgeSourceModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.KnowledgeSourceMode | Prisma.EnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  in?: $Enums.KnowledgeSourceMode[] | Prisma.ListEnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.KnowledgeSourceMode[] | Prisma.ListEnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumKnowledgeSourceModeFilter<$PrismaModel> | $Enums.KnowledgeSourceMode
+}
+
+export type NestedEnumKnowledgeSourceModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.KnowledgeSourceMode | Prisma.EnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  in?: $Enums.KnowledgeSourceMode[] | Prisma.ListEnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.KnowledgeSourceMode[] | Prisma.ListEnumKnowledgeSourceModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumKnowledgeSourceModeWithAggregatesFilter<$PrismaModel> | $Enums.KnowledgeSourceMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumKnowledgeSourceModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumKnowledgeSourceModeFilter<$PrismaModel>
 }
 
 export type NestedEnumKnowledgeDocumentStatusFilter<$PrismaModel = never> = {

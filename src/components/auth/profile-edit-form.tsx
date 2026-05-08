@@ -13,7 +13,6 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -37,7 +36,7 @@ import {
   profileEditSchema,
   profilePasswordSchema
 } from '@/schemas/auth'
-import { uploadAvatar } from '@/lib/oss'
+import { uploadAvatar } from '@/services/oss-client'
 import AvatarInput from '../avatar-input'
 import { useEffect, useTransition } from 'react'
 import PageTitle from '../page-title'

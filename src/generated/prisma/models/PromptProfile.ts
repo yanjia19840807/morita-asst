@@ -207,18 +207,17 @@ export type PromptProfileOrderByWithRelationInput = {
 
 export type PromptProfileWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  userId_name?: Prisma.PromptProfileUserIdNameCompoundUniqueInput
+  name?: string
   AND?: Prisma.PromptProfileWhereInput | Prisma.PromptProfileWhereInput[]
   OR?: Prisma.PromptProfileWhereInput[]
   NOT?: Prisma.PromptProfileWhereInput | Prisma.PromptProfileWhereInput[]
-  name?: Prisma.StringFilter<"PromptProfile"> | string
   userId?: Prisma.StringFilter<"PromptProfile"> | string
   systemPrompt?: Prisma.StringFilter<"PromptProfile"> | string
   createdAt?: Prisma.DateTimeFilter<"PromptProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PromptProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   agents?: Prisma.AgentListRelationFilter
-}, "id" | "userId_name">
+}, "id" | "name">
 
 export type PromptProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -323,11 +322,6 @@ export type PromptProfileOrderByRelationAggregateInput = {
 export type PromptProfileNullableScalarRelationFilter = {
   is?: Prisma.PromptProfileWhereInput | null
   isNot?: Prisma.PromptProfileWhereInput | null
-}
-
-export type PromptProfileUserIdNameCompoundUniqueInput = {
-  userId: string
-  name: string
 }
 
 export type PromptProfileCountOrderByAggregateInput = {

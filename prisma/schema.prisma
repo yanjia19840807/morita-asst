@@ -100,7 +100,7 @@ model Agent {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
-  @@unique([userId, name])
+  @@unique([name])
   @@index([userId])
   @@index([promptProfileId])
   @@index([status])
@@ -134,18 +134,21 @@ model PromptProfile {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  @@unique([userId, name])
+  @@unique([name])
   @@index([userId])
   @@map("prompt-profile")
 }
 
 model Knowledge {
-  id          String  @id @default(uuid())
+  id          String              @id @default(uuid())
   name        String
   description String?
   userId      String
+  sourceMode  KnowledgeSourceMode
+  categoryId  String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category DocumentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   agents    AgentKnowledge[]
   documents KnowledgeDocument[]
@@ -153,7 +156,10 @@ model Knowledge {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([name])
   @@index([userId])
+  @@index([sourceMode])
+  @@index([categoryId])
   @@map("knowledge")
 }
 
@@ -191,10 +197,11 @@ model DocumentCategory {
   isDefault Boolean    @default(false)
   documents Document[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  knowledge Knowledge[]
 
-  @@unique([userId, name])
+  @@unique([name])
   @@index([userId])
   @@map("document-category")
 }
@@ -264,6 +271,11 @@ enum ChunkEmbeddingStatus {
   EMBEDDING // 嵌入中
   EMBEDDED // 已嵌入
   FAILED // 嵌入失败
+}
+
+enum KnowledgeSourceMode {
+  DOC_CATE
+  DOC
 }
 
 enum AgentStatus {

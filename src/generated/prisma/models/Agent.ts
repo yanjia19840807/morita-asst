@@ -236,11 +236,10 @@ export type AgentOrderByWithRelationInput = {
 
 export type AgentWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  userId_name?: Prisma.AgentUserIdNameCompoundUniqueInput
+  name?: string
   AND?: Prisma.AgentWhereInput | Prisma.AgentWhereInput[]
   OR?: Prisma.AgentWhereInput[]
   NOT?: Prisma.AgentWhereInput | Prisma.AgentWhereInput[]
-  name?: Prisma.StringFilter<"Agent"> | string
   description?: Prisma.StringNullableFilter<"Agent"> | string | null
   userId?: Prisma.StringFilter<"Agent"> | string
   status?: Prisma.EnumAgentStatusFilter<"Agent"> | $Enums.AgentStatus
@@ -251,7 +250,7 @@ export type AgentWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   knowledges?: Prisma.AgentKnowledgeListRelationFilter
   promptProfile?: Prisma.XOR<Prisma.PromptProfileNullableScalarRelationFilter, Prisma.PromptProfileWhereInput> | null
-}, "id" | "userId_name">
+}, "id" | "name">
 
 export type AgentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -377,11 +376,6 @@ export type AgentListRelationFilter = {
 
 export type AgentOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type AgentUserIdNameCompoundUniqueInput = {
-  userId: string
-  name: string
 }
 
 export type AgentCountOrderByAggregateInput = {

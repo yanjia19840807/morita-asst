@@ -1,6 +1,8 @@
 'use client'
 
 import type { KnowledgeRow } from '@/data-access/knowledge'
+import { format } from 'date-fns'
+import Link from 'next/link'
 import {
   Card,
   CardContent,
@@ -10,16 +12,11 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { CalendarDays, FileText, Fingerprint } from 'lucide-react'
+import { buttonVariants } from '../ui/button'
 
 interface KnowledgeCardProps {
   knowledge: KnowledgeRow
 }
-
-const dateFormatter = new Intl.DateTimeFormat('zh-CN', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit'
-})
 
 export default function KnowledgeCard({ knowledge }: KnowledgeCardProps) {
   return (
@@ -59,12 +56,24 @@ export default function KnowledgeCard({ knowledge }: KnowledgeCardProps) {
           </div>
         </div>
       </CardContent>
-      <CardFooter className='text-muted-foreground mt-auto justify-between border-t pt-4 text-xs'>
-        <div className='flex items-center gap-2'>
+      <CardFooter className='mt-auto justify-between gap-3 border-t pt-4'>
+        <div className='text-muted-foreground flex items-center gap-2 text-xs'>
           <CalendarDays className='size-4' />
-          <span>创建于 {dateFormatter.format(knowledge.createdAt)}</span>
+          <span>
+            创建于 {format(new Date(knowledge.createdAt), 'yyyy/MM/dd')}
+          </span>
         </div>
-        <span>更新于 {dateFormatter.format(knowledge.updatedAt)}</span>
+        <div className='flex items-center gap-3'>
+          <span className='text-muted-foreground text-xs'>
+            更新于 {format(new Date(knowledge.updatedAt), 'yyyy/MM/dd')}
+          </span>
+          <Link
+            href={`/knowledge/${knowledge.id}`}
+            className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+          >
+            查看详情
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   )

@@ -2,18 +2,15 @@ import { getSTS } from '@/data-access/sts-token'
 import { withAuth } from '@/lib/api/server/with-auth'
 import { APIError } from '@/lib/api/server/errors'
 import { NextRequest } from 'next/server'
-import { BucketAccess } from '@/lib/oss'
+import { resolveBucketConfig } from '@/services/oss-server'
+import type { BucketAccess } from '@/types/oss'
 import { handleApiError, handleApiResult } from '@/lib/api/server/response'
 
 export const GET = withAuth(async (request: NextRequest, { user }) => {
   try {
-    const region = process.env.ALI_OSS_REGION
     const searchParams = request.nextUrl.searchParams
     const bucketAccess = searchParams.get('bucketAccess') as BucketAccess
-    const bucket =
-      bucketAccess === 'private'
-        ? process.env.ALI_PRIVATE_BUCKET
-        : process.env.ALI_PUBLIC_BUCKET
+    const bucketData = resolveBucketConfig(bucketAccess)
 
     const response = await getSTS(user.id)
     const { accessKeyId, accessKeySecret, securityToken, expiration } = response
@@ -23,10 +20,7 @@ export const GET = withAuth(async (request: NextRequest, { user }) => {
       accessKeySecret,
       securityToken,
       expiration,
-      bucketData: {
-        bucket,
-        region
-      }
+      bucketData
     })
   } catch (error) {
     console.error('STS AssumeRole Error:', error)

@@ -24,12 +24,6 @@ interface AgentCardProps {
   agent: AgentRow
 }
 
-const dateFormatter = new Intl.DateTimeFormat('zh-CN', {
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit'
-})
-
 const statusMap = {
   DRAFT: {
     label: '草稿',

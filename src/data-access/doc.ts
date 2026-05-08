@@ -166,7 +166,6 @@ export async function createDocCate(data: DocCateCreateFormValues) {
   const userId = user.id
   const maxOrder = await prisma.documentCategory.aggregate({
     where: {
-      userId,
       isDefault: false
     },
     _max: {
@@ -181,7 +180,7 @@ export async function createDocCate(data: DocCateCreateFormValues) {
 }
 
 export async function editDocCate(data: DocCateEditFormValues) {
-  const user = await requireRoles(['admin'])
+  await requireRoles(['admin'])
   const validation = docCateEditFormSchema.safeParse(data)
   if (!validation.success) {
     throw new ValidationError(z.prettifyError(validation.error))
@@ -189,10 +188,9 @@ export async function editDocCate(data: DocCateEditFormValues) {
 
   const { id, name } = validation.data
   const slug = await generateUniqueSlug(name)
-  const userId = user.id
 
   return prisma.documentCategory.update({
-    data: { userId, name, slug },
+    data: { name, slug },
     where: { id }
   })
 }

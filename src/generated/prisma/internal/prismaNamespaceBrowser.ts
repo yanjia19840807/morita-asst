@@ -188,6 +188,8 @@ export const KnowledgeScalarFieldEnum = {
   name: 'name',
   description: 'description',
   userId: 'userId',
+  sourceMode: 'sourceMode',
+  categoryId: 'categoryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

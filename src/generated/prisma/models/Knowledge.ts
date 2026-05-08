@@ -29,6 +29,8 @@ export type KnowledgeMinAggregateOutputType = {
   name: string | null
   description: string | null
   userId: string | null
+  sourceMode: $Enums.KnowledgeSourceMode | null
+  categoryId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +40,8 @@ export type KnowledgeMaxAggregateOutputType = {
   name: string | null
   description: string | null
   userId: string | null
+  sourceMode: $Enums.KnowledgeSourceMode | null
+  categoryId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,6 +51,8 @@ export type KnowledgeCountAggregateOutputType = {
   name: number
   description: number
   userId: number
+  sourceMode: number
+  categoryId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -58,6 +64,8 @@ export type KnowledgeMinAggregateInputType = {
   name?: true
   description?: true
   userId?: true
+  sourceMode?: true
+  categoryId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -67,6 +75,8 @@ export type KnowledgeMaxAggregateInputType = {
   name?: true
   description?: true
   userId?: true
+  sourceMode?: true
+  categoryId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,6 +86,8 @@ export type KnowledgeCountAggregateInputType = {
   name?: true
   description?: true
   userId?: true
+  sourceMode?: true
+  categoryId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -158,6 +170,8 @@ export type KnowledgeGroupByOutputType = {
   name: string
   description: string | null
   userId: string
+  sourceMode: $Enums.KnowledgeSourceMode
+  categoryId: string | null
   createdAt: Date
   updatedAt: Date
   _count: KnowledgeCountAggregateOutputType | null
@@ -188,9 +202,12 @@ export type KnowledgeWhereInput = {
   name?: Prisma.StringFilter<"Knowledge"> | string
   description?: Prisma.StringNullableFilter<"Knowledge"> | string | null
   userId?: Prisma.StringFilter<"Knowledge"> | string
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFilter<"Knowledge"> | $Enums.KnowledgeSourceMode
+  categoryId?: Prisma.StringNullableFilter<"Knowledge"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Knowledge"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Knowledge"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  category?: Prisma.XOR<Prisma.DocumentCategoryNullableScalarRelationFilter, Prisma.DocumentCategoryWhereInput> | null
   agents?: Prisma.AgentKnowledgeListRelationFilter
   documents?: Prisma.KnowledgeDocumentListRelationFilter
 }
@@ -200,33 +217,41 @@ export type KnowledgeOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
+  sourceMode?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  category?: Prisma.DocumentCategoryOrderByWithRelationInput
   agents?: Prisma.AgentKnowledgeOrderByRelationAggregateInput
   documents?: Prisma.KnowledgeDocumentOrderByRelationAggregateInput
 }
 
 export type KnowledgeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  name?: string
   AND?: Prisma.KnowledgeWhereInput | Prisma.KnowledgeWhereInput[]
   OR?: Prisma.KnowledgeWhereInput[]
   NOT?: Prisma.KnowledgeWhereInput | Prisma.KnowledgeWhereInput[]
-  name?: Prisma.StringFilter<"Knowledge"> | string
   description?: Prisma.StringNullableFilter<"Knowledge"> | string | null
   userId?: Prisma.StringFilter<"Knowledge"> | string
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFilter<"Knowledge"> | $Enums.KnowledgeSourceMode
+  categoryId?: Prisma.StringNullableFilter<"Knowledge"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Knowledge"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Knowledge"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  category?: Prisma.XOR<Prisma.DocumentCategoryNullableScalarRelationFilter, Prisma.DocumentCategoryWhereInput> | null
   agents?: Prisma.AgentKnowledgeListRelationFilter
   documents?: Prisma.KnowledgeDocumentListRelationFilter
-}, "id">
+}, "id" | "name">
 
 export type KnowledgeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
+  sourceMode?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.KnowledgeCountOrderByAggregateInput
@@ -242,6 +267,8 @@ export type KnowledgeScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Knowledge"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Knowledge"> | string | null
   userId?: Prisma.StringWithAggregatesFilter<"Knowledge"> | string
+  sourceMode?: Prisma.EnumKnowledgeSourceModeWithAggregatesFilter<"Knowledge"> | $Enums.KnowledgeSourceMode
+  categoryId?: Prisma.StringNullableWithAggregatesFilter<"Knowledge"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Knowledge"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Knowledge"> | Date | string
 }
@@ -250,9 +277,11 @@ export type KnowledgeCreateInput = {
   id?: string
   name: string
   description?: string | null
+  sourceMode: $Enums.KnowledgeSourceMode
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutKnowledgesInput
+  category?: Prisma.DocumentCategoryCreateNestedOneWithoutKnowledgeInput
   agents?: Prisma.AgentKnowledgeCreateNestedManyWithoutKnowledgeInput
   documents?: Prisma.KnowledgeDocumentCreateNestedManyWithoutKnowledgeInput
 }
@@ -262,6 +291,8 @@ export type KnowledgeUncheckedCreateInput = {
   name: string
   description?: string | null
   userId: string
+  sourceMode: $Enums.KnowledgeSourceMode
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   agents?: Prisma.AgentKnowledgeUncheckedCreateNestedManyWithoutKnowledgeInput
@@ -272,9 +303,11 @@ export type KnowledgeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutKnowledgesNestedInput
+  category?: Prisma.DocumentCategoryUpdateOneWithoutKnowledgeNestedInput
   agents?: Prisma.AgentKnowledgeUpdateManyWithoutKnowledgeNestedInput
   documents?: Prisma.KnowledgeDocumentUpdateManyWithoutKnowledgeNestedInput
 }
@@ -284,6 +317,8 @@ export type KnowledgeUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   agents?: Prisma.AgentKnowledgeUncheckedUpdateManyWithoutKnowledgeNestedInput
@@ -295,6 +330,8 @@ export type KnowledgeCreateManyInput = {
   name: string
   description?: string | null
   userId: string
+  sourceMode: $Enums.KnowledgeSourceMode
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -303,6 +340,7 @@ export type KnowledgeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -312,6 +350,8 @@ export type KnowledgeUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -336,6 +376,8 @@ export type KnowledgeCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  sourceMode?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -345,6 +387,8 @@ export type KnowledgeMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  sourceMode?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -354,6 +398,8 @@ export type KnowledgeMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  sourceMode?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -414,6 +460,10 @@ export type KnowledgeUpdateOneRequiredWithoutAgentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.KnowledgeUpdateToOneWithWhereWithoutAgentsInput, Prisma.KnowledgeUpdateWithoutAgentsInput>, Prisma.KnowledgeUncheckedUpdateWithoutAgentsInput>
 }
 
+export type EnumKnowledgeSourceModeFieldUpdateOperationsInput = {
+  set?: $Enums.KnowledgeSourceMode
+}
+
 export type KnowledgeCreateNestedOneWithoutDocumentsInput = {
   create?: Prisma.XOR<Prisma.KnowledgeCreateWithoutDocumentsInput, Prisma.KnowledgeUncheckedCreateWithoutDocumentsInput>
   connectOrCreate?: Prisma.KnowledgeCreateOrConnectWithoutDocumentsInput
@@ -428,12 +478,56 @@ export type KnowledgeUpdateOneRequiredWithoutDocumentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.KnowledgeUpdateToOneWithWhereWithoutDocumentsInput, Prisma.KnowledgeUpdateWithoutDocumentsInput>, Prisma.KnowledgeUncheckedUpdateWithoutDocumentsInput>
 }
 
+export type KnowledgeCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.KnowledgeCreateWithoutCategoryInput, Prisma.KnowledgeUncheckedCreateWithoutCategoryInput> | Prisma.KnowledgeCreateWithoutCategoryInput[] | Prisma.KnowledgeUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.KnowledgeCreateOrConnectWithoutCategoryInput | Prisma.KnowledgeCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.KnowledgeCreateManyCategoryInputEnvelope
+  connect?: Prisma.KnowledgeWhereUniqueInput | Prisma.KnowledgeWhereUniqueInput[]
+}
+
+export type KnowledgeUncheckedCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.KnowledgeCreateWithoutCategoryInput, Prisma.KnowledgeUncheckedCreateWithoutCategoryInput> | Prisma.KnowledgeCreateWithoutCategoryInput[] | Prisma.KnowledgeUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.KnowledgeCreateOrConnectWithoutCategoryInput | Prisma.KnowledgeCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.KnowledgeCreateManyCategoryInputEnvelope
+  connect?: Prisma.KnowledgeWhereUniqueInput | Prisma.KnowledgeWhereUniqueInput[]
+}
+
+export type KnowledgeUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.KnowledgeCreateWithoutCategoryInput, Prisma.KnowledgeUncheckedCreateWithoutCategoryInput> | Prisma.KnowledgeCreateWithoutCategoryInput[] | Prisma.KnowledgeUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.KnowledgeCreateOrConnectWithoutCategoryInput | Prisma.KnowledgeCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.KnowledgeUpsertWithWhereUniqueWithoutCategoryInput | Prisma.KnowledgeUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.KnowledgeCreateManyCategoryInputEnvelope
+  set?: Prisma.KnowledgeWhereUniqueInput | Prisma.KnowledgeWhereUniqueInput[]
+  disconnect?: Prisma.KnowledgeWhereUniqueInput | Prisma.KnowledgeWhereUniqueInput[]
+  delete?: Prisma.KnowledgeWhereUniqueInput | Prisma.KnowledgeWhereUniqueInput[]
+  connect?: Prisma.KnowledgeWhereUniqueInput | Prisma.KnowledgeWhereUniqueInput[]
+  update?: Prisma.KnowledgeUpdateWithWhereUniqueWithoutCategoryInput | Prisma.KnowledgeUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.KnowledgeUpdateManyWithWhereWithoutCategoryInput | Prisma.KnowledgeUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.KnowledgeScalarWhereInput | Prisma.KnowledgeScalarWhereInput[]
+}
+
+export type KnowledgeUncheckedUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.KnowledgeCreateWithoutCategoryInput, Prisma.KnowledgeUncheckedCreateWithoutCategoryInput> | Prisma.KnowledgeCreateWithoutCategoryInput[] | Prisma.KnowledgeUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.KnowledgeCreateOrConnectWithoutCategoryInput | Prisma.KnowledgeCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.KnowledgeUpsertWithWhereUniqueWithoutCategoryInput | Prisma.KnowledgeUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.KnowledgeCreateManyCategoryInputEnvelope
+  set?: Prisma.KnowledgeWhereUniqueInput | Prisma.KnowledgeWhereUniqueInput[]
+  disconnect?: Prisma.KnowledgeWhereUniqueInput | Prisma.KnowledgeWhereUniqueInput[]
+  delete?: Prisma.KnowledgeWhereUniqueInput | Prisma.KnowledgeWhereUniqueInput[]
+  connect?: Prisma.KnowledgeWhereUniqueInput | Prisma.KnowledgeWhereUniqueInput[]
+  update?: Prisma.KnowledgeUpdateWithWhereUniqueWithoutCategoryInput | Prisma.KnowledgeUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.KnowledgeUpdateManyWithWhereWithoutCategoryInput | Prisma.KnowledgeUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.KnowledgeScalarWhereInput | Prisma.KnowledgeScalarWhereInput[]
+}
+
 export type KnowledgeCreateWithoutUserInput = {
   id?: string
   name: string
   description?: string | null
+  sourceMode: $Enums.KnowledgeSourceMode
   createdAt?: Date | string
   updatedAt?: Date | string
+  category?: Prisma.DocumentCategoryCreateNestedOneWithoutKnowledgeInput
   agents?: Prisma.AgentKnowledgeCreateNestedManyWithoutKnowledgeInput
   documents?: Prisma.KnowledgeDocumentCreateNestedManyWithoutKnowledgeInput
 }
@@ -442,6 +536,8 @@ export type KnowledgeUncheckedCreateWithoutUserInput = {
   id?: string
   name: string
   description?: string | null
+  sourceMode: $Enums.KnowledgeSourceMode
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   agents?: Prisma.AgentKnowledgeUncheckedCreateNestedManyWithoutKnowledgeInput
@@ -482,6 +578,8 @@ export type KnowledgeScalarWhereInput = {
   name?: Prisma.StringFilter<"Knowledge"> | string
   description?: Prisma.StringNullableFilter<"Knowledge"> | string | null
   userId?: Prisma.StringFilter<"Knowledge"> | string
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFilter<"Knowledge"> | $Enums.KnowledgeSourceMode
+  categoryId?: Prisma.StringNullableFilter<"Knowledge"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Knowledge"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Knowledge"> | Date | string
 }
@@ -490,9 +588,11 @@ export type KnowledgeCreateWithoutAgentsInput = {
   id?: string
   name: string
   description?: string | null
+  sourceMode: $Enums.KnowledgeSourceMode
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutKnowledgesInput
+  category?: Prisma.DocumentCategoryCreateNestedOneWithoutKnowledgeInput
   documents?: Prisma.KnowledgeDocumentCreateNestedManyWithoutKnowledgeInput
 }
 
@@ -501,6 +601,8 @@ export type KnowledgeUncheckedCreateWithoutAgentsInput = {
   name: string
   description?: string | null
   userId: string
+  sourceMode: $Enums.KnowledgeSourceMode
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   documents?: Prisma.KnowledgeDocumentUncheckedCreateNestedManyWithoutKnowledgeInput
@@ -526,9 +628,11 @@ export type KnowledgeUpdateWithoutAgentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutKnowledgesNestedInput
+  category?: Prisma.DocumentCategoryUpdateOneWithoutKnowledgeNestedInput
   documents?: Prisma.KnowledgeDocumentUpdateManyWithoutKnowledgeNestedInput
 }
 
@@ -537,6 +641,8 @@ export type KnowledgeUncheckedUpdateWithoutAgentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   documents?: Prisma.KnowledgeDocumentUncheckedUpdateManyWithoutKnowledgeNestedInput
@@ -546,9 +652,11 @@ export type KnowledgeCreateWithoutDocumentsInput = {
   id?: string
   name: string
   description?: string | null
+  sourceMode: $Enums.KnowledgeSourceMode
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutKnowledgesInput
+  category?: Prisma.DocumentCategoryCreateNestedOneWithoutKnowledgeInput
   agents?: Prisma.AgentKnowledgeCreateNestedManyWithoutKnowledgeInput
 }
 
@@ -557,6 +665,8 @@ export type KnowledgeUncheckedCreateWithoutDocumentsInput = {
   name: string
   description?: string | null
   userId: string
+  sourceMode: $Enums.KnowledgeSourceMode
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   agents?: Prisma.AgentKnowledgeUncheckedCreateNestedManyWithoutKnowledgeInput
@@ -582,9 +692,11 @@ export type KnowledgeUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutKnowledgesNestedInput
+  category?: Prisma.DocumentCategoryUpdateOneWithoutKnowledgeNestedInput
   agents?: Prisma.AgentKnowledgeUpdateManyWithoutKnowledgeNestedInput
 }
 
@@ -593,15 +705,69 @@ export type KnowledgeUncheckedUpdateWithoutDocumentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   agents?: Prisma.AgentKnowledgeUncheckedUpdateManyWithoutKnowledgeNestedInput
+}
+
+export type KnowledgeCreateWithoutCategoryInput = {
+  id?: string
+  name: string
+  description?: string | null
+  sourceMode: $Enums.KnowledgeSourceMode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutKnowledgesInput
+  agents?: Prisma.AgentKnowledgeCreateNestedManyWithoutKnowledgeInput
+  documents?: Prisma.KnowledgeDocumentCreateNestedManyWithoutKnowledgeInput
+}
+
+export type KnowledgeUncheckedCreateWithoutCategoryInput = {
+  id?: string
+  name: string
+  description?: string | null
+  userId: string
+  sourceMode: $Enums.KnowledgeSourceMode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  agents?: Prisma.AgentKnowledgeUncheckedCreateNestedManyWithoutKnowledgeInput
+  documents?: Prisma.KnowledgeDocumentUncheckedCreateNestedManyWithoutKnowledgeInput
+}
+
+export type KnowledgeCreateOrConnectWithoutCategoryInput = {
+  where: Prisma.KnowledgeWhereUniqueInput
+  create: Prisma.XOR<Prisma.KnowledgeCreateWithoutCategoryInput, Prisma.KnowledgeUncheckedCreateWithoutCategoryInput>
+}
+
+export type KnowledgeCreateManyCategoryInputEnvelope = {
+  data: Prisma.KnowledgeCreateManyCategoryInput | Prisma.KnowledgeCreateManyCategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type KnowledgeUpsertWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.KnowledgeWhereUniqueInput
+  update: Prisma.XOR<Prisma.KnowledgeUpdateWithoutCategoryInput, Prisma.KnowledgeUncheckedUpdateWithoutCategoryInput>
+  create: Prisma.XOR<Prisma.KnowledgeCreateWithoutCategoryInput, Prisma.KnowledgeUncheckedCreateWithoutCategoryInput>
+}
+
+export type KnowledgeUpdateWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.KnowledgeWhereUniqueInput
+  data: Prisma.XOR<Prisma.KnowledgeUpdateWithoutCategoryInput, Prisma.KnowledgeUncheckedUpdateWithoutCategoryInput>
+}
+
+export type KnowledgeUpdateManyWithWhereWithoutCategoryInput = {
+  where: Prisma.KnowledgeScalarWhereInput
+  data: Prisma.XOR<Prisma.KnowledgeUpdateManyMutationInput, Prisma.KnowledgeUncheckedUpdateManyWithoutCategoryInput>
 }
 
 export type KnowledgeCreateManyUserInput = {
   id?: string
   name: string
   description?: string | null
+  sourceMode: $Enums.KnowledgeSourceMode
+  categoryId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -610,8 +776,10 @@ export type KnowledgeUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  category?: Prisma.DocumentCategoryUpdateOneWithoutKnowledgeNestedInput
   agents?: Prisma.AgentKnowledgeUpdateManyWithoutKnowledgeNestedInput
   documents?: Prisma.KnowledgeDocumentUpdateManyWithoutKnowledgeNestedInput
 }
@@ -620,6 +788,8 @@ export type KnowledgeUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   agents?: Prisma.AgentKnowledgeUncheckedUpdateManyWithoutKnowledgeNestedInput
@@ -630,6 +800,52 @@ export type KnowledgeUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type KnowledgeCreateManyCategoryInput = {
+  id?: string
+  name: string
+  description?: string | null
+  userId: string
+  sourceMode: $Enums.KnowledgeSourceMode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type KnowledgeUpdateWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutKnowledgesNestedInput
+  agents?: Prisma.AgentKnowledgeUpdateManyWithoutKnowledgeNestedInput
+  documents?: Prisma.KnowledgeDocumentUpdateManyWithoutKnowledgeNestedInput
+}
+
+export type KnowledgeUncheckedUpdateWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  agents?: Prisma.AgentKnowledgeUncheckedUpdateManyWithoutKnowledgeNestedInput
+  documents?: Prisma.KnowledgeDocumentUncheckedUpdateManyWithoutKnowledgeNestedInput
+}
+
+export type KnowledgeUncheckedUpdateManyWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  sourceMode?: Prisma.EnumKnowledgeSourceModeFieldUpdateOperationsInput | $Enums.KnowledgeSourceMode
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -679,9 +895,12 @@ export type KnowledgeSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   name?: boolean
   description?: boolean
   userId?: boolean
+  sourceMode?: boolean
+  categoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  category?: boolean | Prisma.Knowledge$categoryArgs<ExtArgs>
   agents?: boolean | Prisma.Knowledge$agentsArgs<ExtArgs>
   documents?: boolean | Prisma.Knowledge$documentsArgs<ExtArgs>
   _count?: boolean | Prisma.KnowledgeCountOutputTypeDefaultArgs<ExtArgs>
@@ -692,9 +911,12 @@ export type KnowledgeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   name?: boolean
   description?: boolean
   userId?: boolean
+  sourceMode?: boolean
+  categoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  category?: boolean | Prisma.Knowledge$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["knowledge"]>
 
 export type KnowledgeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -702,9 +924,12 @@ export type KnowledgeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   name?: boolean
   description?: boolean
   userId?: boolean
+  sourceMode?: boolean
+  categoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  category?: boolean | Prisma.Knowledge$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["knowledge"]>
 
 export type KnowledgeSelectScalar = {
@@ -712,28 +937,34 @@ export type KnowledgeSelectScalar = {
   name?: boolean
   description?: boolean
   userId?: boolean
+  sourceMode?: boolean
+  categoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type KnowledgeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["knowledge"]>
+export type KnowledgeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "userId" | "sourceMode" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["knowledge"]>
 export type KnowledgeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  category?: boolean | Prisma.Knowledge$categoryArgs<ExtArgs>
   agents?: boolean | Prisma.Knowledge$agentsArgs<ExtArgs>
   documents?: boolean | Prisma.Knowledge$documentsArgs<ExtArgs>
   _count?: boolean | Prisma.KnowledgeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type KnowledgeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  category?: boolean | Prisma.Knowledge$categoryArgs<ExtArgs>
 }
 export type KnowledgeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  category?: boolean | Prisma.Knowledge$categoryArgs<ExtArgs>
 }
 
 export type $KnowledgePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Knowledge"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    category: Prisma.$DocumentCategoryPayload<ExtArgs> | null
     agents: Prisma.$AgentKnowledgePayload<ExtArgs>[]
     documents: Prisma.$KnowledgeDocumentPayload<ExtArgs>[]
   }
@@ -742,6 +973,8 @@ export type $KnowledgePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     name: string
     description: string | null
     userId: string
+    sourceMode: $Enums.KnowledgeSourceMode
+    categoryId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["knowledge"]>
@@ -1139,6 +1372,7 @@ readonly fields: KnowledgeFieldRefs;
 export interface Prisma__KnowledgeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  category<T extends Prisma.Knowledge$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Knowledge$categoryArgs<ExtArgs>>): Prisma.Prisma__DocumentCategoryClient<runtime.Types.Result.GetResult<Prisma.$DocumentCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   agents<T extends Prisma.Knowledge$agentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Knowledge$agentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentKnowledgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.Knowledge$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Knowledge$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KnowledgeDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1174,6 +1408,8 @@ export interface KnowledgeFieldRefs {
   readonly name: Prisma.FieldRef<"Knowledge", 'String'>
   readonly description: Prisma.FieldRef<"Knowledge", 'String'>
   readonly userId: Prisma.FieldRef<"Knowledge", 'String'>
+  readonly sourceMode: Prisma.FieldRef<"Knowledge", 'KnowledgeSourceMode'>
+  readonly categoryId: Prisma.FieldRef<"Knowledge", 'String'>
   readonly createdAt: Prisma.FieldRef<"Knowledge", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Knowledge", 'DateTime'>
 }
@@ -1574,6 +1810,25 @@ export type KnowledgeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many Knowledges to delete.
    */
   limit?: number
+}
+
+/**
+ * Knowledge.category
+ */
+export type Knowledge$categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DocumentCategory
+   */
+  select?: Prisma.DocumentCategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DocumentCategory
+   */
+  omit?: Prisma.DocumentCategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DocumentCategoryInclude<ExtArgs> | null
+  where?: Prisma.DocumentCategoryWhereInput
 }
 
 /**
