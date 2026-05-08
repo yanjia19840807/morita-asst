@@ -28,7 +28,7 @@ import {
   useForm,
   UseFormStateReturn
 } from 'react-hook-form'
-import { forgotPasswordAction } from '@/app/(auth)/actions'
+import { forgotPasswordAction } from '@/actions/auth/actions'
 import { toast } from 'sonner'
 import { LoaderCircle } from 'lucide-react'
 

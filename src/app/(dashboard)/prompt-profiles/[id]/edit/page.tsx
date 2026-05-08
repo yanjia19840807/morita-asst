@@ -1,5 +1,5 @@
-import { PromptProfileEditForm } from '@/components/prompt-profile/prompt-profile-edit-form'
-import { fetchPromptProfileById } from '@/data-access/prompt-profile'
+import { PromptProfileEditForm } from '@/components/prompt-profiles/prompt-profile-edit-form'
+import { fetchPromptProfileById } from '@/dal/prompt-profiles'
 import { PromptProfileEditFormValues } from '@/schemas/prompt-profile'
 
 export default async function PromptProfileEditPage({

@@ -43,11 +43,6 @@ export type Verification = Prisma.VerificationModel
  */
 export type Agent = Prisma.AgentModel
 /**
- * Model AgentKnowledge
- * 
- */
-export type AgentKnowledge = Prisma.AgentKnowledgeModel
-/**
  * Model PromptProfile
  * 
  */

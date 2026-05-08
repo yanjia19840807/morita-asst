@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/field'
 import { Pencil } from 'lucide-react'
 import Link from 'next/link'
-import { FetchSessionResult } from '@/data-access/auth'
-import PageTitle from '../page-title'
+import { FetchSessionResult } from '@/dal/auth'
+import PageTitle from '../layout/page-title'
 
 export default async function ProfileView({
   session

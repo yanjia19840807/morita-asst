@@ -3,7 +3,7 @@ import z from 'zod'
 import { withRole } from '@/lib/api/server/with-role'
 import { handleApiError, handleApiResult } from '@/lib/api/server/response'
 import { ValidationError } from '@/lib/api/server/errors'
-import { fetchKnowledgeDocuments } from '@/data-access/knowledge'
+import { fetchKnowledgeDocuments } from '@/dal/knowledges'
 import { toFetchKnowledgeDocumentsListResult } from '@/lib/api/shared/knowledge'
 import { fetchKnowledgeDocumentsParamsSchema } from '@/schemas/knowledge'
 

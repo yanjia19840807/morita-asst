@@ -1,12 +1,17 @@
-import { AgentCreateForm } from '@/components/agent/agent-create-form'
-import { fetchAgentFormOptions } from '@/data-access/agent'
+import { AgentCreateForm } from '@/components/agents/agent-create-form'
+import { fetchAllKnowledges } from '@/dal/knowledges'
+import { fetchAllPromptProfiles } from '@/dal/prompt-profiles'
 
 export default function AgentCreatePage() {
-  const optionsPromise = fetchAgentFormOptions()
+  const promptPromise = fetchAllPromptProfiles()
+  const knowledgePromise = fetchAllKnowledges()
 
   return (
     <div className='px-4'>
-      <AgentCreateForm optionsPromise={optionsPromise} />
+      <AgentCreateForm
+        promptPromise={promptPromise}
+        knowledgePromise={knowledgePromise}
+      />
     </div>
   )
 }

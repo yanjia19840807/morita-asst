@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/table'
 import { useTransition } from 'react'
 import { userColumns } from './user-table-columns'
-import type { UserRow } from '@/data-access/auth'
+import type { UserRow } from '@/dal/auth'
 import TableFooterSection from '../table/table-footer-section'
 import { TableQsPagination } from '../table/table-qs-pagination'
 import TableActionSection from '../table/table-action-section'
@@ -28,7 +28,7 @@ import {
   bulkBanUsersAction,
   bulkRemoveUsersAction,
   bulkUnbanUsersAction
-} from '@/app/(auth)/actions'
+} from '@/actions/auth/actions'
 import { toast } from 'sonner'
 import ConfirmDialog from '../confirm-dialog'
 import { useTableSelection } from '@/hooks/use-table-selection'

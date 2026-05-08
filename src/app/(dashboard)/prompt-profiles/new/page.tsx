@@ -1,4 +1,4 @@
-import { PromptProfileCreateForm } from '@/components/prompt-profile/prompt-profile-create-form'
+import { PromptProfileCreateForm } from '@/components/prompt-profiles/prompt-profile-create-form'
 
 export default function PromptProfileCreatePage() {
   return (

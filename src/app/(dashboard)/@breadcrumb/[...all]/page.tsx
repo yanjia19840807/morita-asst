@@ -1,4 +1,4 @@
-import AppBreadCrumb from '@/components/app-breadcrumb'
+import AppBreadCrumb from '@/components/layout/app-breadcrumb'
 
 export default async function BreadcrumbsSlot({
   params

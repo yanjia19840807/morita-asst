@@ -27,6 +27,7 @@ export type AggregatePromptProfile = {
 export type PromptProfileMinAggregateOutputType = {
   id: string | null
   name: string | null
+  description: string | null
   userId: string | null
   systemPrompt: string | null
   createdAt: Date | null
@@ -36,6 +37,7 @@ export type PromptProfileMinAggregateOutputType = {
 export type PromptProfileMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  description: string | null
   userId: string | null
   systemPrompt: string | null
   createdAt: Date | null
@@ -45,6 +47,7 @@ export type PromptProfileMaxAggregateOutputType = {
 export type PromptProfileCountAggregateOutputType = {
   id: number
   name: number
+  description: number
   userId: number
   systemPrompt: number
   createdAt: number
@@ -56,6 +59,7 @@ export type PromptProfileCountAggregateOutputType = {
 export type PromptProfileMinAggregateInputType = {
   id?: true
   name?: true
+  description?: true
   userId?: true
   systemPrompt?: true
   createdAt?: true
@@ -65,6 +69,7 @@ export type PromptProfileMinAggregateInputType = {
 export type PromptProfileMaxAggregateInputType = {
   id?: true
   name?: true
+  description?: true
   userId?: true
   systemPrompt?: true
   createdAt?: true
@@ -74,6 +79,7 @@ export type PromptProfileMaxAggregateInputType = {
 export type PromptProfileCountAggregateInputType = {
   id?: true
   name?: true
+  description?: true
   userId?: true
   systemPrompt?: true
   createdAt?: true
@@ -156,6 +162,7 @@ export type PromptProfileGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type PromptProfileGroupByOutputType = {
   id: string
   name: string
+  description: string | null
   userId: string
   systemPrompt: string
   createdAt: Date
@@ -186,6 +193,7 @@ export type PromptProfileWhereInput = {
   NOT?: Prisma.PromptProfileWhereInput | Prisma.PromptProfileWhereInput[]
   id?: Prisma.StringFilter<"PromptProfile"> | string
   name?: Prisma.StringFilter<"PromptProfile"> | string
+  description?: Prisma.StringNullableFilter<"PromptProfile"> | string | null
   userId?: Prisma.StringFilter<"PromptProfile"> | string
   systemPrompt?: Prisma.StringFilter<"PromptProfile"> | string
   createdAt?: Prisma.DateTimeFilter<"PromptProfile"> | Date | string
@@ -197,6 +205,7 @@ export type PromptProfileWhereInput = {
 export type PromptProfileOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   systemPrompt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -211,6 +220,7 @@ export type PromptProfileWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.PromptProfileWhereInput | Prisma.PromptProfileWhereInput[]
   OR?: Prisma.PromptProfileWhereInput[]
   NOT?: Prisma.PromptProfileWhereInput | Prisma.PromptProfileWhereInput[]
+  description?: Prisma.StringNullableFilter<"PromptProfile"> | string | null
   userId?: Prisma.StringFilter<"PromptProfile"> | string
   systemPrompt?: Prisma.StringFilter<"PromptProfile"> | string
   createdAt?: Prisma.DateTimeFilter<"PromptProfile"> | Date | string
@@ -222,6 +232,7 @@ export type PromptProfileWhereUniqueInput = Prisma.AtLeast<{
 export type PromptProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   systemPrompt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -237,6 +248,7 @@ export type PromptProfileScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PromptProfileScalarWhereWithAggregatesInput | Prisma.PromptProfileScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"PromptProfile"> | string
   name?: Prisma.StringWithAggregatesFilter<"PromptProfile"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"PromptProfile"> | string | null
   userId?: Prisma.StringWithAggregatesFilter<"PromptProfile"> | string
   systemPrompt?: Prisma.StringWithAggregatesFilter<"PromptProfile"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PromptProfile"> | Date | string
@@ -246,6 +258,7 @@ export type PromptProfileScalarWhereWithAggregatesInput = {
 export type PromptProfileCreateInput = {
   id?: string
   name: string
+  description?: string | null
   systemPrompt: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -256,6 +269,7 @@ export type PromptProfileCreateInput = {
 export type PromptProfileUncheckedCreateInput = {
   id?: string
   name: string
+  description?: string | null
   userId: string
   systemPrompt: string
   createdAt?: Date | string
@@ -266,6 +280,7 @@ export type PromptProfileUncheckedCreateInput = {
 export type PromptProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -276,6 +291,7 @@ export type PromptProfileUpdateInput = {
 export type PromptProfileUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   systemPrompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -286,6 +302,7 @@ export type PromptProfileUncheckedUpdateInput = {
 export type PromptProfileCreateManyInput = {
   id?: string
   name: string
+  description?: string | null
   userId: string
   systemPrompt: string
   createdAt?: Date | string
@@ -295,6 +312,7 @@ export type PromptProfileCreateManyInput = {
 export type PromptProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -303,6 +321,7 @@ export type PromptProfileUpdateManyMutationInput = {
 export type PromptProfileUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   systemPrompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -327,6 +346,7 @@ export type PromptProfileNullableScalarRelationFilter = {
 export type PromptProfileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   systemPrompt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -336,6 +356,7 @@ export type PromptProfileCountOrderByAggregateInput = {
 export type PromptProfileMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   systemPrompt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -345,6 +366,7 @@ export type PromptProfileMaxOrderByAggregateInput = {
 export type PromptProfileMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   systemPrompt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -412,6 +434,7 @@ export type PromptProfileUpdateOneWithoutAgentsNestedInput = {
 export type PromptProfileCreateWithoutUserInput = {
   id?: string
   name: string
+  description?: string | null
   systemPrompt: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -421,6 +444,7 @@ export type PromptProfileCreateWithoutUserInput = {
 export type PromptProfileUncheckedCreateWithoutUserInput = {
   id?: string
   name: string
+  description?: string | null
   systemPrompt: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -459,6 +483,7 @@ export type PromptProfileScalarWhereInput = {
   NOT?: Prisma.PromptProfileScalarWhereInput | Prisma.PromptProfileScalarWhereInput[]
   id?: Prisma.StringFilter<"PromptProfile"> | string
   name?: Prisma.StringFilter<"PromptProfile"> | string
+  description?: Prisma.StringNullableFilter<"PromptProfile"> | string | null
   userId?: Prisma.StringFilter<"PromptProfile"> | string
   systemPrompt?: Prisma.StringFilter<"PromptProfile"> | string
   createdAt?: Prisma.DateTimeFilter<"PromptProfile"> | Date | string
@@ -468,6 +493,7 @@ export type PromptProfileScalarWhereInput = {
 export type PromptProfileCreateWithoutAgentsInput = {
   id?: string
   name: string
+  description?: string | null
   systemPrompt: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -477,6 +503,7 @@ export type PromptProfileCreateWithoutAgentsInput = {
 export type PromptProfileUncheckedCreateWithoutAgentsInput = {
   id?: string
   name: string
+  description?: string | null
   userId: string
   systemPrompt: string
   createdAt?: Date | string
@@ -502,6 +529,7 @@ export type PromptProfileUpdateToOneWithWhereWithoutAgentsInput = {
 export type PromptProfileUpdateWithoutAgentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -511,6 +539,7 @@ export type PromptProfileUpdateWithoutAgentsInput = {
 export type PromptProfileUncheckedUpdateWithoutAgentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   systemPrompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -520,6 +549,7 @@ export type PromptProfileUncheckedUpdateWithoutAgentsInput = {
 export type PromptProfileCreateManyUserInput = {
   id?: string
   name: string
+  description?: string | null
   systemPrompt: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -528,6 +558,7 @@ export type PromptProfileCreateManyUserInput = {
 export type PromptProfileUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -537,6 +568,7 @@ export type PromptProfileUpdateWithoutUserInput = {
 export type PromptProfileUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -546,6 +578,7 @@ export type PromptProfileUncheckedUpdateWithoutUserInput = {
 export type PromptProfileUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   systemPrompt?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -585,6 +618,7 @@ export type PromptProfileCountOutputTypeCountAgentsArgs<ExtArgs extends runtime.
 export type PromptProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
   userId?: boolean
   systemPrompt?: boolean
   createdAt?: boolean
@@ -597,6 +631,7 @@ export type PromptProfileSelect<ExtArgs extends runtime.Types.Extensions.Interna
 export type PromptProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
   userId?: boolean
   systemPrompt?: boolean
   createdAt?: boolean
@@ -607,6 +642,7 @@ export type PromptProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types
 export type PromptProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
   userId?: boolean
   systemPrompt?: boolean
   createdAt?: boolean
@@ -617,13 +653,14 @@ export type PromptProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type PromptProfileSelectScalar = {
   id?: boolean
   name?: boolean
+  description?: boolean
   userId?: boolean
   systemPrompt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PromptProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "userId" | "systemPrompt" | "createdAt" | "updatedAt", ExtArgs["result"]["promptProfile"]>
+export type PromptProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "userId" | "systemPrompt" | "createdAt" | "updatedAt", ExtArgs["result"]["promptProfile"]>
 export type PromptProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   agents?: boolean | Prisma.PromptProfile$agentsArgs<ExtArgs>
@@ -645,6 +682,7 @@ export type $PromptProfilePayload<ExtArgs extends runtime.Types.Extensions.Inter
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    description: string | null
     userId: string
     systemPrompt: string
     createdAt: Date
@@ -1076,6 +1114,7 @@ export interface Prisma__PromptProfileClient<T, Null = never, ExtArgs extends ru
 export interface PromptProfileFieldRefs {
   readonly id: Prisma.FieldRef<"PromptProfile", 'String'>
   readonly name: Prisma.FieldRef<"PromptProfile", 'String'>
+  readonly description: Prisma.FieldRef<"PromptProfile", 'String'>
   readonly userId: Prisma.FieldRef<"PromptProfile", 'String'>
   readonly systemPrompt: Prisma.FieldRef<"PromptProfile", 'String'>
   readonly createdAt: Prisma.FieldRef<"PromptProfile", 'DateTime'>

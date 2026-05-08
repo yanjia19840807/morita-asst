@@ -1,5 +1,5 @@
 import ProfileView from '@/components/auth/profile-view'
-import { fetchProfile } from '@/data-access/auth'
+import { fetchProfile } from '@/dal/auth'
 
 export default async function ProfilePage() {
   const session = await fetchProfile()

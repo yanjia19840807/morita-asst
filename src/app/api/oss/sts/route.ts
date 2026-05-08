@@ -1,4 +1,4 @@
-import { getSTS } from '@/data-access/sts-token'
+import { getSTS } from '@/dal/sts-token'
 import { withAuth } from '@/lib/api/server/with-auth'
 import { APIError } from '@/lib/api/server/errors'
 import { NextRequest } from 'next/server'

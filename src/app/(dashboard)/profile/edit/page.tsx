@@ -1,5 +1,5 @@
 import ProfileEditForm from '@/components/auth/profile-edit-form'
-import { fetchProfile } from '@/data-access/auth'
+import { fetchProfile } from '@/dal/auth'
 
 export default async function ProfileEditPage() {
   const session = await fetchProfile()

@@ -36,14 +36,14 @@ export const menuConfig: MenuConfig = [
     items: [
       {
         title: '文档数据',
-        url: '/documents',
+        url: '/docs ',
         icon: BookOpen,
         isActive: false,
         items: []
       },
       {
         title: '知识库',
-        url: '/knowledge',
+        url: '/knowledges',
         icon: Database,
         isActive: false,
         items: []

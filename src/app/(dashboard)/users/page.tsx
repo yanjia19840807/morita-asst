@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
-import { fetchUsers } from '@/data-access/auth'
+import { fetchUsers } from '@/dal/auth'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import { UserTable } from '@/components/auth/user-table'
-import PageTitle from '@/components/page-title'
+import PageTitle from '@/components/layout/page-title'
 import { getPage } from '@/lib/pagination'
 
 interface UsersPageProps {

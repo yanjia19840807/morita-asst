@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
-import PageTitle from '@/components/page-title'
+import PageTitle from '@/components/layout/page-title'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
-import { PromptProfileTable } from '@/components/prompt-profile/prompt-profile-table'
-import { fetchPromptProfiles } from '@/data-access/prompt-profile'
+import { PromptProfileTable } from '@/components/prompt-profiles/prompt-profile-table'
+import { fetchPromptProfiles } from '@/dal/prompt-profiles'
 import { getPage } from '@/lib/pagination'
 
 interface PromptProfilesPageProps {

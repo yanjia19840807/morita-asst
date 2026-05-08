@@ -30,7 +30,7 @@ import {
   UseFormStateReturn
 } from 'react-hook-form'
 import { useTransition } from 'react'
-import { resetPasswordAction } from '@/app/(auth)/actions'
+import { resetPasswordAction } from '@/actions/auth/actions'
 import { toast } from 'sonner'
 
 export default function ResetPasswordForm() {

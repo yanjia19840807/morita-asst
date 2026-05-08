@@ -1,6 +1,6 @@
 'use client'
 
-import { createUserAction } from '@/app/(auth)/actions'
+import { createUserAction } from '@/actions/auth/actions'
 import { UserCreateFormValues, userCreateSchema } from '@/schemas/auth'
 import { UserForm } from './user-form'
 

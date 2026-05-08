@@ -56,7 +56,6 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Agent: 'Agent',
-  AgentKnowledge: 'AgentKnowledge',
   PromptProfile: 'PromptProfile',
   Knowledge: 'Knowledge',
   KnowledgeDocument: 'KnowledgeDocument',
@@ -151,6 +150,7 @@ export const AgentScalarFieldEnum = {
   userId: 'userId',
   status: 'status',
   model: 'model',
+  knowledgeId: 'knowledgeId',
   promptProfileId: 'promptProfileId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -159,21 +159,10 @@ export const AgentScalarFieldEnum = {
 export type AgentScalarFieldEnum = (typeof AgentScalarFieldEnum)[keyof typeof AgentScalarFieldEnum]
 
 
-export const AgentKnowledgeScalarFieldEnum = {
-  id: 'id',
-  agentId: 'agentId',
-  knowledgeId: 'knowledgeId',
-  priority: 'priority',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AgentKnowledgeScalarFieldEnum = (typeof AgentKnowledgeScalarFieldEnum)[keyof typeof AgentKnowledgeScalarFieldEnum]
-
-
 export const PromptProfileScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   userId: 'userId',
   systemPrompt: 'systemPrompt',
   createdAt: 'createdAt',

@@ -11,10 +11,10 @@ import {
   removeUserAction,
   banUserAction,
   unbanUserAction
-} from '@/app/(auth)/actions'
+} from '@/actions/auth/actions'
 import ConfirmDialog from '@/components/confirm-dialog'
 import { Button } from '@/components/ui/button'
-import type { UserRow } from '@/data-access/auth'
+import type { UserRow } from '@/dal/auth'
 
 interface UserTableRowActionsProps {
   row: Row<UserRow>

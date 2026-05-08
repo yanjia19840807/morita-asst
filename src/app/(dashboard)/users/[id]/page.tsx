@@ -1,5 +1,5 @@
 import { UserDetail } from '@/components/auth/user-detail'
-import { fetchUserById } from '@/data-access/auth'
+import { fetchUserById } from '@/dal/auth'
 import { UserFormValues } from '@/schemas/auth'
 
 export default async function UserDetailPage({

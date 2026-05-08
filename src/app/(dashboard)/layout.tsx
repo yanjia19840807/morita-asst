@@ -3,11 +3,11 @@ import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger
-} from '@/components/ui/sidebar'
+} from '@/components/layout/sidebar'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import AppSidebar from '@/components/sidebar/app-sidebar'
 
 import { Separator } from '@/components/ui/separator'
+import AppSidebar from '@/components/layout/sidebar/app-sidebar'
 
 function MainLayout({
   children,

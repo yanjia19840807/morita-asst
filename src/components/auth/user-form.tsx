@@ -14,8 +14,8 @@ import {
 import { useEffect, useTransition } from 'react'
 import { toast } from 'sonner'
 import type z from 'zod'
-import AvatarInput from '@/components/avatar-input'
-import PageTitle from '@/components/page-title'
+import AvatarPicker from '@/components/avatar-picker'
+import PageTitle from '@/components/layout/page-title'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -87,7 +87,7 @@ export function UserForm({
     return (
       <Field data-invalid={fieldState.invalid} className='flex-1'>
         <FieldLabel htmlFor={field.name}>头像</FieldLabel>
-        <AvatarInput {...field} />
+        <AvatarPicker {...field} />
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
         )}

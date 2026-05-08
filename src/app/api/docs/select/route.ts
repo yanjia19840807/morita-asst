@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import z from 'zod'
-import { fetchDocs } from '@/data-access/doc'
+import { fetchDocs } from '@/dal/docs'
 import { toFetchSelectDocsResult } from '@/lib/api/shared/doc'
 import { handleApiError, handleApiResult } from '@/lib/api/server/response'
 import { fetchDocsParamsSchema } from '@/schemas/doc'

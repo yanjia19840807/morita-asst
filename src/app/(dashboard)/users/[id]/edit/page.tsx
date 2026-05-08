@@ -1,4 +1,4 @@
-import { fetchUserById } from '@/data-access/auth'
+import { fetchUserById } from '@/dal/auth'
 import { UserEditForm } from '@/components/auth/user-edit-form'
 import { UserEditFormValues } from '@/schemas/auth'
 

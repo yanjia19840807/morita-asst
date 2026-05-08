@@ -389,7 +389,6 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Agent: 'Agent',
-  AgentKnowledge: 'AgentKnowledge',
   PromptProfile: 'PromptProfile',
   Knowledge: 'Knowledge',
   KnowledgeDocument: 'KnowledgeDocument',
@@ -411,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "agent" | "agentKnowledge" | "promptProfile" | "knowledge" | "knowledgeDocument" | "documentCategory" | "document" | "chunk"
+    modelProps: "user" | "session" | "account" | "verification" | "agent" | "promptProfile" | "knowledge" | "knowledgeDocument" | "documentCategory" | "document" | "chunk"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -782,80 +781,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AgentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AgentCountAggregateOutputType> | number
-        }
-      }
-    }
-    AgentKnowledge: {
-      payload: Prisma.$AgentKnowledgePayload<ExtArgs>
-      fields: Prisma.AgentKnowledgeFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.AgentKnowledgeFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.AgentKnowledgeFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload>
-        }
-        findFirst: {
-          args: Prisma.AgentKnowledgeFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.AgentKnowledgeFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload>
-        }
-        findMany: {
-          args: Prisma.AgentKnowledgeFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload>[]
-        }
-        create: {
-          args: Prisma.AgentKnowledgeCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload>
-        }
-        createMany: {
-          args: Prisma.AgentKnowledgeCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.AgentKnowledgeCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload>[]
-        }
-        delete: {
-          args: Prisma.AgentKnowledgeDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload>
-        }
-        update: {
-          args: Prisma.AgentKnowledgeUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload>
-        }
-        deleteMany: {
-          args: Prisma.AgentKnowledgeDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.AgentKnowledgeUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.AgentKnowledgeUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload>[]
-        }
-        upsert: {
-          args: Prisma.AgentKnowledgeUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentKnowledgePayload>
-        }
-        aggregate: {
-          args: Prisma.AgentKnowledgeAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAgentKnowledge>
-        }
-        groupBy: {
-          args: Prisma.AgentKnowledgeGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AgentKnowledgeGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.AgentKnowledgeCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AgentKnowledgeCountAggregateOutputType> | number
         }
       }
     }
@@ -1412,6 +1337,7 @@ export const AgentScalarFieldEnum = {
   userId: 'userId',
   status: 'status',
   model: 'model',
+  knowledgeId: 'knowledgeId',
   promptProfileId: 'promptProfileId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1420,21 +1346,10 @@ export const AgentScalarFieldEnum = {
 export type AgentScalarFieldEnum = (typeof AgentScalarFieldEnum)[keyof typeof AgentScalarFieldEnum]
 
 
-export const AgentKnowledgeScalarFieldEnum = {
-  id: 'id',
-  agentId: 'agentId',
-  knowledgeId: 'knowledgeId',
-  priority: 'priority',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AgentKnowledgeScalarFieldEnum = (typeof AgentKnowledgeScalarFieldEnum)[keyof typeof AgentKnowledgeScalarFieldEnum]
-
-
 export const PromptProfileScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   userId: 'userId',
   systemPrompt: 'systemPrompt',
   createdAt: 'createdAt',
@@ -1626,20 +1541,6 @@ export type ListEnumAgentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
  * Reference to a field of type 'KnowledgeSourceMode'
  */
 export type EnumKnowledgeSourceModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeSourceMode'>
@@ -1664,6 +1565,20 @@ export type EnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInp
  * Reference to a field of type 'KnowledgeDocumentStatus[]'
  */
 export type ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeDocumentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -1808,7 +1723,6 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   agent?: Prisma.AgentOmit
-  agentKnowledge?: Prisma.AgentKnowledgeOmit
   promptProfile?: Prisma.PromptProfileOmit
   knowledge?: Prisma.KnowledgeOmit
   knowledgeDocument?: Prisma.KnowledgeDocumentOmit

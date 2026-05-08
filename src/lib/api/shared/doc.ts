@@ -1,5 +1,5 @@
 import type { DocumentCategory } from '@/generated/prisma/client'
-import type { FetchDocsResult } from '@/data-access/doc'
+import type { FetchDocsResult } from '@/dal/docs'
 
 export type SelectDocCateItem = {
   id: string

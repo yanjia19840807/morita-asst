@@ -569,6 +569,14 @@ export type EnumKnowledgeDocumentStatusFieldUpdateOperationsInput = {
   set?: $Enums.KnowledgeDocumentStatus
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type KnowledgeDocumentCreateNestedManyWithoutDocumentInput = {
   create?: Prisma.XOR<Prisma.KnowledgeDocumentCreateWithoutDocumentInput, Prisma.KnowledgeDocumentUncheckedCreateWithoutDocumentInput> | Prisma.KnowledgeDocumentCreateWithoutDocumentInput[] | Prisma.KnowledgeDocumentUncheckedCreateWithoutDocumentInput[]
   connectOrCreate?: Prisma.KnowledgeDocumentCreateOrConnectWithoutDocumentInput | Prisma.KnowledgeDocumentCreateOrConnectWithoutDocumentInput[]

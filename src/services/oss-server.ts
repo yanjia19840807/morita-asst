@@ -1,7 +1,7 @@
 import 'server-only'
 
 import OSS from 'ali-oss'
-import { getSTS } from '@/data-access/sts-token'
+import { getSTS } from '@/dal/sts-token'
 import type { BucketAccess, BucketConfig } from '@/types/oss'
 
 export function resolveBucketConfig(bucketAccess: BucketAccess): BucketConfig {

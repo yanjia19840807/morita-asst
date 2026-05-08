@@ -30,7 +30,7 @@ import { useRouter } from 'next/navigation'
 import { LoaderCircle } from 'lucide-react'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
-import { signInEmailAction } from '@/app/(auth)/actions'
+import { signInEmailAction } from '@/actions/auth/actions'
 import { authClient } from '@/lib/auth-client'
 
 export default function EmailSignInForm() {

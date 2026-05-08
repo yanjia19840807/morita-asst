@@ -1,4 +1,4 @@
-import { fetchDocCates } from '@/data-access/doc'
+import { fetchDocCates } from '@/dal/docs'
 import { toSelectDocCateItems } from '@/lib/api/shared/doc'
 import { handleApiError, handleApiResult } from '@/lib/api/server/response'
 import { withRole } from '@/lib/api/server/with-role'

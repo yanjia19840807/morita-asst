@@ -1,6 +1,6 @@
 'use client'
 
-import { changePasswordAction, editProfileAction } from '@/app/(auth)/actions'
+import { changePasswordAction, editProfileAction } from '@/actions/auth/actions'
 import {
   Card,
   CardContent,
@@ -37,9 +37,9 @@ import {
   profilePasswordSchema
 } from '@/schemas/auth'
 import { uploadAvatar } from '@/services/oss-client'
-import AvatarInput from '../avatar-input'
+import AvatarPicker from '../avatar-picker'
 import { useEffect, useTransition } from 'react'
-import PageTitle from '../page-title'
+import PageTitle from '../layout/page-title'
 import { toast } from 'sonner'
 
 export default function ProfileEditForm({
@@ -103,7 +103,7 @@ export default function ProfileEditForm({
     return (
       <Field data-invalid={fieldState.invalid}>
         <FieldLabel htmlFor={field.name}>头像</FieldLabel>
-        <AvatarInput {...field} />
+        <AvatarPicker {...field} />
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
         )}

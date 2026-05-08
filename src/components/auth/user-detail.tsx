@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/field'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ChevronLeft, Edit } from 'lucide-react'
-import PageTitle from '../page-title'
+import PageTitle from '../layout/page-title'
 import { UserFormValues } from '@/schemas/auth'
 
 interface UserDetailViewProps {

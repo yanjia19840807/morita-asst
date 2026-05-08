@@ -1,4 +1,4 @@
-import type { FetchKnowledgeDocumentsResult } from '@/data-access/knowledge'
+import type { FetchKnowledgeDocumentsResult } from '@/dal/knowledges'
 
 export type KnowledgeDocumentListItem = {
   id: string

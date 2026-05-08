@@ -3,8 +3,9 @@ import _ from 'lodash'
 import type { FetchKnowledgeDocumentsParams } from '@/schemas/knowledge'
 import type { FetchKnowledgeDocumentsListResult } from '@/lib/api/shared/knowledge'
 import { getErrorMessage, type ResponseResult } from '@/lib/api/shared/response'
+import { PaginationParams } from '@/schemas/query'
 
-export const initialKnowledgeDocumentsParams = {
+export const initialKnowledgeDocumentsParams: PaginationParams = {
   page: 1,
   pageSize: 10,
   sortBy: 'createdAt' as const,

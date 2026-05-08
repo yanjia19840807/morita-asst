@@ -30,7 +30,7 @@ import {
   UseFormStateReturn
 } from 'react-hook-form'
 import { toast } from 'sonner'
-import { signUpEmailAction } from '@/app/(auth)/actions'
+import { signUpEmailAction } from '@/actions/auth/actions'
 import { authClient } from '@/lib/auth-client'
 
 export default function EmailSignUpForm() {

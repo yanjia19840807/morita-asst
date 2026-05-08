@@ -30,7 +30,11 @@ export const agentPromptProfileIdSchema = z
   .min(1, '提示词ID不能为空')
   .optional()
 
-export const knowledgeIdsSchema = z.array(z.string().trim().min(1))
+export const agentKnowledgeIdSchema = z
+  .string()
+  .trim()
+  .min(1, '知识库ID不能为空')
+  .optional()
 
 export const agentSchema = z.object({
   id: agentIdSchema,
@@ -39,7 +43,7 @@ export const agentSchema = z.object({
   status: agentStatusSchema,
   model: agentModelSchema,
   promptProfileId: agentPromptProfileIdSchema,
-  knowledgeIds: knowledgeIdsSchema
+  knowledgeId: agentKnowledgeIdSchema
 })
 
 export const agentCreateSchema = agentSchema.omit({ id: true })

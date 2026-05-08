@@ -1,16 +1,12 @@
 import { Suspense } from 'react'
-import AgentGrid from '@/components/agent/agent-grid'
-import PageTitle from '@/components/page-title'
+import AgentGrid from '@/components/agents/agent-grid'
+import PageTitle from '@/components/layout/page-title'
 import { Button } from '@/components/ui/button'
-import { fetchAgents } from '@/data-access/agent'
+import { fetchAgents } from '@/dal/agent'
 import { getPage } from '@/lib/pagination'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
-
-interface AgentsPageProps {
-  page?: number
-  searchValue?: string
-}
+import { PaginationParams } from '@/schemas/query'
 
 const pageSize = 12
 
@@ -28,7 +24,7 @@ const CreateBtn = function () {
 export default async function AgentsPage({
   searchParams
 }: {
-  searchParams: Promise<AgentsPageProps>
+  searchParams: Promise<PaginationParams>
 }) {
   const { page, searchValue } = await searchParams
 

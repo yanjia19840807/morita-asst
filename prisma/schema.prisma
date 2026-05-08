@@ -87,46 +87,32 @@ model Verification {
 }
 
 model Agent {
-  id              String           @id @default(uuid())
+  id              String         @id @default(uuid())
   name            String
   description     String?
   userId          String
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  knowledges      AgentKnowledge[]
-  status          AgentStatus      @default(DRAFT)
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status          AgentStatus    @default(DRAFT)
   model           String?
+  knowledgeId     String?
+  knowledge       Knowledge?     @relation(fields: [knowledgeId], references: [id], onDelete: SetNull)
   promptProfileId String?
-  promptProfile   PromptProfile?   @relation(fields: [promptProfileId], references: [id], onDelete: SetNull)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  promptProfile   PromptProfile? @relation(fields: [promptProfileId], references: [id], onDelete: SetNull)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 
   @@unique([name])
   @@index([userId])
+  @@index([knowledgeId])
   @@index([promptProfileId])
   @@index([status])
   @@map("agent")
 }
 
-model AgentKnowledge {
-  id          String    @id @default(uuid())
-  agentId     String
-  knowledgeId String
-  agent       Agent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
-  knowledge   Knowledge @relation(fields: [knowledgeId], references: [id], onDelete: Cascade)
-  priority    Int       @default(1)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  @@unique([agentId, knowledgeId])
-  @@index([agentId])
-  @@index([knowledgeId])
-  @@index([priority])
-  @@map("agent-knowledge")
-}
-
 model PromptProfile {
   id           String   @id @default(uuid())
   name         String
+  description  String?
   userId       String
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   systemPrompt String
@@ -150,7 +136,7 @@ model Knowledge {
   user     User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   category DocumentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
-  agents    AgentKnowledge[]
+  agents    Agent[]
   documents KnowledgeDocument[]
 
   createdAt DateTime @default(now())

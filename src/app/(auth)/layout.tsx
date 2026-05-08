@@ -1,6 +1,6 @@
 import React from 'react'
-import MainFooter from '@/components/copyright'
-import AuthHeader from '@/components/auth-header'
+import MainFooter from '@/components/layout/copyright'
+import AuthHeader from '@/components/layout/auth-header'
 
 export default function AuthLayout({
   children
