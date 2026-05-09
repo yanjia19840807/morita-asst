@@ -1,4 +1,5 @@
 import z from 'zod'
+import { paginationSchema } from './query'
 
 export const DOC_MAX_SIZE = 100 // 100MB
 export const DOC_MAX_FILES = 10
@@ -12,8 +13,6 @@ export const DOC_ACCEPT_MINE_TYPES = [
   'text/plain'
 ]
 export const DOC_ACCEPT_TYPES = ['PDF', 'DOC', 'TXT']
-
-const docSchemaId = z.string().min(1, '文档ID不能为空')
 
 const docSchemaCategoryId = z.string().min(1, '类目ID不能为空')
 
@@ -35,13 +34,11 @@ export const docCreateFormSchema = z.object({
     .min(1, '请至少上传一个文件')
 })
 
-export const fetchDocsParamsSchema = z.object({
-  filename: z.string().trim().optional(),
+export const fetchDocsParamsSchema = paginationSchema.extend({
+  searchField: z.enum(['filename']).optional(),
   categoryId: z.string().trim().optional(),
   sortBy: z.enum(['filename', 'fileSize', 'mimeType', 'createdAt']).optional(),
-  sortDirection: z.enum(['asc', 'desc']).optional(),
-  page: z.coerce.number().int().positive(),
-  pageSize: z.coerce.number().int().positive()
+  sortDirection: z.enum(['asc', 'desc']).optional()
 })
 
 export const docCreateSchema = z.object({

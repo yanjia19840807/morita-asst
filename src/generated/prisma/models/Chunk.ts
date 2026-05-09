@@ -26,7 +26,7 @@ export type AggregateChunk = {
 
 export type ChunkMinAggregateOutputType = {
   id: string | null
-  knowledgeDocumentId: string | null
+  knowledgeDocId: string | null
   content: string | null
   embeddingStatus: $Enums.ChunkEmbeddingStatus | null
   embeddingId: string | null
@@ -36,7 +36,7 @@ export type ChunkMinAggregateOutputType = {
 
 export type ChunkMaxAggregateOutputType = {
   id: string | null
-  knowledgeDocumentId: string | null
+  knowledgeDocId: string | null
   content: string | null
   embeddingStatus: $Enums.ChunkEmbeddingStatus | null
   embeddingId: string | null
@@ -46,7 +46,7 @@ export type ChunkMaxAggregateOutputType = {
 
 export type ChunkCountAggregateOutputType = {
   id: number
-  knowledgeDocumentId: number
+  knowledgeDocId: number
   content: number
   metadata: number
   embeddingStatus: number
@@ -59,7 +59,7 @@ export type ChunkCountAggregateOutputType = {
 
 export type ChunkMinAggregateInputType = {
   id?: true
-  knowledgeDocumentId?: true
+  knowledgeDocId?: true
   content?: true
   embeddingStatus?: true
   embeddingId?: true
@@ -69,7 +69,7 @@ export type ChunkMinAggregateInputType = {
 
 export type ChunkMaxAggregateInputType = {
   id?: true
-  knowledgeDocumentId?: true
+  knowledgeDocId?: true
   content?: true
   embeddingStatus?: true
   embeddingId?: true
@@ -79,7 +79,7 @@ export type ChunkMaxAggregateInputType = {
 
 export type ChunkCountAggregateInputType = {
   id?: true
-  knowledgeDocumentId?: true
+  knowledgeDocId?: true
   content?: true
   metadata?: true
   embeddingStatus?: true
@@ -163,7 +163,7 @@ export type ChunkGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 
 export type ChunkGroupByOutputType = {
   id: string
-  knowledgeDocumentId: string
+  knowledgeDocId: string
   content: string
   metadata: runtime.JsonValue
   embeddingStatus: $Enums.ChunkEmbeddingStatus
@@ -195,26 +195,26 @@ export type ChunkWhereInput = {
   OR?: Prisma.ChunkWhereInput[]
   NOT?: Prisma.ChunkWhereInput | Prisma.ChunkWhereInput[]
   id?: Prisma.StringFilter<"Chunk"> | string
-  knowledgeDocumentId?: Prisma.StringFilter<"Chunk"> | string
+  knowledgeDocId?: Prisma.StringFilter<"Chunk"> | string
   content?: Prisma.StringFilter<"Chunk"> | string
   metadata?: Prisma.JsonFilter<"Chunk">
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFilter<"Chunk"> | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.StringNullableFilter<"Chunk"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Chunk"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chunk"> | Date | string
-  knowledgeDocument?: Prisma.XOR<Prisma.KnowledgeDocumentScalarRelationFilter, Prisma.KnowledgeDocumentWhereInput>
+  knowledgeDoc?: Prisma.XOR<Prisma.KnowledgeDocScalarRelationFilter, Prisma.KnowledgeDocWhereInput>
 }
 
 export type ChunkOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  knowledgeDocumentId?: Prisma.SortOrder
+  knowledgeDocId?: Prisma.SortOrder
   content?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
   embeddingStatus?: Prisma.SortOrder
   embeddingId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  knowledgeDocument?: Prisma.KnowledgeDocumentOrderByWithRelationInput
+  knowledgeDoc?: Prisma.KnowledgeDocOrderByWithRelationInput
 }
 
 export type ChunkWhereUniqueInput = Prisma.AtLeast<{
@@ -222,19 +222,19 @@ export type ChunkWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ChunkWhereInput | Prisma.ChunkWhereInput[]
   OR?: Prisma.ChunkWhereInput[]
   NOT?: Prisma.ChunkWhereInput | Prisma.ChunkWhereInput[]
-  knowledgeDocumentId?: Prisma.StringFilter<"Chunk"> | string
+  knowledgeDocId?: Prisma.StringFilter<"Chunk"> | string
   content?: Prisma.StringFilter<"Chunk"> | string
   metadata?: Prisma.JsonFilter<"Chunk">
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFilter<"Chunk"> | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.StringNullableFilter<"Chunk"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Chunk"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chunk"> | Date | string
-  knowledgeDocument?: Prisma.XOR<Prisma.KnowledgeDocumentScalarRelationFilter, Prisma.KnowledgeDocumentWhereInput>
+  knowledgeDoc?: Prisma.XOR<Prisma.KnowledgeDocScalarRelationFilter, Prisma.KnowledgeDocWhereInput>
 }, "id">
 
 export type ChunkOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  knowledgeDocumentId?: Prisma.SortOrder
+  knowledgeDocId?: Prisma.SortOrder
   content?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
   embeddingStatus?: Prisma.SortOrder
@@ -251,7 +251,7 @@ export type ChunkScalarWhereWithAggregatesInput = {
   OR?: Prisma.ChunkScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ChunkScalarWhereWithAggregatesInput | Prisma.ChunkScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Chunk"> | string
-  knowledgeDocumentId?: Prisma.StringWithAggregatesFilter<"Chunk"> | string
+  knowledgeDocId?: Prisma.StringWithAggregatesFilter<"Chunk"> | string
   content?: Prisma.StringWithAggregatesFilter<"Chunk"> | string
   metadata?: Prisma.JsonWithAggregatesFilter<"Chunk">
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusWithAggregatesFilter<"Chunk"> | $Enums.ChunkEmbeddingStatus
@@ -268,12 +268,12 @@ export type ChunkCreateInput = {
   embeddingId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  knowledgeDocument: Prisma.KnowledgeDocumentCreateNestedOneWithoutChunksInput
+  knowledgeDoc: Prisma.KnowledgeDocCreateNestedOneWithoutChunksInput
 }
 
 export type ChunkUncheckedCreateInput = {
   id?: string
-  knowledgeDocumentId: string
+  knowledgeDocId: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
   embeddingStatus?: $Enums.ChunkEmbeddingStatus
@@ -290,12 +290,12 @@ export type ChunkUpdateInput = {
   embeddingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  knowledgeDocument?: Prisma.KnowledgeDocumentUpdateOneRequiredWithoutChunksNestedInput
+  knowledgeDoc?: Prisma.KnowledgeDocUpdateOneRequiredWithoutChunksNestedInput
 }
 
 export type ChunkUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  knowledgeDocumentId?: Prisma.StringFieldUpdateOperationsInput | string
+  knowledgeDocId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFieldUpdateOperationsInput | $Enums.ChunkEmbeddingStatus
@@ -306,7 +306,7 @@ export type ChunkUncheckedUpdateInput = {
 
 export type ChunkCreateManyInput = {
   id?: string
-  knowledgeDocumentId: string
+  knowledgeDocId: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
   embeddingStatus?: $Enums.ChunkEmbeddingStatus
@@ -327,7 +327,7 @@ export type ChunkUpdateManyMutationInput = {
 
 export type ChunkUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  knowledgeDocumentId?: Prisma.StringFieldUpdateOperationsInput | string
+  knowledgeDocId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFieldUpdateOperationsInput | $Enums.ChunkEmbeddingStatus
@@ -348,7 +348,7 @@ export type ChunkOrderByRelationAggregateInput = {
 
 export type ChunkCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  knowledgeDocumentId?: Prisma.SortOrder
+  knowledgeDocId?: Prisma.SortOrder
   content?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
   embeddingStatus?: Prisma.SortOrder
@@ -359,7 +359,7 @@ export type ChunkCountOrderByAggregateInput = {
 
 export type ChunkMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  knowledgeDocumentId?: Prisma.SortOrder
+  knowledgeDocId?: Prisma.SortOrder
   content?: Prisma.SortOrder
   embeddingStatus?: Prisma.SortOrder
   embeddingId?: Prisma.SortOrder
@@ -369,7 +369,7 @@ export type ChunkMaxOrderByAggregateInput = {
 
 export type ChunkMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  knowledgeDocumentId?: Prisma.SortOrder
+  knowledgeDocId?: Prisma.SortOrder
   content?: Prisma.SortOrder
   embeddingStatus?: Prisma.SortOrder
   embeddingId?: Prisma.SortOrder
@@ -377,45 +377,45 @@ export type ChunkMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type ChunkCreateNestedManyWithoutKnowledgeDocumentInput = {
-  create?: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocumentInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocumentInput> | Prisma.ChunkCreateWithoutKnowledgeDocumentInput[] | Prisma.ChunkUncheckedCreateWithoutKnowledgeDocumentInput[]
-  connectOrCreate?: Prisma.ChunkCreateOrConnectWithoutKnowledgeDocumentInput | Prisma.ChunkCreateOrConnectWithoutKnowledgeDocumentInput[]
-  createMany?: Prisma.ChunkCreateManyKnowledgeDocumentInputEnvelope
+export type ChunkCreateNestedManyWithoutKnowledgeDocInput = {
+  create?: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocInput> | Prisma.ChunkCreateWithoutKnowledgeDocInput[] | Prisma.ChunkUncheckedCreateWithoutKnowledgeDocInput[]
+  connectOrCreate?: Prisma.ChunkCreateOrConnectWithoutKnowledgeDocInput | Prisma.ChunkCreateOrConnectWithoutKnowledgeDocInput[]
+  createMany?: Prisma.ChunkCreateManyKnowledgeDocInputEnvelope
   connect?: Prisma.ChunkWhereUniqueInput | Prisma.ChunkWhereUniqueInput[]
 }
 
-export type ChunkUncheckedCreateNestedManyWithoutKnowledgeDocumentInput = {
-  create?: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocumentInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocumentInput> | Prisma.ChunkCreateWithoutKnowledgeDocumentInput[] | Prisma.ChunkUncheckedCreateWithoutKnowledgeDocumentInput[]
-  connectOrCreate?: Prisma.ChunkCreateOrConnectWithoutKnowledgeDocumentInput | Prisma.ChunkCreateOrConnectWithoutKnowledgeDocumentInput[]
-  createMany?: Prisma.ChunkCreateManyKnowledgeDocumentInputEnvelope
+export type ChunkUncheckedCreateNestedManyWithoutKnowledgeDocInput = {
+  create?: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocInput> | Prisma.ChunkCreateWithoutKnowledgeDocInput[] | Prisma.ChunkUncheckedCreateWithoutKnowledgeDocInput[]
+  connectOrCreate?: Prisma.ChunkCreateOrConnectWithoutKnowledgeDocInput | Prisma.ChunkCreateOrConnectWithoutKnowledgeDocInput[]
+  createMany?: Prisma.ChunkCreateManyKnowledgeDocInputEnvelope
   connect?: Prisma.ChunkWhereUniqueInput | Prisma.ChunkWhereUniqueInput[]
 }
 
-export type ChunkUpdateManyWithoutKnowledgeDocumentNestedInput = {
-  create?: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocumentInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocumentInput> | Prisma.ChunkCreateWithoutKnowledgeDocumentInput[] | Prisma.ChunkUncheckedCreateWithoutKnowledgeDocumentInput[]
-  connectOrCreate?: Prisma.ChunkCreateOrConnectWithoutKnowledgeDocumentInput | Prisma.ChunkCreateOrConnectWithoutKnowledgeDocumentInput[]
-  upsert?: Prisma.ChunkUpsertWithWhereUniqueWithoutKnowledgeDocumentInput | Prisma.ChunkUpsertWithWhereUniqueWithoutKnowledgeDocumentInput[]
-  createMany?: Prisma.ChunkCreateManyKnowledgeDocumentInputEnvelope
+export type ChunkUpdateManyWithoutKnowledgeDocNestedInput = {
+  create?: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocInput> | Prisma.ChunkCreateWithoutKnowledgeDocInput[] | Prisma.ChunkUncheckedCreateWithoutKnowledgeDocInput[]
+  connectOrCreate?: Prisma.ChunkCreateOrConnectWithoutKnowledgeDocInput | Prisma.ChunkCreateOrConnectWithoutKnowledgeDocInput[]
+  upsert?: Prisma.ChunkUpsertWithWhereUniqueWithoutKnowledgeDocInput | Prisma.ChunkUpsertWithWhereUniqueWithoutKnowledgeDocInput[]
+  createMany?: Prisma.ChunkCreateManyKnowledgeDocInputEnvelope
   set?: Prisma.ChunkWhereUniqueInput | Prisma.ChunkWhereUniqueInput[]
   disconnect?: Prisma.ChunkWhereUniqueInput | Prisma.ChunkWhereUniqueInput[]
   delete?: Prisma.ChunkWhereUniqueInput | Prisma.ChunkWhereUniqueInput[]
   connect?: Prisma.ChunkWhereUniqueInput | Prisma.ChunkWhereUniqueInput[]
-  update?: Prisma.ChunkUpdateWithWhereUniqueWithoutKnowledgeDocumentInput | Prisma.ChunkUpdateWithWhereUniqueWithoutKnowledgeDocumentInput[]
-  updateMany?: Prisma.ChunkUpdateManyWithWhereWithoutKnowledgeDocumentInput | Prisma.ChunkUpdateManyWithWhereWithoutKnowledgeDocumentInput[]
+  update?: Prisma.ChunkUpdateWithWhereUniqueWithoutKnowledgeDocInput | Prisma.ChunkUpdateWithWhereUniqueWithoutKnowledgeDocInput[]
+  updateMany?: Prisma.ChunkUpdateManyWithWhereWithoutKnowledgeDocInput | Prisma.ChunkUpdateManyWithWhereWithoutKnowledgeDocInput[]
   deleteMany?: Prisma.ChunkScalarWhereInput | Prisma.ChunkScalarWhereInput[]
 }
 
-export type ChunkUncheckedUpdateManyWithoutKnowledgeDocumentNestedInput = {
-  create?: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocumentInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocumentInput> | Prisma.ChunkCreateWithoutKnowledgeDocumentInput[] | Prisma.ChunkUncheckedCreateWithoutKnowledgeDocumentInput[]
-  connectOrCreate?: Prisma.ChunkCreateOrConnectWithoutKnowledgeDocumentInput | Prisma.ChunkCreateOrConnectWithoutKnowledgeDocumentInput[]
-  upsert?: Prisma.ChunkUpsertWithWhereUniqueWithoutKnowledgeDocumentInput | Prisma.ChunkUpsertWithWhereUniqueWithoutKnowledgeDocumentInput[]
-  createMany?: Prisma.ChunkCreateManyKnowledgeDocumentInputEnvelope
+export type ChunkUncheckedUpdateManyWithoutKnowledgeDocNestedInput = {
+  create?: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocInput> | Prisma.ChunkCreateWithoutKnowledgeDocInput[] | Prisma.ChunkUncheckedCreateWithoutKnowledgeDocInput[]
+  connectOrCreate?: Prisma.ChunkCreateOrConnectWithoutKnowledgeDocInput | Prisma.ChunkCreateOrConnectWithoutKnowledgeDocInput[]
+  upsert?: Prisma.ChunkUpsertWithWhereUniqueWithoutKnowledgeDocInput | Prisma.ChunkUpsertWithWhereUniqueWithoutKnowledgeDocInput[]
+  createMany?: Prisma.ChunkCreateManyKnowledgeDocInputEnvelope
   set?: Prisma.ChunkWhereUniqueInput | Prisma.ChunkWhereUniqueInput[]
   disconnect?: Prisma.ChunkWhereUniqueInput | Prisma.ChunkWhereUniqueInput[]
   delete?: Prisma.ChunkWhereUniqueInput | Prisma.ChunkWhereUniqueInput[]
   connect?: Prisma.ChunkWhereUniqueInput | Prisma.ChunkWhereUniqueInput[]
-  update?: Prisma.ChunkUpdateWithWhereUniqueWithoutKnowledgeDocumentInput | Prisma.ChunkUpdateWithWhereUniqueWithoutKnowledgeDocumentInput[]
-  updateMany?: Prisma.ChunkUpdateManyWithWhereWithoutKnowledgeDocumentInput | Prisma.ChunkUpdateManyWithWhereWithoutKnowledgeDocumentInput[]
+  update?: Prisma.ChunkUpdateWithWhereUniqueWithoutKnowledgeDocInput | Prisma.ChunkUpdateWithWhereUniqueWithoutKnowledgeDocInput[]
+  updateMany?: Prisma.ChunkUpdateManyWithWhereWithoutKnowledgeDocInput | Prisma.ChunkUpdateManyWithWhereWithoutKnowledgeDocInput[]
   deleteMany?: Prisma.ChunkScalarWhereInput | Prisma.ChunkScalarWhereInput[]
 }
 
@@ -423,7 +423,7 @@ export type EnumChunkEmbeddingStatusFieldUpdateOperationsInput = {
   set?: $Enums.ChunkEmbeddingStatus
 }
 
-export type ChunkCreateWithoutKnowledgeDocumentInput = {
+export type ChunkCreateWithoutKnowledgeDocInput = {
   id?: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -433,7 +433,7 @@ export type ChunkCreateWithoutKnowledgeDocumentInput = {
   updatedAt?: Date | string
 }
 
-export type ChunkUncheckedCreateWithoutKnowledgeDocumentInput = {
+export type ChunkUncheckedCreateWithoutKnowledgeDocInput = {
   id?: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -443,30 +443,30 @@ export type ChunkUncheckedCreateWithoutKnowledgeDocumentInput = {
   updatedAt?: Date | string
 }
 
-export type ChunkCreateOrConnectWithoutKnowledgeDocumentInput = {
+export type ChunkCreateOrConnectWithoutKnowledgeDocInput = {
   where: Prisma.ChunkWhereUniqueInput
-  create: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocumentInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocumentInput>
+  create: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocInput>
 }
 
-export type ChunkCreateManyKnowledgeDocumentInputEnvelope = {
-  data: Prisma.ChunkCreateManyKnowledgeDocumentInput | Prisma.ChunkCreateManyKnowledgeDocumentInput[]
+export type ChunkCreateManyKnowledgeDocInputEnvelope = {
+  data: Prisma.ChunkCreateManyKnowledgeDocInput | Prisma.ChunkCreateManyKnowledgeDocInput[]
   skipDuplicates?: boolean
 }
 
-export type ChunkUpsertWithWhereUniqueWithoutKnowledgeDocumentInput = {
+export type ChunkUpsertWithWhereUniqueWithoutKnowledgeDocInput = {
   where: Prisma.ChunkWhereUniqueInput
-  update: Prisma.XOR<Prisma.ChunkUpdateWithoutKnowledgeDocumentInput, Prisma.ChunkUncheckedUpdateWithoutKnowledgeDocumentInput>
-  create: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocumentInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocumentInput>
+  update: Prisma.XOR<Prisma.ChunkUpdateWithoutKnowledgeDocInput, Prisma.ChunkUncheckedUpdateWithoutKnowledgeDocInput>
+  create: Prisma.XOR<Prisma.ChunkCreateWithoutKnowledgeDocInput, Prisma.ChunkUncheckedCreateWithoutKnowledgeDocInput>
 }
 
-export type ChunkUpdateWithWhereUniqueWithoutKnowledgeDocumentInput = {
+export type ChunkUpdateWithWhereUniqueWithoutKnowledgeDocInput = {
   where: Prisma.ChunkWhereUniqueInput
-  data: Prisma.XOR<Prisma.ChunkUpdateWithoutKnowledgeDocumentInput, Prisma.ChunkUncheckedUpdateWithoutKnowledgeDocumentInput>
+  data: Prisma.XOR<Prisma.ChunkUpdateWithoutKnowledgeDocInput, Prisma.ChunkUncheckedUpdateWithoutKnowledgeDocInput>
 }
 
-export type ChunkUpdateManyWithWhereWithoutKnowledgeDocumentInput = {
+export type ChunkUpdateManyWithWhereWithoutKnowledgeDocInput = {
   where: Prisma.ChunkScalarWhereInput
-  data: Prisma.XOR<Prisma.ChunkUpdateManyMutationInput, Prisma.ChunkUncheckedUpdateManyWithoutKnowledgeDocumentInput>
+  data: Prisma.XOR<Prisma.ChunkUpdateManyMutationInput, Prisma.ChunkUncheckedUpdateManyWithoutKnowledgeDocInput>
 }
 
 export type ChunkScalarWhereInput = {
@@ -474,7 +474,7 @@ export type ChunkScalarWhereInput = {
   OR?: Prisma.ChunkScalarWhereInput[]
   NOT?: Prisma.ChunkScalarWhereInput | Prisma.ChunkScalarWhereInput[]
   id?: Prisma.StringFilter<"Chunk"> | string
-  knowledgeDocumentId?: Prisma.StringFilter<"Chunk"> | string
+  knowledgeDocId?: Prisma.StringFilter<"Chunk"> | string
   content?: Prisma.StringFilter<"Chunk"> | string
   metadata?: Prisma.JsonFilter<"Chunk">
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFilter<"Chunk"> | $Enums.ChunkEmbeddingStatus
@@ -483,7 +483,7 @@ export type ChunkScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Chunk"> | Date | string
 }
 
-export type ChunkCreateManyKnowledgeDocumentInput = {
+export type ChunkCreateManyKnowledgeDocInput = {
   id?: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -493,7 +493,7 @@ export type ChunkCreateManyKnowledgeDocumentInput = {
   updatedAt?: Date | string
 }
 
-export type ChunkUpdateWithoutKnowledgeDocumentInput = {
+export type ChunkUpdateWithoutKnowledgeDocInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -503,7 +503,7 @@ export type ChunkUpdateWithoutKnowledgeDocumentInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ChunkUncheckedUpdateWithoutKnowledgeDocumentInput = {
+export type ChunkUncheckedUpdateWithoutKnowledgeDocInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -513,7 +513,7 @@ export type ChunkUncheckedUpdateWithoutKnowledgeDocumentInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ChunkUncheckedUpdateManyWithoutKnowledgeDocumentInput = {
+export type ChunkUncheckedUpdateManyWithoutKnowledgeDocInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -527,43 +527,43 @@ export type ChunkUncheckedUpdateManyWithoutKnowledgeDocumentInput = {
 
 export type ChunkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  knowledgeDocumentId?: boolean
+  knowledgeDocId?: boolean
   content?: boolean
   metadata?: boolean
   embeddingStatus?: boolean
   embeddingId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  knowledgeDocument?: boolean | Prisma.KnowledgeDocumentDefaultArgs<ExtArgs>
+  knowledgeDoc?: boolean | Prisma.KnowledgeDocDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["chunk"]>
 
 export type ChunkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  knowledgeDocumentId?: boolean
+  knowledgeDocId?: boolean
   content?: boolean
   metadata?: boolean
   embeddingStatus?: boolean
   embeddingId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  knowledgeDocument?: boolean | Prisma.KnowledgeDocumentDefaultArgs<ExtArgs>
+  knowledgeDoc?: boolean | Prisma.KnowledgeDocDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["chunk"]>
 
 export type ChunkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  knowledgeDocumentId?: boolean
+  knowledgeDocId?: boolean
   content?: boolean
   metadata?: boolean
   embeddingStatus?: boolean
   embeddingId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  knowledgeDocument?: boolean | Prisma.KnowledgeDocumentDefaultArgs<ExtArgs>
+  knowledgeDoc?: boolean | Prisma.KnowledgeDocDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["chunk"]>
 
 export type ChunkSelectScalar = {
   id?: boolean
-  knowledgeDocumentId?: boolean
+  knowledgeDocId?: boolean
   content?: boolean
   metadata?: boolean
   embeddingStatus?: boolean
@@ -572,25 +572,25 @@ export type ChunkSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ChunkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "knowledgeDocumentId" | "content" | "metadata" | "embeddingStatus" | "embeddingId" | "createdAt" | "updatedAt", ExtArgs["result"]["chunk"]>
+export type ChunkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "knowledgeDocId" | "content" | "metadata" | "embeddingStatus" | "embeddingId" | "createdAt" | "updatedAt", ExtArgs["result"]["chunk"]>
 export type ChunkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  knowledgeDocument?: boolean | Prisma.KnowledgeDocumentDefaultArgs<ExtArgs>
+  knowledgeDoc?: boolean | Prisma.KnowledgeDocDefaultArgs<ExtArgs>
 }
 export type ChunkIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  knowledgeDocument?: boolean | Prisma.KnowledgeDocumentDefaultArgs<ExtArgs>
+  knowledgeDoc?: boolean | Prisma.KnowledgeDocDefaultArgs<ExtArgs>
 }
 export type ChunkIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  knowledgeDocument?: boolean | Prisma.KnowledgeDocumentDefaultArgs<ExtArgs>
+  knowledgeDoc?: boolean | Prisma.KnowledgeDocDefaultArgs<ExtArgs>
 }
 
 export type $ChunkPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Chunk"
   objects: {
-    knowledgeDocument: Prisma.$KnowledgeDocumentPayload<ExtArgs>
+    knowledgeDoc: Prisma.$KnowledgeDocPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    knowledgeDocumentId: string
+    knowledgeDocId: string
     content: string
     metadata: runtime.JsonValue
     embeddingStatus: $Enums.ChunkEmbeddingStatus
@@ -991,7 +991,7 @@ readonly fields: ChunkFieldRefs;
  */
 export interface Prisma__ChunkClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  knowledgeDocument<T extends Prisma.KnowledgeDocumentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.KnowledgeDocumentDefaultArgs<ExtArgs>>): Prisma.Prisma__KnowledgeDocumentClient<runtime.Types.Result.GetResult<Prisma.$KnowledgeDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  knowledgeDoc<T extends Prisma.KnowledgeDocDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.KnowledgeDocDefaultArgs<ExtArgs>>): Prisma.Prisma__KnowledgeDocClient<runtime.Types.Result.GetResult<Prisma.$KnowledgeDocPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1022,7 +1022,7 @@ export interface Prisma__ChunkClient<T, Null = never, ExtArgs extends runtime.Ty
  */
 export interface ChunkFieldRefs {
   readonly id: Prisma.FieldRef<"Chunk", 'String'>
-  readonly knowledgeDocumentId: Prisma.FieldRef<"Chunk", 'String'>
+  readonly knowledgeDocId: Prisma.FieldRef<"Chunk", 'String'>
   readonly content: Prisma.FieldRef<"Chunk", 'String'>
   readonly metadata: Prisma.FieldRef<"Chunk", 'Json'>
   readonly embeddingStatus: Prisma.FieldRef<"Chunk", 'ChunkEmbeddingStatus'>

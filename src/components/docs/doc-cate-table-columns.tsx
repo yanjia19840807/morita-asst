@@ -4,10 +4,10 @@ import { format } from 'date-fns'
 import { ColumnDef } from '@tanstack/react-table'
 import { TableColumnHeader } from '../table/table-column-header'
 import { Checkbox } from '../ui/checkbox'
-import { DocumentCategory } from '@/generated/prisma/client'
+import { DocCate } from '@/generated/prisma/client'
 import RowDragHandle from '../row-drag-handle'
 
-export const docCateColumns: ColumnDef<DocumentCategory>[] = [
+export const docCateColumns: ColumnDef<DocCate>[] = [
   {
     id: 'select',
     size: 80,

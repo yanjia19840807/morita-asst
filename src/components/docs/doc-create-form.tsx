@@ -2,7 +2,7 @@
 
 import { docCreateFormSchema, DocCreateFormValues } from '@/schemas/doc'
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { DocumentCategory } from '@/generated/prisma/client'
+import type { DocCate } from '@/generated/prisma/client'
 import { useRouter } from 'next/navigation'
 import { useRef, useTransition } from 'react'
 import {
@@ -43,7 +43,7 @@ import DocCateDialog from './doc-cate-dialog'
 export default function DocCreateForm({
   docCatesPromise
 }: {
-  docCatesPromise: Promise<DocumentCategory[]>
+  docCatesPromise: Promise<DocCate[]>
 }) {
   const { data: userData } = authClient.useSession()
   const router = useRouter()

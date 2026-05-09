@@ -9,7 +9,7 @@
 * 🟢 You can import this file directly.
 */
 
-export const KnowledgeDocumentStatus = {
+export const KnowledgeDocStatus = {
   UPLOADED: 'UPLOADED',
   SPLITTING: 'SPLITTING',
   SPLITTED: 'SPLITTED',
@@ -18,7 +18,7 @@ export const KnowledgeDocumentStatus = {
   FAILED: 'FAILED'
 } as const
 
-export type KnowledgeDocumentStatus = (typeof KnowledgeDocumentStatus)[keyof typeof KnowledgeDocumentStatus]
+export type KnowledgeDocStatus = (typeof KnowledgeDocStatus)[keyof typeof KnowledgeDocStatus]
 
 
 export const ChunkEmbeddingStatus = {

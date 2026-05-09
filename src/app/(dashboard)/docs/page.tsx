@@ -26,14 +26,15 @@ export default async function DocsPage({
 }: {
   searchParams: Promise<FetchDocsParams>
 }) {
-  const { categoryId, page, filename, sortBy, sortDirection } =
+  const { categoryId, page, searchField, searchValue, sortBy, sortDirection } =
     await searchParams
   const pageSize = 10
 
   const data = await fetchDocs({
     page: getPage(page),
     pageSize,
-    filename,
+    searchField,
+    searchValue,
     categoryId,
     sortBy,
     sortDirection
@@ -46,11 +47,7 @@ export default async function DocsPage({
         <DocCateSidebar />
         <SidebarInset>
           <Suspense fallback={null}>
-            <DocTable
-              data={data.documents}
-              total={data.total}
-              pageSize={pageSize}
-            />
+            <DocTable data={data.docs} total={data.total} pageSize={pageSize} />
           </Suspense>
         </SidebarInset>
       </div>

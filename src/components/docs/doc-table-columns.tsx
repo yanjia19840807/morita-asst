@@ -54,7 +54,7 @@ export const docColumns: ColumnDef<DocRow>[] = [
     header: ({ column }) => (
       <TableColumnHeader column={column} title={'知识库数'} />
     ),
-    cell: ({ row }) => row.original._count.knowledgeDocuments
+    cell: ({ row }) => row.original._count.knowledgeDocs
   },
   {
     accessorKey: 'createdAt',

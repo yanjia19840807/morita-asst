@@ -1,29 +1,12 @@
 import qs from 'qs'
 import _ from 'lodash'
-import type { FetchKnowledgeDocumentsParams } from '@/schemas/knowledge'
-import type { FetchKnowledgeDocumentsListResult } from '@/lib/api/shared/knowledge'
+import type { FetchKnowledgeDocsParams } from '@/schemas/knowledge'
+import type { FetchKnowledgeDocsListResult } from '@/lib/api/shared/knowledge'
 import { getErrorMessage, type ResponseResult } from '@/lib/api/shared/response'
-import { PaginationParams } from '@/schemas/query'
 
-export const initialKnowledgeDocumentsParams: PaginationParams = {
-  page: 1,
-  pageSize: 10,
-  sortBy: 'createdAt' as const,
-  sortDirection: 'desc' as const
-}
-
-export function getKnowledgeDocumentsQueryKey(
-  params: FetchKnowledgeDocumentsParams
-) {
-  return [
-    'knowledge-documents',
-    _.omitBy(params, value => _.isNil(value) || value === '')
-  ] as const
-}
-
-export async function fetchKnowledgeDocumentsClient(
-  params: FetchKnowledgeDocumentsParams
-): Promise<FetchKnowledgeDocumentsListResult> {
+export async function fetchKnowledgeDocsClient(
+  params: FetchKnowledgeDocsParams
+): Promise<FetchKnowledgeDocsListResult> {
   const { knowledgeId, ...rest } = params
   const searchParams = qs.stringify(
     _.omitBy(rest, value => _.isNil(value) || value === '')
@@ -38,7 +21,7 @@ export async function fetchKnowledgeDocumentsClient(
   )
 
   const payload =
-    (await response.json()) as ResponseResult<FetchKnowledgeDocumentsListResult>
+    (await response.json()) as ResponseResult<FetchKnowledgeDocsListResult>
 
   if (!response.ok) {
     throw new Error(

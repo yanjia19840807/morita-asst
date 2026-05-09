@@ -3,11 +3,11 @@
 import { ScrollArea } from '../ui/scroll-area'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { useDocumentsParams } from '@/hooks/use-documents-params'
-import { DocumentCategory } from '@/generated/prisma/client'
+import { useDocsParams } from '@/hooks/use-docs-params'
+import { DocCate } from '@/generated/prisma/client'
 
-export default function DocCateList({ data }: { data: DocumentCategory[] }) {
-  const { categoryId, setCategoryId } = useDocumentsParams()
+export default function DocCateList({ data }: { data: DocCate[] }) {
+  const { categoryId, setCategoryId } = useDocsParams()
 
   return (
     <ScrollArea className='h-full'>

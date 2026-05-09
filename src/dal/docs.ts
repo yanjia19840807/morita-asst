@@ -1,6 +1,6 @@
 import { pinyin } from 'pinyin-pro'
 import { prisma } from '@/lib/prisma'
-import { DocumentCategory } from '@/generated/prisma/client'
+import { DocCate } from '@/generated/prisma/client'
 import type { Prisma } from '@/generated/prisma/client'
 import {
   DocCateCreateFormValues,
@@ -18,9 +18,9 @@ import { requireRoles } from './auth'
 import { ValidationError } from '@/lib/api/server/errors'
 import z from 'zod'
 
-export type DocRow = Prisma.DocumentGetPayload<{
+export type DocRow = Prisma.DocGetPayload<{
   include: {
-    knowledgeDocuments: {
+    knowledgeDocs: {
       select: {
         id: true
         knowledgeId: true
@@ -32,14 +32,14 @@ export type DocRow = Prisma.DocumentGetPayload<{
     }
     _count: {
       select: {
-        knowledgeDocuments: true
+        knowledgeDocs: true
       }
     }
   }
 }>
 
 export type FetchDocsResult = {
-  documents: DocRow[]
+  docs: DocRow[]
   total: number
 }
 
@@ -53,7 +53,7 @@ async function generateUniqueSlug(name: string): Promise<string> {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
-  const existing = await prisma.documentCategory.findMany({
+  const existing = await prisma.docCate.findMany({
     where: { slug: { startsWith: base } },
     select: { slug: true }
   })
@@ -77,10 +77,10 @@ export async function createDoc(data: DocCreateValues) {
   const { categoryId, files } = validation.data
   const userId = user.id
 
-  return prisma.document.createMany({
+  return prisma.doc.createMany({
     data: files.map(({ filename, fileSize, mimeType, storageKey }) => ({
       userId,
-      categoryId,
+      docCateId: categoryId,
       filename,
       fileSize,
       mimeType,
@@ -100,7 +100,8 @@ export async function fetchDocs(
   }
 
   const {
-    filename,
+    searchField,
+    searchValue,
     categoryId,
     sortBy = 'createdAt',
     sortDirection = 'desc',
@@ -108,12 +109,12 @@ export async function fetchDocs(
     pageSize = 10
   } = params
 
-  const where: Prisma.DocumentWhereInput = {
-    ...(categoryId ? { categoryId } : {}),
-    ...(filename
+  const where: Prisma.DocWhereInput = {
+    ...(categoryId ? { docCateId: categoryId } : {}),
+    ...(searchField === 'filename' && searchValue
       ? {
           filename: {
-            contains: filename,
+            contains: searchValue,
             mode: 'insensitive'
           }
         }
@@ -124,11 +125,11 @@ export async function fetchDocs(
     [sortBy]: sortDirection
   }
 
-  const [documents, total] = await Promise.all([
-    prisma.document.findMany({
+  const [docs, total] = await Promise.all([
+    prisma.doc.findMany({
       where,
       include: {
-        knowledgeDocuments: {
+        knowledgeDocs: {
           select: {
             id: true,
             knowledgeId: true,
@@ -140,7 +141,7 @@ export async function fetchDocs(
         },
         _count: {
           select: {
-            knowledgeDocuments: true
+            knowledgeDocs: true
           }
         }
       },
@@ -148,10 +149,10 @@ export async function fetchDocs(
       skip: (page - 1) * pageSize,
       take: pageSize
     }),
-    prisma.document.count({ where })
+    prisma.doc.count({ where })
   ])
 
-  return { documents, total }
+  return { docs, total }
 }
 
 export async function createDocCate(data: DocCateCreateFormValues) {
@@ -164,7 +165,7 @@ export async function createDocCate(data: DocCateCreateFormValues) {
   const { name } = validation.data
   const slug = await generateUniqueSlug(name)
   const userId = user.id
-  const maxOrder = await prisma.documentCategory.aggregate({
+  const maxOrder = await prisma.docCate.aggregate({
     where: {
       isDefault: false
     },
@@ -174,7 +175,7 @@ export async function createDocCate(data: DocCateCreateFormValues) {
   })
   const nextOrder = (maxOrder._max.order ?? 0) + 1
 
-  return prisma.documentCategory.create({
+  return prisma.docCate.create({
     data: { userId, name, slug, order: nextOrder }
   })
 }
@@ -189,23 +190,23 @@ export async function editDocCate(data: DocCateEditFormValues) {
   const { id, name } = validation.data
   const slug = await generateUniqueSlug(name)
 
-  return prisma.documentCategory.update({
+  return prisma.docCate.update({
     data: { name, slug },
     where: { id }
   })
 }
 
-export async function fetchDocCates(): Promise<DocumentCategory[]> {
+export async function fetchDocCates(): Promise<DocCate[]> {
   await requireRoles(['admin'])
 
-  return prisma.documentCategory.findMany({
+  return prisma.docCate.findMany({
     orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
   })
 }
 
 export async function reorderDocCates(
   data: DocCateReorderValues
-): Promise<DocumentCategory[]> {
+): Promise<DocCate[]> {
   await requireRoles(['admin'])
   const validation = docCateReorderSchema.safeParse(data)
 
@@ -214,7 +215,7 @@ export async function reorderDocCates(
   }
 
   const { sourceId, targetId } = validation.data
-  const categories = await prisma.documentCategory.findMany({
+  const categories = await prisma.docCate.findMany({
     orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
   })
 
@@ -235,7 +236,7 @@ export async function reorderDocCates(
 
   if (sourceCate.order < targetCate.order) {
     await prisma.$transaction([
-      prisma.documentCategory.updateMany({
+      prisma.docCate.updateMany({
         where: {
           isDefault: false,
           order: {
@@ -249,7 +250,7 @@ export async function reorderDocCates(
           }
         }
       }),
-      prisma.documentCategory.update({
+      prisma.docCate.update({
         where: {
           id: sourceCate.id
         },
@@ -260,7 +261,7 @@ export async function reorderDocCates(
     ])
   } else {
     await prisma.$transaction([
-      prisma.documentCategory.updateMany({
+      prisma.docCate.updateMany({
         where: {
           isDefault: false,
           order: {
@@ -274,7 +275,7 @@ export async function reorderDocCates(
           }
         }
       }),
-      prisma.documentCategory.update({
+      prisma.docCate.update({
         where: {
           id: sourceCate.id
         },
@@ -285,7 +286,7 @@ export async function reorderDocCates(
     ])
   }
 
-  return prisma.documentCategory.findMany({
+  return prisma.docCate.findMany({
     orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
   })
 }

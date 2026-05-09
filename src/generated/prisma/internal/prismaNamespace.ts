@@ -391,9 +391,9 @@ export const ModelName = {
   Agent: 'Agent',
   PromptProfile: 'PromptProfile',
   Knowledge: 'Knowledge',
-  KnowledgeDocument: 'KnowledgeDocument',
-  DocumentCategory: 'DocumentCategory',
-  Document: 'Document',
+  KnowledgeDoc: 'KnowledgeDoc',
+  DocCate: 'DocCate',
+  Doc: 'Doc',
   Chunk: 'Chunk'
 } as const
 
@@ -410,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "agent" | "promptProfile" | "knowledge" | "knowledgeDocument" | "documentCategory" | "document" | "chunk"
+    modelProps: "user" | "session" | "account" | "verification" | "agent" | "promptProfile" | "knowledge" | "knowledgeDoc" | "docCate" | "doc" | "chunk"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -932,225 +932,225 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    KnowledgeDocument: {
-      payload: Prisma.$KnowledgeDocumentPayload<ExtArgs>
-      fields: Prisma.KnowledgeDocumentFieldRefs
+    KnowledgeDoc: {
+      payload: Prisma.$KnowledgeDocPayload<ExtArgs>
+      fields: Prisma.KnowledgeDocFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.KnowledgeDocumentFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload> | null
+          args: Prisma.KnowledgeDocFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.KnowledgeDocumentFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload>
+          args: Prisma.KnowledgeDocFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload>
         }
         findFirst: {
-          args: Prisma.KnowledgeDocumentFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload> | null
+          args: Prisma.KnowledgeDocFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.KnowledgeDocumentFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload>
+          args: Prisma.KnowledgeDocFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload>
         }
         findMany: {
-          args: Prisma.KnowledgeDocumentFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload>[]
+          args: Prisma.KnowledgeDocFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload>[]
         }
         create: {
-          args: Prisma.KnowledgeDocumentCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload>
+          args: Prisma.KnowledgeDocCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload>
         }
         createMany: {
-          args: Prisma.KnowledgeDocumentCreateManyArgs<ExtArgs>
+          args: Prisma.KnowledgeDocCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.KnowledgeDocumentCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload>[]
+          args: Prisma.KnowledgeDocCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload>[]
         }
         delete: {
-          args: Prisma.KnowledgeDocumentDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload>
+          args: Prisma.KnowledgeDocDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload>
         }
         update: {
-          args: Prisma.KnowledgeDocumentUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload>
+          args: Prisma.KnowledgeDocUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload>
         }
         deleteMany: {
-          args: Prisma.KnowledgeDocumentDeleteManyArgs<ExtArgs>
+          args: Prisma.KnowledgeDocDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.KnowledgeDocumentUpdateManyArgs<ExtArgs>
+          args: Prisma.KnowledgeDocUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.KnowledgeDocumentUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload>[]
+          args: Prisma.KnowledgeDocUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload>[]
         }
         upsert: {
-          args: Prisma.KnowledgeDocumentUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocumentPayload>
+          args: Prisma.KnowledgeDocUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KnowledgeDocPayload>
         }
         aggregate: {
-          args: Prisma.KnowledgeDocumentAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateKnowledgeDocument>
+          args: Prisma.KnowledgeDocAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateKnowledgeDoc>
         }
         groupBy: {
-          args: Prisma.KnowledgeDocumentGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.KnowledgeDocumentGroupByOutputType>[]
+          args: Prisma.KnowledgeDocGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.KnowledgeDocGroupByOutputType>[]
         }
         count: {
-          args: Prisma.KnowledgeDocumentCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.KnowledgeDocumentCountAggregateOutputType> | number
+          args: Prisma.KnowledgeDocCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.KnowledgeDocCountAggregateOutputType> | number
         }
       }
     }
-    DocumentCategory: {
-      payload: Prisma.$DocumentCategoryPayload<ExtArgs>
-      fields: Prisma.DocumentCategoryFieldRefs
+    DocCate: {
+      payload: Prisma.$DocCatePayload<ExtArgs>
+      fields: Prisma.DocCateFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.DocumentCategoryFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload> | null
+          args: Prisma.DocCateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.DocumentCategoryFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+          args: Prisma.DocCateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload>
         }
         findFirst: {
-          args: Prisma.DocumentCategoryFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload> | null
+          args: Prisma.DocCateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.DocumentCategoryFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+          args: Prisma.DocCateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload>
         }
         findMany: {
-          args: Prisma.DocumentCategoryFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>[]
+          args: Prisma.DocCateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload>[]
         }
         create: {
-          args: Prisma.DocumentCategoryCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+          args: Prisma.DocCateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload>
         }
         createMany: {
-          args: Prisma.DocumentCategoryCreateManyArgs<ExtArgs>
+          args: Prisma.DocCateCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.DocumentCategoryCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>[]
+          args: Prisma.DocCateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload>[]
         }
         delete: {
-          args: Prisma.DocumentCategoryDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+          args: Prisma.DocCateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload>
         }
         update: {
-          args: Prisma.DocumentCategoryUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+          args: Prisma.DocCateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload>
         }
         deleteMany: {
-          args: Prisma.DocumentCategoryDeleteManyArgs<ExtArgs>
+          args: Prisma.DocCateDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.DocumentCategoryUpdateManyArgs<ExtArgs>
+          args: Prisma.DocCateUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.DocumentCategoryUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>[]
+          args: Prisma.DocCateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload>[]
         }
         upsert: {
-          args: Prisma.DocumentCategoryUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentCategoryPayload>
+          args: Prisma.DocCateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocCatePayload>
         }
         aggregate: {
-          args: Prisma.DocumentCategoryAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateDocumentCategory>
+          args: Prisma.DocCateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDocCate>
         }
         groupBy: {
-          args: Prisma.DocumentCategoryGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DocumentCategoryGroupByOutputType>[]
+          args: Prisma.DocCateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DocCateGroupByOutputType>[]
         }
         count: {
-          args: Prisma.DocumentCategoryCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DocumentCategoryCountAggregateOutputType> | number
+          args: Prisma.DocCateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DocCateCountAggregateOutputType> | number
         }
       }
     }
-    Document: {
-      payload: Prisma.$DocumentPayload<ExtArgs>
-      fields: Prisma.DocumentFieldRefs
+    Doc: {
+      payload: Prisma.$DocPayload<ExtArgs>
+      fields: Prisma.DocFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.DocumentFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload> | null
+          args: Prisma.DocFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.DocumentFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload>
+          args: Prisma.DocFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload>
         }
         findFirst: {
-          args: Prisma.DocumentFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload> | null
+          args: Prisma.DocFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.DocumentFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload>
+          args: Prisma.DocFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload>
         }
         findMany: {
-          args: Prisma.DocumentFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload>[]
+          args: Prisma.DocFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload>[]
         }
         create: {
-          args: Prisma.DocumentCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload>
+          args: Prisma.DocCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload>
         }
         createMany: {
-          args: Prisma.DocumentCreateManyArgs<ExtArgs>
+          args: Prisma.DocCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.DocumentCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload>[]
+          args: Prisma.DocCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload>[]
         }
         delete: {
-          args: Prisma.DocumentDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload>
+          args: Prisma.DocDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload>
         }
         update: {
-          args: Prisma.DocumentUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload>
+          args: Prisma.DocUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload>
         }
         deleteMany: {
-          args: Prisma.DocumentDeleteManyArgs<ExtArgs>
+          args: Prisma.DocDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.DocumentUpdateManyArgs<ExtArgs>
+          args: Prisma.DocUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.DocumentUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload>[]
+          args: Prisma.DocUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload>[]
         }
         upsert: {
-          args: Prisma.DocumentUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocumentPayload>
+          args: Prisma.DocUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DocPayload>
         }
         aggregate: {
-          args: Prisma.DocumentAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateDocument>
+          args: Prisma.DocAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDoc>
         }
         groupBy: {
-          args: Prisma.DocumentGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DocumentGroupByOutputType>[]
+          args: Prisma.DocGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DocGroupByOutputType>[]
         }
         count: {
-          args: Prisma.DocumentCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DocumentCountAggregateOutputType> | number
+          args: Prisma.DocCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DocCountAggregateOutputType> | number
         }
       }
     }
@@ -1365,7 +1365,7 @@ export const KnowledgeScalarFieldEnum = {
   description: 'description',
   userId: 'userId',
   sourceMode: 'sourceMode',
-  categoryId: 'categoryId',
+  docCateId: 'docCateId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1373,10 +1373,10 @@ export const KnowledgeScalarFieldEnum = {
 export type KnowledgeScalarFieldEnum = (typeof KnowledgeScalarFieldEnum)[keyof typeof KnowledgeScalarFieldEnum]
 
 
-export const KnowledgeDocumentScalarFieldEnum = {
+export const KnowledgeDocScalarFieldEnum = {
   id: 'id',
   knowledgeId: 'knowledgeId',
-  documentId: 'documentId',
+  docId: 'docId',
   status: 'status',
   errorMessage: 'errorMessage',
   lastIndexedAt: 'lastIndexedAt',
@@ -1388,10 +1388,10 @@ export const KnowledgeDocumentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type KnowledgeDocumentScalarFieldEnum = (typeof KnowledgeDocumentScalarFieldEnum)[keyof typeof KnowledgeDocumentScalarFieldEnum]
+export type KnowledgeDocScalarFieldEnum = (typeof KnowledgeDocScalarFieldEnum)[keyof typeof KnowledgeDocScalarFieldEnum]
 
 
-export const DocumentCategoryScalarFieldEnum = {
+export const DocCateScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
@@ -1402,10 +1402,10 @@ export const DocumentCategoryScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type DocumentCategoryScalarFieldEnum = (typeof DocumentCategoryScalarFieldEnum)[keyof typeof DocumentCategoryScalarFieldEnum]
+export type DocCateScalarFieldEnum = (typeof DocCateScalarFieldEnum)[keyof typeof DocCateScalarFieldEnum]
 
 
-export const DocumentScalarFieldEnum = {
+export const DocScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   filename: 'filename',
@@ -1414,18 +1414,18 @@ export const DocumentScalarFieldEnum = {
   storageKey: 'storageKey',
   sourceHash: 'sourceHash',
   errorMessage: 'errorMessage',
-  categoryId: 'categoryId',
+  docCateId: 'docCateId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   metadata: 'metadata'
 } as const
 
-export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
+export type DocScalarFieldEnum = (typeof DocScalarFieldEnum)[keyof typeof DocScalarFieldEnum]
 
 
 export const ChunkScalarFieldEnum = {
   id: 'id',
-  knowledgeDocumentId: 'knowledgeDocumentId',
+  knowledgeDocId: 'knowledgeDocId',
   content: 'content',
   metadata: 'metadata',
   embeddingStatus: 'embeddingStatus',
@@ -1555,16 +1555,16 @@ export type ListEnumKnowledgeSourceModeFieldRefInput<$PrismaModel> = FieldRefInp
 
 
 /**
- * Reference to a field of type 'KnowledgeDocumentStatus'
+ * Reference to a field of type 'KnowledgeDocStatus'
  */
-export type EnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeDocumentStatus'>
+export type EnumKnowledgeDocStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeDocStatus'>
     
 
 
 /**
- * Reference to a field of type 'KnowledgeDocumentStatus[]'
+ * Reference to a field of type 'KnowledgeDocStatus[]'
  */
-export type ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeDocumentStatus[]'>
+export type ListEnumKnowledgeDocStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeDocStatus[]'>
     
 
 
@@ -1725,9 +1725,9 @@ export type GlobalOmitConfig = {
   agent?: Prisma.AgentOmit
   promptProfile?: Prisma.PromptProfileOmit
   knowledge?: Prisma.KnowledgeOmit
-  knowledgeDocument?: Prisma.KnowledgeDocumentOmit
-  documentCategory?: Prisma.DocumentCategoryOmit
-  document?: Prisma.DocumentOmit
+  knowledgeDoc?: Prisma.KnowledgeDocOmit
+  docCate?: Prisma.DocCateOmit
+  doc?: Prisma.DocOmit
   chunk?: Prisma.ChunkOmit
 }
 

@@ -5,13 +5,13 @@ import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChevronLeft } from 'lucide-react'
 import PageTitle from '../layout/page-title'
-import type { KnowledgeDetailRow } from '@/dal/knowledges'
 import { KNOWLEDGE_SOURCE_MODE } from '@/schemas/knowledge'
 import DetailItem from '../data-item'
-import { KnowledgeDocumentsTable } from './knowledge-documents-table'
+import { KnowledgeDocsTable } from './knowledge-docs-table'
+import { KnowledgeRow } from '@/dal/knowledges'
 
 interface KnowledgeDetailProps {
-  knowledge: KnowledgeDetailRow
+  knowledge: KnowledgeRow
 }
 
 const sourceModeLabelMap = {
@@ -55,10 +55,10 @@ export function KnowledgeDetail({ knowledge }: KnowledgeDetailProps) {
             </DetailItem>
             <div className='flex flex-row justify-between gap-3'>
               <DetailItem label='所属类目'>
-                {knowledge.category?.name ?? '-'}
+                {knowledge.docCate?.name ?? '-'}
               </DetailItem>
               <DetailItem label='关联文档数'>
-                {knowledge._count.documents} 份文档
+                {knowledge._count.knowledgeDocs} 份文档
               </DetailItem>
             </div>
             <div className='flex flex-row justify-between gap-3'>
@@ -79,7 +79,7 @@ export function KnowledgeDetail({ knowledge }: KnowledgeDetailProps) {
           <CardTitle>关联文档</CardTitle>
         </CardHeader>
         <CardContent>
-          <KnowledgeDocumentsTable knowledgeId={knowledge.id} />
+          <KnowledgeDocsTable knowledgeId={knowledge.id} />
         </CardContent>
       </Card>
     </div>

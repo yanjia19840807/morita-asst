@@ -2,9 +2,9 @@ import { prisma } from '@/lib/prisma'
 import { Prisma, type Knowledge } from '@/generated/prisma/client'
 import { requireRoles } from './auth'
 import {
-  fetchKnowledgeDocumentsParamsSchema,
+  fetchKnowledgeDocsParamsSchema,
   KNOWLEDGE_SOURCE_MODE,
-  type FetchKnowledgeDocumentsParams,
+  type FetchKnowledgeDocsParams,
   KnowledgeCreateFormValues,
   type KnowledgeSourceModeValues,
   knowledgeCreateSchema
@@ -23,9 +23,22 @@ export type KnowledgeOption = Prisma.KnowledgeGetPayload<{
 
 export type KnowledgeRow = Prisma.KnowledgeGetPayload<{
   include: {
+    user: {
+      select: {
+        id: true
+        name: true
+      }
+    }
+    docCate: {
+      select: {
+        id: true
+        name: true
+        slug: true
+      }
+    }
     _count: {
       select: {
-        documents: true
+        knowledgeDocs: true
       }
     }
   }
@@ -36,34 +49,11 @@ export type KnowLedgesWithTotal = {
   total: number
 }
 
-export type KnowledgeDetailRow = Prisma.KnowledgeGetPayload<{
+export type KnowledgeDocRow = Prisma.KnowledgeDocGetPayload<{
   include: {
-    user: {
-      select: {
-        id: true
-        name: true
-      }
-    }
-    category: {
-      select: {
-        id: true
-        name: true
-        slug: true
-      }
-    }
-    _count: {
-      select: {
-        documents: true
-      }
-    }
-  }
-}>
-
-export type KnowledgeDocumentRow = Prisma.KnowledgeDocumentGetPayload<{
-  include: {
-    document: {
+    doc: {
       include: {
-        category: {
+        docCate: {
           select: {
             id: true
             name: true
@@ -75,14 +65,15 @@ export type KnowledgeDocumentRow = Prisma.KnowledgeDocumentGetPayload<{
   }
 }>
 
-export type FetchKnowledgeDocumentsResult = {
-  documents: KnowledgeDocumentRow[]
+export type FetchKnowledgeDocsResult = {
+  docs: KnowledgeDocRow[]
   total: number
 }
 
 export type fetchKnowledgesParams = {
   page?: number
   pageSize?: number
+  searchField?: string
   searchValue?: string
 }
 
@@ -103,6 +94,7 @@ export async function fetchAllKnowledges(): Promise<KnowledgeOption[]> {
 export async function fetchKnowledges({
   page = 1,
   pageSize = 12,
+  searchField,
   searchValue
 }: PaginationParams): Promise<KnowLedgesWithTotal> {
   await requireRoles(['admin'])
@@ -110,20 +102,36 @@ export async function fetchKnowledges({
   const where: Prisma.KnowledgeWhereInput = {
     ...(searchValue
       ? {
-          OR: [
-            {
-              name: {
-                contains: searchValue,
-                mode: 'insensitive'
+          ...(searchField === 'name'
+            ? {
+                name: {
+                  contains: searchValue,
+                  mode: 'insensitive'
+                }
               }
-            },
-            {
-              description: {
-                contains: searchValue,
-                mode: 'insensitive'
-              }
-            }
-          ]
+            : searchField === 'description'
+              ? {
+                  description: {
+                    contains: searchValue,
+                    mode: 'insensitive'
+                  }
+                }
+              : {
+                  OR: [
+                    {
+                      name: {
+                        contains: searchValue,
+                        mode: 'insensitive'
+                      }
+                    },
+                    {
+                      description: {
+                        contains: searchValue,
+                        mode: 'insensitive'
+                      }
+                    }
+                  ]
+                })
         }
       : {})
   }
@@ -132,9 +140,22 @@ export async function fetchKnowledges({
     prisma.knowledge.findMany({
       where,
       include: {
+        user: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        docCate: {
+          select: {
+            id: true,
+            name: true,
+            slug: true
+          }
+        },
         _count: {
           select: {
-            documents: true
+            knowledgeDocs: true
           }
         }
       },
@@ -150,9 +171,7 @@ export async function fetchKnowledges({
   return { knowledges, total }
 }
 
-export async function fetchKnowledgeById(
-  id: string
-): Promise<KnowledgeDetailRow> {
+export async function fetchKnowledgeById(id: string): Promise<KnowledgeRow> {
   await requireRoles(['admin'])
 
   const knowledge = await prisma.knowledge.findUnique({
@@ -164,7 +183,7 @@ export async function fetchKnowledgeById(
           name: true
         }
       },
-      category: {
+      docCate: {
         select: {
           id: true,
           name: true,
@@ -173,7 +192,7 @@ export async function fetchKnowledgeById(
       },
       _count: {
         select: {
-          documents: true
+          knowledgeDocs: true
         }
       }
     }
@@ -186,32 +205,33 @@ export async function fetchKnowledgeById(
   return knowledge
 }
 
-export async function fetchKnowledgeDocuments(
-  params: FetchKnowledgeDocumentsParams
-): Promise<FetchKnowledgeDocumentsResult> {
+export async function fetchKnowledgeDocs(
+  params: FetchKnowledgeDocsParams
+): Promise<FetchKnowledgeDocsResult> {
   await requireRoles(['admin'])
 
-  const validation = fetchKnowledgeDocumentsParamsSchema.safeParse(params)
+  const validation = fetchKnowledgeDocsParamsSchema.safeParse(params)
   if (!validation.success) {
     throw new ValidationError(z.prettifyError(validation.error))
   }
 
   const {
     knowledgeId,
-    filename,
+    searchField,
+    searchValue,
     sortBy = 'createdAt',
     sortDirection = 'desc',
     page = 1,
     pageSize = 10
   } = validation.data
 
-  const where: Prisma.KnowledgeDocumentWhereInput = {
+  const where: Prisma.KnowledgeDocWhereInput = {
     knowledgeId,
-    ...(filename
+    ...(searchField === 'filename' && searchValue
       ? {
-          document: {
+          doc: {
             filename: {
-              contains: filename,
+              contains: searchValue,
               mode: 'insensitive'
             }
           }
@@ -219,18 +239,18 @@ export async function fetchKnowledgeDocuments(
       : {})
   }
 
-  const orderBy: Prisma.KnowledgeDocumentOrderByWithRelationInput =
+  const orderBy: Prisma.KnowledgeDocOrderByWithRelationInput =
     sortBy === 'filename'
-      ? { document: { filename: sortDirection } }
+      ? { doc: { filename: sortDirection } }
       : { [sortBy]: sortDirection }
 
-  const [documents, total] = await Promise.all([
-    prisma.knowledgeDocument.findMany({
+  const [docs, total] = await Promise.all([
+    prisma.knowledgeDoc.findMany({
       where,
       include: {
-        document: {
+        doc: {
           include: {
-            category: {
+            docCate: {
               select: {
                 id: true,
                 name: true,
@@ -244,10 +264,10 @@ export async function fetchKnowledgeDocuments(
       skip: (page - 1) * pageSize,
       take: pageSize
     }),
-    prisma.knowledgeDocument.count({ where })
+    prisma.knowledgeDoc.count({ where })
   ])
 
-  return { documents, total }
+  return { docs, total }
 }
 
 export async function createKnowledge(
@@ -262,16 +282,16 @@ export async function createKnowledge(
 
   const { name, description, docSource } = validation.data
 
-  let categoryId: string | null = null
-  let documentIds: string[] = []
+  let docCateId: string | null = null
+  let docIds: string[] = []
   const sourceMode: KnowledgeSourceModeValues = docSource.mode
 
   if (docSource.mode === KNOWLEDGE_SOURCE_MODE.DOC_CATE) {
-    categoryId = docSource.categoryId
+    docCateId = docSource.categoryId
 
-    const category = await prisma.documentCategory.findFirst({
+    const category = await prisma.docCate.findFirst({
       where: {
-        id: categoryId
+        id: docCateId
       },
       select: {
         id: true
@@ -279,26 +299,26 @@ export async function createKnowledge(
     })
 
     if (!category) {
-      throw new NotFoundError('DocumentCategory')
+      throw new NotFoundError('DocCate')
     }
 
-    const documents = await prisma.document.findMany({
+    const docs = await prisma.doc.findMany({
       where: {
-        categoryId
+        docCateId: docCateId
       },
       select: {
         id: true
       }
     })
 
-    documentIds = documents.map(document => document.id)
+    docIds = docs.map(doc => doc.id)
   } else {
-    const selectedDocumentIds = docSource.documentIds
+    const selectedDocIds = docSource.docIds
 
-    const documents = await prisma.document.findMany({
+    const docs = await prisma.doc.findMany({
       where: {
         id: {
-          in: selectedDocumentIds
+          in: selectedDocIds
         }
       },
       select: {
@@ -306,11 +326,11 @@ export async function createKnowledge(
       }
     })
 
-    if (documents.length !== selectedDocumentIds.length) {
-      throw new NotFoundError('Document')
+    if (docs.length !== selectedDocIds.length) {
+      throw new NotFoundError('Doc')
     }
 
-    documentIds = selectedDocumentIds
+    docIds = selectedDocIds
   }
 
   try {
@@ -321,15 +341,15 @@ export async function createKnowledge(
           name,
           description,
           sourceMode,
-          categoryId
+          docCateId
         }
       })
 
-      if (documentIds.length > 0) {
-        await tx.knowledgeDocument.createMany({
-          data: documentIds.map(documentId => ({
+      if (docIds.length > 0) {
+        await tx.knowledgeDoc.createMany({
+          data: docIds.map(docId => ({
             knowledgeId: knowledge.id,
-            documentId
+            docId
           }))
         })
       }

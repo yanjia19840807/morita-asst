@@ -3,11 +3,7 @@
 import { format } from 'date-fns'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import {
-  fetchKnowledgeDocumentsClient,
-  getKnowledgeDocumentsQueryKey,
-  initialKnowledgeDocumentsParams
-} from '@/lib/api/client/knowledge'
+import { fetchKnowledgeDocsClient } from '@/lib/api/client/knowledge'
 import { getErrorMessage } from '@/lib/api/shared/response'
 import {
   type ColumnDef,
@@ -17,8 +13,8 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import type { FetchKnowledgeDocumentsParams } from '@/schemas/knowledge'
-import type { FetchKnowledgeDocumentsListResult } from '@/lib/api/shared/knowledge'
+import type { FetchKnowledgeDocsParams } from '@/schemas/knowledge'
+import type { FetchKnowledgeDocsListResult } from '@/lib/api/shared/knowledge'
 import { Input } from '../ui/input'
 import {
   Table,
@@ -31,9 +27,9 @@ import {
 import { TableColumnHeader } from '../table/table-column-header'
 import TablePagination from '../table/table-pagination'
 import { Badge } from '../ui/badge'
+import _ from 'lodash'
 
-type KnowledgeDocumentItem =
-  FetchKnowledgeDocumentsListResult['documents'][number]
+type KnowledgeDocItem = FetchKnowledgeDocsListResult['docs'][number]
 
 const statusLabelMap: Record<string, string> = {
   UPLOADED: '已上传',
@@ -44,20 +40,20 @@ const statusLabelMap: Record<string, string> = {
   FAILED: '失败'
 }
 
-const knowledgeDocumentColumns: ColumnDef<KnowledgeDocumentItem>[] = [
+const knowledgeDocColumns: ColumnDef<KnowledgeDocItem>[] = [
   {
-    accessorKey: 'document.filename',
+    accessorKey: 'doc.filename',
     id: 'filename',
     header: ({ column }) => (
       <TableColumnHeader column={column} title='文档名称' />
     ),
-    cell: ({ row }) => row.original.document.filename
+    cell: ({ row }) => row.original.doc.filename
   },
   {
-    accessorKey: 'document.category.name',
+    accessorKey: 'doc.docCate.name',
     id: 'category',
     header: () => <div>所属类目</div>,
-    cell: ({ row }) => row.original.document.category?.name ?? '未分类'
+    cell: ({ row }) => row.original.doc.docCate?.name ?? '未分类'
   },
   {
     accessorKey: 'status',
@@ -95,82 +91,72 @@ const knowledgeDocumentColumns: ColumnDef<KnowledgeDocumentItem>[] = [
   }
 ]
 
-interface KnowledgeDocumentsTableProps {
+interface KnowledgeDocsTableProps {
   knowledgeId: string
 }
 
-export function KnowledgeDocumentsTable({
-  knowledgeId
-}: KnowledgeDocumentsTableProps) {
-  const [searchText, setSearchText] = useState('')
-  const [page, setPage] = useState(initialKnowledgeDocumentsParams.page)
-  const [sortBy, setSortBy] = useState<
-    'filename' | 'status' | 'chunkCount' | 'lastIndexedAt' | 'createdAt'
-  >(initialKnowledgeDocumentsParams.sortBy)
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(
-    initialKnowledgeDocumentsParams.sortDirection
-  )
+export function KnowledgeDocsTable({ knowledgeId }: KnowledgeDocsTableProps) {
+  const [searchText, setSearchText] = useState<string | undefined>()
+  const [page, setPage] = useState<number | undefined>()
+  const [sortBy, setSortBy] = useState<string | undefined>(undefined)
+  const [sortDirection, setSortDirection] = useState<
+    'asc' | 'desc' | undefined
+  >(undefined)
 
-  const documentsParams: FetchKnowledgeDocumentsParams = {
+  const knowledgeDocsParams: FetchKnowledgeDocsParams = {
     knowledgeId,
-    filename: searchText || undefined,
-    sortBy,
-    sortDirection,
-    page,
-    pageSize: initialKnowledgeDocumentsParams.pageSize
+    ...(_.isNil(searchText) ? {} : { searchText }),
+    ...(_.isNil(page) ? {} : { page }),
+    ...(_.isNil(sortBy) ? {} : { sortBy }),
+    ...(_.isNil(sortDirection) ? {} : { sortDirection })
   }
 
-  const documentsQuery = useQuery({
-    queryKey: getKnowledgeDocumentsQueryKey(documentsParams),
-    queryFn: () => fetchKnowledgeDocumentsClient(documentsParams),
+  const knowledgeDocsQuery = useQuery({
+    queryKey: ['knowledge-docs', knowledgeDocsParams],
+    queryFn: () => fetchKnowledgeDocsClient(knowledgeDocsParams),
     placeholderData: previousData => previousData
   })
 
-  const data = documentsQuery.data?.documents ?? []
-  const total = documentsQuery.data?.total ?? 0
-  const isLoading = documentsQuery.isFetching && !documentsQuery.data
-  const error = documentsQuery.error
-    ? getErrorMessage(documentsQuery.error)
+  const data = knowledgeDocsQuery.data?.docs ?? []
+  const total = knowledgeDocsQuery.data?.total ?? 0
+  const isLoading = knowledgeDocsQuery.isLoading
+  const error = knowledgeDocsQuery.error
+    ? getErrorMessage(knowledgeDocsQuery.error)
     : null
 
-  const sorting: SortingState = [
-    {
-      id: sortBy,
-      desc: sortDirection === 'desc'
-    }
-  ]
+  const sorting: SortingState = sortBy
+    ? [
+        {
+          id: sortBy,
+          desc: sortDirection === 'desc'
+        }
+      ]
+    : []
 
-  const handleSortingChange: OnChangeFn<SortingState> = updater => {
+  const onSortingChange: OnChangeFn<SortingState> = updater => {
     const nextSorting =
       typeof updater === 'function' ? updater(sorting) : updater
 
     if (nextSorting.length === 0) {
-      setSortBy(initialKnowledgeDocumentsParams.sortBy)
-      setSortDirection(initialKnowledgeDocumentsParams.sortDirection)
       setPage(1)
       return
     }
 
     const nextSort = nextSorting[0]
-    setSortBy(
-      nextSort.id as
-        | 'filename'
-        | 'status'
-        | 'chunkCount'
-        | 'lastIndexedAt'
-        | 'createdAt'
-    )
-    setSortDirection(nextSort.desc ? 'desc' : 'asc')
-    setPage(1)
+    if (nextSort) {
+      setSortBy(nextSort.id)
+      setSortDirection(nextSort.desc ? 'desc' : 'asc')
+      setPage(1)
+    }
   }
 
   const table = useReactTable({
     data,
-    columns: knowledgeDocumentColumns,
+    columns: knowledgeDocColumns,
     getCoreRowModel: getCoreRowModel(),
     getRowId: row => row.id,
     state: { sorting },
-    onSortingChange: handleSortingChange
+    onSortingChange
   })
 
   return (
@@ -210,7 +196,7 @@ export function KnowledgeDocumentsTable({
           {isLoading ? (
             <TableRow>
               <TableCell
-                colSpan={knowledgeDocumentColumns.length}
+                colSpan={knowledgeDocColumns.length}
                 className='h-24 text-center'
               >
                 加载中...
@@ -229,7 +215,7 @@ export function KnowledgeDocumentsTable({
           ) : (
             <TableRow>
               <TableCell
-                colSpan={knowledgeDocumentColumns.length}
+                colSpan={knowledgeDocColumns.length}
                 className='h-24 text-center'
               >
                 暂无关联文档
@@ -241,7 +227,7 @@ export function KnowledgeDocumentsTable({
       <TablePagination
         page={page}
         setPage={setPage}
-        pageSize={documentsParams.pageSize}
+        pageSize={10}
         total={total}
         className='justify-end'
       />

@@ -15,7 +15,7 @@ interface TablePaginationProps {
   pageSize: number
   total: number
   className?: string
-  page: number
+  page?: number
   setPage: (page: number) => void
 }
 

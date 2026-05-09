@@ -7,10 +7,10 @@ import {
   ComboboxItem,
   ComboboxList
 } from '@/components/ui/combobox'
-import type { DocumentCategory } from '@/generated/prisma/client'
+import type { DocCate } from '@/generated/prisma/client'
 
 interface DocCateComboboxProps {
-  docCatesPromise: Promise<DocumentCategory[]>
+  docCatesPromise: Promise<DocCate[]>
   value: string | undefined
   onChange: (value: string) => void
   onBlur: () => void

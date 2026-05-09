@@ -3,9 +3,9 @@ import z from 'zod'
 import { withRole } from '@/lib/api/server/with-role'
 import { handleApiError, handleApiResult } from '@/lib/api/server/response'
 import { ValidationError } from '@/lib/api/server/errors'
-import { fetchKnowledgeDocuments } from '@/dal/knowledges'
-import { toFetchKnowledgeDocumentsListResult } from '@/lib/api/shared/knowledge'
-import { fetchKnowledgeDocumentsParamsSchema } from '@/schemas/knowledge'
+import { fetchKnowledgeDocs } from '@/dal/knowledges'
+import { toFetchKnowledgeDocsListResult } from '@/lib/api/shared/knowledge'
+import { fetchKnowledgeDocsParamsSchema } from '@/schemas/knowledge'
 
 export const GET = withRole(
   ['admin'],
@@ -14,7 +14,7 @@ export const GET = withRole(
     const routeParams = await context.params
 
     try {
-      const validation = fetchKnowledgeDocumentsParamsSchema.safeParse({
+      const validation = fetchKnowledgeDocsParamsSchema.safeParse({
         ...params,
         knowledgeId: routeParams.id
       })
@@ -23,8 +23,8 @@ export const GET = withRole(
         throw new ValidationError(z.prettifyError(validation.error))
       }
 
-      const result = await fetchKnowledgeDocuments(validation.data)
-      return handleApiResult(toFetchKnowledgeDocumentsListResult(result))
+      const result = await fetchKnowledgeDocs(validation.data)
+      return handleApiResult(toFetchKnowledgeDocsListResult(result))
     } catch (error) {
       return handleApiError(error)
     }

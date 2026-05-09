@@ -26,11 +26,12 @@ export default async function KnowledgePage({
 }: {
   searchParams: Promise<PaginationParams>
 }) {
-  const { page, searchValue } = await searchParams
+  const { page, searchField, searchValue } = await searchParams
 
   const data = await fetchKnowledges({
     page: getPage(page),
     pageSize,
+    searchField,
     searchValue
   })
 

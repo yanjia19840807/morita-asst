@@ -1,6 +1,6 @@
 'use client'
 
-import type { AgentRow } from '@/dal/agent'
+import type { AgentsWithTotal } from '@/dal/agent'
 import TableActionSection from '../table/table-action-section'
 import TableFooterSection from '../table/table-footer-section'
 import { TableQsPagination } from '../table/table-qs-pagination'
@@ -8,20 +8,21 @@ import AgentCard from './agent-card'
 import AgentSearch from './agent-search'
 
 interface AgentGridProps {
-  data: AgentRow[]
-  total: number
+  data: AgentsWithTotal
   pageSize: number
 }
 
-export default function AgentGrid({ data, total, pageSize }: AgentGridProps) {
+export default function AgentGrid({ data, pageSize }: AgentGridProps) {
+  const { agents, total } = data
+
   return (
     <div className='flex min-h-0 flex-1 flex-col gap-3'>
       <TableActionSection className='justify-between'>
         <AgentSearch />
       </TableActionSection>
-      {data.length > 0 ? (
+      {agents.length > 0 ? (
         <div className='grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-4'>
-          {data.map(agent => (
+          {agents.map(agent => (
             <AgentCard key={agent.id} agent={agent} />
           ))}
         </div>

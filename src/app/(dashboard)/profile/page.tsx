@@ -1,4 +1,4 @@
-import ProfileView from '@/components/auth/profile-view'
+import ProfileDetail from '@/components/auth/profile-detail'
 import { fetchProfile } from '@/dal/auth'
 
 export default async function ProfilePage() {
@@ -6,7 +6,7 @@ export default async function ProfilePage() {
 
   return (
     <div className='flex flex-1 flex-col gap-3 px-4'>
-      <ProfileView session={session} />
+      <ProfileDetail session={session} />
     </div>
   )
 }

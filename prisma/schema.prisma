@@ -13,20 +13,20 @@ datasource db {
 }
 
 model User {
-  id                 String             @id @default(uuid())
-  email              String             @unique
-  createdAt          DateTime           @default(now())
-  agents             Agent[]
-  promptProfiles     PromptProfile[]
-  knowledges         Knowledge[]
-  documents          Document[]
-  documentCategories DocumentCategory[]
-  name               String
-  emailVerified      Boolean            @default(false)
-  image              String?
-  updatedAt          DateTime           @updatedAt
-  sessions           Session[]
-  accounts           Account[]
+  id             String          @id @default(uuid())
+  email          String          @unique
+  createdAt      DateTime        @default(now())
+  agents         Agent[]
+  promptProfiles PromptProfile[]
+  knowledges     Knowledge[]
+  docs           Doc[]
+  docCates       DocCate[]
+  name           String
+  emailVerified  Boolean         @default(false)
+  image          String?
+  updatedAt      DateTime        @updatedAt
+  sessions       Session[]
+  accounts       Account[]
 
   role       String?
   banned     Boolean?  @default(false)
@@ -131,13 +131,13 @@ model Knowledge {
   description String?
   userId      String
   sourceMode  KnowledgeSourceMode
-  categoryId  String?
+  docCateId   String?
 
-  user     User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  category DocumentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  docCate DocCate? @relation(fields: [docCateId], references: [id], onDelete: SetNull)
 
-  agents    Agent[]
-  documents KnowledgeDocument[]
+  agents        Agent[]
+  knowledgeDocs KnowledgeDoc[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -145,43 +145,43 @@ model Knowledge {
   @@unique([name])
   @@index([userId])
   @@index([sourceMode])
-  @@index([categoryId])
+  @@index([docCateId])
   @@map("knowledge")
 }
 
-model KnowledgeDocument {
-  id             String                  @id @default(uuid())
+model KnowledgeDoc {
+  id             String             @id @default(uuid())
   knowledgeId    String
-  documentId     String
-  knowledge      Knowledge               @relation(fields: [knowledgeId], references: [id], onDelete: Cascade)
-  document       Document                @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  status         KnowledgeDocumentStatus @default(UPLOADED)
+  docId          String
+  knowledge      Knowledge          @relation(fields: [knowledgeId], references: [id], onDelete: Cascade)
+  doc            Doc                @relation(fields: [docId], references: [id], onDelete: Cascade)
+  status         KnowledgeDocStatus @default(UPLOADED)
   errorMessage   String?
   lastIndexedAt  DateTime?
-  chunkCount     Int                     @default(0)
+  chunkCount     Int                @default(0)
   embeddingModel String?
   splitConfig    Json?
   metadata       Json?
   chunks         Chunk[]
-  createdAt      DateTime                @default(now())
-  updatedAt      DateTime                @updatedAt
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
 
-  @@unique([knowledgeId, documentId])
+  @@unique([knowledgeId, docId])
   @@index([knowledgeId])
-  @@index([documentId])
+  @@index([docId])
   @@index([status])
-  @@map("knowledge-document")
+  @@map("knowledge-doc")
 }
 
-model DocumentCategory {
-  id        String     @id @default(uuid())
+model DocCate {
+  id        String  @id @default(uuid())
   name      String
-  slug      String     @unique
+  slug      String  @unique
   userId    String
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  order     Int        @default(1)
-  isDefault Boolean    @default(false)
-  documents Document[]
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order     Int     @default(1)
+  isDefault Boolean @default(false)
+  docs      Doc[]
 
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
@@ -189,10 +189,10 @@ model DocumentCategory {
 
   @@unique([name])
   @@index([userId])
-  @@map("document-category")
+  @@map("doc-cate")
 }
 
-model Document {
+model Doc {
   id     String @id @default(uuid())
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -206,10 +206,10 @@ model Document {
   sourceHash   String?
   errorMessage String?
 
-  categoryId String?
-  category   DocumentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  docCateId String?
+  docCate   DocCate? @relation(fields: [docCateId], references: [id], onDelete: SetNull)
 
-  knowledgeDocuments KnowledgeDocument[]
+  knowledgeDocs KnowledgeDoc[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -218,18 +218,18 @@ model Document {
 
   @@index([userId])
   @@index([sourceHash])
-  @@index([categoryId])
-  @@map("document")
+  @@index([docCateId])
+  @@map("doc")
 }
 
 model Chunk {
   id String @id @default(uuid())
 
-  knowledgeDocumentId String
-  knowledgeDocument   KnowledgeDocument @relation(fields: [knowledgeDocumentId], references: [id], onDelete: Cascade)
+  knowledgeDocId String
+  knowledgeDoc   KnowledgeDoc @relation(fields: [knowledgeDocId], references: [id], onDelete: Cascade)
 
   content  String // Chunk 的实际文本内容（可编辑）
-  metadata Json // LangChain 用的 metadata（包含 knowledgeId、documentId 等）
+  metadata Json // LangChain 用的 metadata（包含 knowledgeId、docId 等）
 
   // 嵌入状态
   embeddingStatus ChunkEmbeddingStatus @default(PENDING)
@@ -238,12 +238,12 @@ model Chunk {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([knowledgeDocumentId])
+  @@index([knowledgeDocId])
   @@index([embeddingStatus])
   @@map("chunk")
 }
 
-enum KnowledgeDocumentStatus {
+enum KnowledgeDocStatus {
   UPLOADED // 已上传（文档初始状态）
   SPLITTING // 切分中
   SPLITTED // 已切分（文档切分完成）

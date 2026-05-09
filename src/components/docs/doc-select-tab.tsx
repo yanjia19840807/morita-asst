@@ -18,7 +18,7 @@ export type DocSelectMode = KnowledgeSourceModeValues
 export type DocSelectValue = {
   mode: DocSelectMode
   categoryId?: string
-  documentIds: string[]
+  docIds: string[]
 }
 
 interface DocSelectTabProps {

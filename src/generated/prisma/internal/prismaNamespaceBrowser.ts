@@ -58,9 +58,9 @@ export const ModelName = {
   Agent: 'Agent',
   PromptProfile: 'PromptProfile',
   Knowledge: 'Knowledge',
-  KnowledgeDocument: 'KnowledgeDocument',
-  DocumentCategory: 'DocumentCategory',
-  Document: 'Document',
+  KnowledgeDoc: 'KnowledgeDoc',
+  DocCate: 'DocCate',
+  Doc: 'Doc',
   Chunk: 'Chunk'
 } as const
 
@@ -178,7 +178,7 @@ export const KnowledgeScalarFieldEnum = {
   description: 'description',
   userId: 'userId',
   sourceMode: 'sourceMode',
-  categoryId: 'categoryId',
+  docCateId: 'docCateId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -186,10 +186,10 @@ export const KnowledgeScalarFieldEnum = {
 export type KnowledgeScalarFieldEnum = (typeof KnowledgeScalarFieldEnum)[keyof typeof KnowledgeScalarFieldEnum]
 
 
-export const KnowledgeDocumentScalarFieldEnum = {
+export const KnowledgeDocScalarFieldEnum = {
   id: 'id',
   knowledgeId: 'knowledgeId',
-  documentId: 'documentId',
+  docId: 'docId',
   status: 'status',
   errorMessage: 'errorMessage',
   lastIndexedAt: 'lastIndexedAt',
@@ -201,10 +201,10 @@ export const KnowledgeDocumentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type KnowledgeDocumentScalarFieldEnum = (typeof KnowledgeDocumentScalarFieldEnum)[keyof typeof KnowledgeDocumentScalarFieldEnum]
+export type KnowledgeDocScalarFieldEnum = (typeof KnowledgeDocScalarFieldEnum)[keyof typeof KnowledgeDocScalarFieldEnum]
 
 
-export const DocumentCategoryScalarFieldEnum = {
+export const DocCateScalarFieldEnum = {
   id: 'id',
   name: 'name',
   slug: 'slug',
@@ -215,10 +215,10 @@ export const DocumentCategoryScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type DocumentCategoryScalarFieldEnum = (typeof DocumentCategoryScalarFieldEnum)[keyof typeof DocumentCategoryScalarFieldEnum]
+export type DocCateScalarFieldEnum = (typeof DocCateScalarFieldEnum)[keyof typeof DocCateScalarFieldEnum]
 
 
-export const DocumentScalarFieldEnum = {
+export const DocScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   filename: 'filename',
@@ -227,18 +227,18 @@ export const DocumentScalarFieldEnum = {
   storageKey: 'storageKey',
   sourceHash: 'sourceHash',
   errorMessage: 'errorMessage',
-  categoryId: 'categoryId',
+  docCateId: 'docCateId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   metadata: 'metadata'
 } as const
 
-export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
+export type DocScalarFieldEnum = (typeof DocScalarFieldEnum)[keyof typeof DocScalarFieldEnum]
 
 
 export const ChunkScalarFieldEnum = {
   id: 'id',
-  knowledgeDocumentId: 'knowledgeDocumentId',
+  knowledgeDocId: 'knowledgeDocId',
   content: 'content',
   metadata: 'metadata',
   embeddingStatus: 'embeddingStatus',

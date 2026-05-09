@@ -44,14 +44,14 @@ export default function DocSelect({
       onChange({
         mode,
         categoryId: selectedCategoryId ?? '',
-        documentIds: undefined
+        docIds: undefined
       })
     } else {
       setBrowseCategoryId(value.categoryId)
       onChange({
         mode,
         categoryId: undefined,
-        documentIds: value.documentIds ?? []
+        docIds: value.docIds ?? []
       })
     }
 
@@ -65,18 +65,18 @@ export default function DocSelect({
       onChange({
         mode: KNOWLEDGE_SOURCE_MODE.DOC_CATE,
         categoryId,
-        documentIds: undefined
+        docIds: undefined
       })
     }
 
     onBlur?.()
   }
 
-  const handleSelectedDocumentIdsChange = (documentIds: string[]) => {
+  const handleSelectedDocIdsChange = (docIds: string[]) => {
     onChange({
       mode: KNOWLEDGE_SOURCE_MODE.DOC,
       categoryId: undefined,
-      documentIds
+      docIds
     })
     onBlur?.()
   }
@@ -97,8 +97,8 @@ export default function DocSelect({
         <DocSelectTable
           pageSize={pageSize}
           categoryId={selectedCategoryId}
-          selectedDocumentIds={value.documentIds ?? []}
-          onSelectedDocumentIdsChange={handleSelectedDocumentIdsChange}
+          selectedDocIds={value.docIds ?? []}
+          onSelectedDocIdsChange={handleSelectedDocIdsChange}
           disabled={disabled || value.mode !== KNOWLEDGE_SOURCE_MODE.DOC}
         />
       </div>

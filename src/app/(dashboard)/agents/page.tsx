@@ -46,7 +46,7 @@ export default async function AgentsPage({
         助手管理
       </PageTitle>
       <Suspense fallback={null}>
-        <AgentGrid data={data.agents} total={data.total} pageSize={pageSize} />
+        <AgentGrid data={data} pageSize={pageSize} />
       </Suspense>
     </div>
   )

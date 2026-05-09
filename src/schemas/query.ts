@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
 export const paginationSchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
-  pageSize: z.coerce.number().int().min(1).max(100).default(10),
+  page: z.coerce.number().int().min(1).default(1).optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).default(10).optional(),
   sortBy: z.string().optional(),
-  sortOrder: z.enum(['asc', 'desc']).optional(),
+  sortDirection: z.enum(['asc', 'desc']).optional(),
   searchField: z.string().optional(),
   searchValue: z.string().optional()
 })

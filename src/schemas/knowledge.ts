@@ -1,4 +1,5 @@
 import z from 'zod'
+import { paginationSchema } from './query'
 
 export const knowledgeIdSchema = z.string().trim().min(1, '知识库ID不能为空')
 
@@ -27,12 +28,12 @@ export const knowledgeDocSourceSchema = z.discriminatedUnion('mode', [
   z.object({
     mode: z.literal(KNOWLEDGE_SOURCE_MODE.DOC_CATE),
     categoryId: knowledgeDocCateIdSchema,
-    documentIds: z.undefined()
+    docIds: z.undefined()
   }),
   z.object({
     mode: z.literal(KNOWLEDGE_SOURCE_MODE.DOC),
     categoryId: z.undefined(),
-    documentIds: z.array(knowledgeDocIdSchema).min(1, '至少需要一个文档ID')
+    docIds: z.array(knowledgeDocIdSchema).min(1, '至少需要一个文档ID')
   })
 ])
 
@@ -84,15 +85,8 @@ export const knowledgeCreateSchema = z.object({
   docSource: knowledgeDocSourceSchema
 })
 
-export const fetchKnowledgeDocumentsParamsSchema = z.object({
-  knowledgeId: knowledgeIdSchema,
-  filename: z.string().trim().optional(),
-  sortBy: z
-    .enum(['filename', 'status', 'chunkCount', 'lastIndexedAt', 'createdAt'])
-    .optional(),
-  sortDirection: z.enum(['asc', 'desc']).optional(),
-  page: z.coerce.number().int().positive(),
-  pageSize: z.coerce.number().int().positive()
+export const fetchKnowledgeDocsParamsSchema = paginationSchema.extend({
+  knowledgeId: knowledgeIdSchema
 })
 
 export const knowledgeEditSchema = knowledgeSchema
@@ -117,6 +111,6 @@ export type KnowledgeSourceModeValues = z.infer<
   typeof knowledgeSourceModeSchema
 >
 
-export type FetchKnowledgeDocumentsParams = z.infer<
-  typeof fetchKnowledgeDocumentsParamsSchema
+export type FetchKnowledgeDocsParams = z.infer<
+  typeof fetchKnowledgeDocsParamsSchema
 >

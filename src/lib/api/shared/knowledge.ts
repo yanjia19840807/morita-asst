@@ -1,6 +1,6 @@
-import type { FetchKnowledgeDocumentsResult } from '@/dal/knowledges'
+import type { FetchKnowledgeDocsResult } from '@/dal/knowledges'
 
-export type KnowledgeDocumentListItem = {
+export type KnowledgeDocListItem = {
   id: string
   status: string
   chunkCount: number
@@ -8,13 +8,13 @@ export type KnowledgeDocumentListItem = {
   lastIndexedAt: string | null
   createdAt: string
   updatedAt: string
-  document: {
+  doc: {
     id: string
     filename: string
     fileSize: number | null
     mimeType: string | null
     createdAt: string
-    category: {
+    docCate: {
       id: string
       name: string
       slug: string
@@ -22,34 +22,34 @@ export type KnowledgeDocumentListItem = {
   }
 }
 
-export type FetchKnowledgeDocumentsListResult = {
-  documents: KnowledgeDocumentListItem[]
+export type FetchKnowledgeDocsListResult = {
+  docs: KnowledgeDocListItem[]
   total: number
 }
 
-export function toFetchKnowledgeDocumentsListResult(
-  result: FetchKnowledgeDocumentsResult
-): FetchKnowledgeDocumentsListResult {
+export function toFetchKnowledgeDocsListResult(
+  result: FetchKnowledgeDocsResult
+): FetchKnowledgeDocsListResult {
   return {
-    documents: result.documents.map(knowledgeDocument => ({
-      id: knowledgeDocument.id,
-      status: knowledgeDocument.status,
-      chunkCount: knowledgeDocument.chunkCount,
-      errorMessage: knowledgeDocument.errorMessage ?? null,
-      lastIndexedAt: knowledgeDocument.lastIndexedAt?.toISOString() ?? null,
-      createdAt: knowledgeDocument.createdAt.toISOString(),
-      updatedAt: knowledgeDocument.updatedAt.toISOString(),
-      document: {
-        id: knowledgeDocument.document.id,
-        filename: knowledgeDocument.document.filename,
-        fileSize: knowledgeDocument.document.fileSize,
-        mimeType: knowledgeDocument.document.mimeType,
-        createdAt: knowledgeDocument.document.createdAt.toISOString(),
-        category: knowledgeDocument.document.category
+    docs: result.docs.map(knowledgeDoc => ({
+      id: knowledgeDoc.id,
+      status: knowledgeDoc.status,
+      chunkCount: knowledgeDoc.chunkCount,
+      errorMessage: knowledgeDoc.errorMessage ?? null,
+      lastIndexedAt: knowledgeDoc.lastIndexedAt?.toISOString() ?? null,
+      createdAt: knowledgeDoc.createdAt.toISOString(),
+      updatedAt: knowledgeDoc.updatedAt.toISOString(),
+      doc: {
+        id: knowledgeDoc.doc.id,
+        filename: knowledgeDoc.doc.filename,
+        fileSize: knowledgeDoc.doc.fileSize,
+        mimeType: knowledgeDoc.doc.mimeType,
+        createdAt: knowledgeDoc.doc.createdAt.toISOString(),
+        docCate: knowledgeDoc.doc.docCate
           ? {
-              id: knowledgeDocument.document.category.id,
-              name: knowledgeDocument.document.category.name,
-              slug: knowledgeDocument.document.category.slug
+              id: knowledgeDoc.doc.docCate.id,
+              name: knowledgeDoc.doc.docCate.name,
+              slug: knowledgeDoc.doc.docCate.slug
             }
           : null
       }

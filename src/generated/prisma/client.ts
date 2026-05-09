@@ -77,20 +77,20 @@ export type PromptProfile = Prisma.PromptProfileModel
  */
 export type Knowledge = Prisma.KnowledgeModel
 /**
- * Model KnowledgeDocument
+ * Model KnowledgeDoc
  * 
  */
-export type KnowledgeDocument = Prisma.KnowledgeDocumentModel
+export type KnowledgeDoc = Prisma.KnowledgeDocModel
 /**
- * Model DocumentCategory
+ * Model DocCate
  * 
  */
-export type DocumentCategory = Prisma.DocumentCategoryModel
+export type DocCate = Prisma.DocCateModel
 /**
- * Model Document
+ * Model Doc
  * 
  */
-export type Document = Prisma.DocumentModel
+export type Doc = Prisma.DocModel
 /**
  * Model Chunk
  * 

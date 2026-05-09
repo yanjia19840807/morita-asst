@@ -1,4 +1,4 @@
-import type { DocumentCategory } from '@/generated/prisma/client'
+import type { DocCate } from '@/generated/prisma/client'
 import type { FetchDocsResult } from '@/dal/docs'
 
 export type SelectDocCateItem = {
@@ -15,35 +15,31 @@ export type SelectDocItem = {
 }
 
 export type FetchSelectDocsResult = {
-  documents: SelectDocItem[]
+  docs: SelectDocItem[]
   total: number
 }
 
-export function toSelectDocCateItem(
-  category: DocumentCategory
-): SelectDocCateItem {
+export function toSelectDocCateItem(docCate: DocCate): SelectDocCateItem {
   return {
-    id: category.id,
-    name: category.name
+    id: docCate.id,
+    name: docCate.name
   }
 }
 
-export function toSelectDocCateItems(
-  categories: DocumentCategory[]
-): SelectDocCateItem[] {
-  return categories.map(toSelectDocCateItem)
+export function toSelectDocCateItems(docCates: DocCate[]): SelectDocCateItem[] {
+  return docCates.map(toSelectDocCateItem)
 }
 
 export function toFetchSelectDocsResult(
   result: FetchDocsResult
 ): FetchSelectDocsResult {
   return {
-    documents: result.documents.map(document => ({
-      id: document.id,
-      filename: document.filename,
-      fileSize: document.fileSize,
-      mimeType: document.mimeType,
-      createdAt: document.createdAt.toISOString()
+    docs: result.docs.map(doc => ({
+      id: doc.id,
+      filename: doc.filename,
+      fileSize: doc.fileSize,
+      mimeType: doc.mimeType,
+      createdAt: doc.createdAt.toISOString()
     })),
     total: result.total
   }

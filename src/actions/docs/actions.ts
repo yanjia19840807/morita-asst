@@ -13,7 +13,7 @@ import {
   DocCateEditFormValues,
   DocCateReorderValues
 } from '@/schemas/doc'
-import { DocumentCategory } from '@/generated/prisma/client'
+import { DocCate } from '@/generated/prisma/client'
 import { ResponseResult } from '@/lib/api/shared/response'
 import {
   handleActionError,
@@ -36,7 +36,7 @@ export async function createDocAction(
 
 export async function createDocCateAction(
   data: DocCateCreateFormValues
-): Promise<ResponseResult<DocumentCategory>> {
+): Promise<ResponseResult<DocCate>> {
   try {
     const cate = await createDocCate(data)
     revalidatePath(docPath)
@@ -48,7 +48,7 @@ export async function createDocCateAction(
 
 export async function editDocCateAction(
   data: DocCateEditFormValues
-): Promise<ResponseResult<DocumentCategory>> {
+): Promise<ResponseResult<DocCate>> {
   try {
     const cate = await editDocCate(data)
     revalidatePath(docPath)
@@ -60,7 +60,7 @@ export async function editDocCateAction(
 
 export async function reorderDocCatesAction(
   data: DocCateReorderValues
-): Promise<ResponseResult<DocumentCategory[]>> {
+): Promise<ResponseResult<DocCate[]>> {
   try {
     const categories = await reorderDocCates(data)
     revalidatePath(docPath)

@@ -195,11 +195,11 @@ export type EnumKnowledgeSourceModeWithAggregatesFilter<$PrismaModel = never> = 
   _max?: Prisma.NestedEnumKnowledgeSourceModeFilter<$PrismaModel>
 }
 
-export type EnumKnowledgeDocumentStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.KnowledgeDocumentStatus | Prisma.EnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.KnowledgeDocumentStatus[] | Prisma.ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.KnowledgeDocumentStatus[] | Prisma.ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumKnowledgeDocumentStatusFilter<$PrismaModel> | $Enums.KnowledgeDocumentStatus
+export type EnumKnowledgeDocStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.KnowledgeDocStatus | Prisma.EnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.KnowledgeDocStatus[] | Prisma.ListEnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.KnowledgeDocStatus[] | Prisma.ListEnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumKnowledgeDocStatusFilter<$PrismaModel> | $Enums.KnowledgeDocStatus
 }
 
 export type IntFilter<$PrismaModel = never> = {
@@ -237,14 +237,14 @@ export type JsonNullableFilterBase<$PrismaModel = never> = {
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
 }
 
-export type EnumKnowledgeDocumentStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.KnowledgeDocumentStatus | Prisma.EnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.KnowledgeDocumentStatus[] | Prisma.ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.KnowledgeDocumentStatus[] | Prisma.ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumKnowledgeDocumentStatusWithAggregatesFilter<$PrismaModel> | $Enums.KnowledgeDocumentStatus
+export type EnumKnowledgeDocStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.KnowledgeDocStatus | Prisma.EnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.KnowledgeDocStatus[] | Prisma.ListEnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.KnowledgeDocStatus[] | Prisma.ListEnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumKnowledgeDocStatusWithAggregatesFilter<$PrismaModel> | $Enums.KnowledgeDocStatus
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumKnowledgeDocumentStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumKnowledgeDocumentStatusFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumKnowledgeDocStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumKnowledgeDocStatusFilter<$PrismaModel>
 }
 
 export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -579,21 +579,21 @@ export type NestedEnumKnowledgeSourceModeWithAggregatesFilter<$PrismaModel = nev
   _max?: Prisma.NestedEnumKnowledgeSourceModeFilter<$PrismaModel>
 }
 
-export type NestedEnumKnowledgeDocumentStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.KnowledgeDocumentStatus | Prisma.EnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.KnowledgeDocumentStatus[] | Prisma.ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.KnowledgeDocumentStatus[] | Prisma.ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumKnowledgeDocumentStatusFilter<$PrismaModel> | $Enums.KnowledgeDocumentStatus
+export type NestedEnumKnowledgeDocStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.KnowledgeDocStatus | Prisma.EnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.KnowledgeDocStatus[] | Prisma.ListEnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.KnowledgeDocStatus[] | Prisma.ListEnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumKnowledgeDocStatusFilter<$PrismaModel> | $Enums.KnowledgeDocStatus
 }
 
-export type NestedEnumKnowledgeDocumentStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.KnowledgeDocumentStatus | Prisma.EnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.KnowledgeDocumentStatus[] | Prisma.ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.KnowledgeDocumentStatus[] | Prisma.ListEnumKnowledgeDocumentStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumKnowledgeDocumentStatusWithAggregatesFilter<$PrismaModel> | $Enums.KnowledgeDocumentStatus
+export type NestedEnumKnowledgeDocStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.KnowledgeDocStatus | Prisma.EnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.KnowledgeDocStatus[] | Prisma.ListEnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.KnowledgeDocStatus[] | Prisma.ListEnumKnowledgeDocStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumKnowledgeDocStatusWithAggregatesFilter<$PrismaModel> | $Enums.KnowledgeDocStatus
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumKnowledgeDocumentStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumKnowledgeDocumentStatusFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumKnowledgeDocStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumKnowledgeDocStatusFilter<$PrismaModel>
 }
 
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {

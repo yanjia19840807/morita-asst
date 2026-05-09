@@ -18,7 +18,7 @@ import {
   Table
 } from '../ui/table'
 import { Button } from '../ui/button'
-import { DocumentCategory } from '@/generated/prisma/client'
+import { DocCate } from '@/generated/prisma/client'
 import { docCateColumns } from './doc-cate-table-columns'
 import ConfirmDialog from '../confirm-dialog'
 import { useTableSelection } from '@/hooks/use-table-selection'
@@ -31,7 +31,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
 interface DocCateTableProps {
-  data: DocumentCategory[]
+  data: DocCate[]
 }
 
 function DocCateTable({ data }: DocCateTableProps) {
@@ -99,7 +99,7 @@ function DocCateTable({ data }: DocCateTableProps) {
 
   const table = useReactTable({
     data,
-    columns: docCateColumns as ColumnDef<DocumentCategory>[],
+    columns: docCateColumns as ColumnDef<DocCate>[],
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: row => !row.original.isDefault && isBulkMode,
     state: {

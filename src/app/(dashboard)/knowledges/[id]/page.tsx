@@ -1,11 +1,8 @@
 import { KnowledgeDetail } from '@/components/knowledges/knowledge-detail'
-import { fetchKnowledgeById, fetchKnowledgeDocuments } from '@/dal/knowledges'
-import {
-  getKnowledgeDocumentsQueryKey,
-  initialKnowledgeDocumentsParams
-} from '@/lib/api/client/knowledge'
-import { toFetchKnowledgeDocumentsListResult } from '@/lib/api/shared/knowledge'
+import { fetchKnowledgeById, fetchKnowledgeDocs } from '@/dal/knowledges'
+import { toFetchKnowledgeDocsListResult } from '@/lib/api/shared/knowledge'
 import { getQueryClient } from '@/lib/get-query-client'
+import { FetchKnowledgeDocsParams } from '@/schemas/knowledge'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 
 export default async function KnowledgeDetailPage({
@@ -17,17 +14,15 @@ export default async function KnowledgeDetailPage({
   const queryClient = getQueryClient()
   const knowledge = await fetchKnowledgeById(id)
 
+  const knowledgeDocsParams: FetchKnowledgeDocsParams = {
+    knowledgeId: id
+  }
+
   await queryClient.prefetchQuery({
-    queryKey: getKnowledgeDocumentsQueryKey({
-      knowledgeId: id,
-      ...initialKnowledgeDocumentsParams
-    }),
+    queryKey: ['knowledge-docs', knowledgeDocsParams],
     queryFn: async () =>
-      toFetchKnowledgeDocumentsListResult(
-        await fetchKnowledgeDocuments({
-          knowledgeId: id,
-          ...initialKnowledgeDocumentsParams
-        })
+      toFetchKnowledgeDocsListResult(
+        await fetchKnowledgeDocs(knowledgeDocsParams)
       )
   })
 

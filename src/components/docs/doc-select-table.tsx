@@ -33,9 +33,9 @@ import {
 import { TableColumnHeader } from '../table/table-column-header'
 import TablePagination from '../table/table-pagination'
 
-type SelectableDocument = FetchSelectDocsResult['documents'][number]
+type SelectableDoc = FetchSelectDocsResult['docs'][number]
 
-const docSelectColumns: ColumnDef<SelectableDocument>[] = [
+const docSelectColumns: ColumnDef<SelectableDoc>[] = [
   {
     id: 'select',
     enableSorting: false,
@@ -91,16 +91,16 @@ const docSelectColumns: ColumnDef<SelectableDocument>[] = [
 interface DocSelectTableProps {
   categoryId?: string
   pageSize: number
-  selectedDocumentIds: string[]
-  onSelectedDocumentIdsChange: (ids: string[]) => void
+  selectedDocIds: string[]
+  onSelectedDocIdsChange: (ids: string[]) => void
   disabled?: boolean
 }
 
 export function DocSelectTable({
   categoryId,
   pageSize,
-  selectedDocumentIds,
-  onSelectedDocumentIdsChange,
+  selectedDocIds,
+  onSelectedDocIdsChange,
   disabled = false
 }: DocSelectTableProps) {
   const [searchText, setSearchText] = useState('')
@@ -113,7 +113,8 @@ export function DocSelectTable({
   )
 
   const docsParams = {
-    filename: searchText || undefined,
+    searchField: 'filename' as const,
+    searchValue: searchText || undefined,
     categoryId: categoryId || undefined,
     sortBy,
     sortDirection,
@@ -127,23 +128,20 @@ export function DocSelectTable({
     placeholderData: previousData => previousData
   })
 
-  const data = docsQuery.data?.documents ?? []
+  const data = docsQuery.data?.docs ?? []
   const total = docsQuery.data?.total ?? 0
   const isLoading = docsQuery.isFetching && !docsQuery.data
   const error = docsQuery.error ? getErrorMessage(docsQuery.error) : null
 
-  const selectedIds = selectedDocumentIds ?? []
+  const selectedIds = selectedDocIds ?? []
 
-  const rowSelection = data.reduce<RowSelectionState>(
-    (accumulator, document) => {
-      if (selectedIds.includes(document.id)) {
-        accumulator[document.id] = true
-      }
+  const rowSelection = data.reduce<RowSelectionState>((accumulator, doc) => {
+    if (selectedIds.includes(doc.id)) {
+      accumulator[doc.id] = true
+    }
 
-      return accumulator
-    },
-    {}
-  )
+    return accumulator
+  }, {})
 
   const sorting: SortingState = [
     {
@@ -155,13 +153,13 @@ export function DocSelectTable({
   const handleRowSelectionChange: OnChangeFn<RowSelectionState> = updater => {
     const nextRowSelection =
       typeof updater === 'function' ? updater(rowSelection) : updater
-    const currentPageIds = new Set(data.map(document => document.id))
+    const currentPageIds = new Set(data.map(doc => doc.id))
     const preservedIds = selectedIds.filter(id => !currentPageIds.has(id))
     const nextPageSelectedIds = data
-      .filter(document => nextRowSelection[document.id])
-      .map(document => document.id)
+      .filter(doc => nextRowSelection[doc.id])
+      .map(doc => doc.id)
 
-    onSelectedDocumentIdsChange([...preservedIds, ...nextPageSelectedIds])
+    onSelectedDocIdsChange([...preservedIds, ...nextPageSelectedIds])
   }
 
   const handleSortingChange: OnChangeFn<SortingState> = updater => {

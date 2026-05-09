@@ -249,7 +249,7 @@ export default function ProfileEditForm({
   }
 
   return (
-    <div>
+    <div className='flex min-h-0 flex-1 flex-col gap-3'>
       <PageTitle
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
