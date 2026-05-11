@@ -2,11 +2,11 @@ import { Suspense } from 'react'
 import AgentGrid from '@/components/agents/agent-grid'
 import PageTitle from '@/components/layout/page-title'
 import { Button } from '@/components/ui/button'
-import { fetchAgents } from '@/dal/agent'
+import { fetchAgents } from '@/modules/agents/service'
 import { getPage } from '@/lib/pagination'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
-import { PaginationParams } from '@/schemas/query'
+import { PaginationParams } from '@/lib/query'
 
 const pageSize = 12
 

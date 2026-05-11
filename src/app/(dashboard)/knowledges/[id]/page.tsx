@@ -1,9 +1,12 @@
 import { KnowledgeDetail } from '@/components/knowledges/knowledge-detail'
-import { fetchKnowledgeById, fetchKnowledgeDocs } from '@/dal/knowledges'
-import { toFetchKnowledgeDocsListResult } from '@/lib/api/shared/knowledge'
 import { getQueryClient } from '@/lib/get-query-client'
-import { FetchKnowledgeDocsParams } from '@/schemas/knowledge'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
+import { toFetchKnowledgeDocsListResult } from '@/modules/knowledges/mapper'
+import { FetchKnowledgeDocsParams } from '@/modules/knowledges/schemas'
+import {
+  fetchKnowledgeById,
+  fetchKnowledgeDocs
+} from '@/modules/knowledges/service'
 
 export default async function KnowledgeDetailPage({
   params

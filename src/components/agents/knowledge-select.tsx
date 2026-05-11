@@ -1,7 +1,7 @@
 'use client'
 
 import { use } from 'react'
-import type { KnowledgeOption } from '@/dal/knowledges'
+import type { KnowledgeOptionDto } from '@/modules/knowledges/dto'
 import {
   Combobox,
   ComboboxContent,
@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/combobox'
 
 interface KnowledgeSelectProps {
-  knowledgePromise: Promise<Array<KnowledgeOption>>
+  knowledgePromise: Promise<Array<KnowledgeOptionDto>>
   value: string | undefined
   onChange: (value: string | undefined) => void
   onBlur: () => void
@@ -24,10 +24,7 @@ interface KnowledgeSelectProps {
 export function KnowledgeSelect({
   knowledgePromise,
   value,
-  onChange,
-  onBlur,
-  disabled,
-  invalid
+  onChange
 }: KnowledgeSelectProps) {
   const knowledges = use(knowledgePromise)
   const anchor = useComboboxAnchor()

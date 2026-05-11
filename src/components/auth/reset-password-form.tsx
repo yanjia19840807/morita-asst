@@ -1,6 +1,9 @@
 'use client'
 
-import { ResetPasswordFormValues, resetPasswordSchema } from '@/schemas/auth'
+import {
+  ResetPasswordFormValues,
+  resetPasswordSchema
+} from '@/modules/auth/schemas'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -30,7 +33,7 @@ import {
   UseFormStateReturn
 } from 'react-hook-form'
 import { useTransition } from 'react'
-import { resetPasswordAction } from '@/actions/auth/actions'
+import { resetPasswordAction } from '@/modules/auth/actions'
 import { toast } from 'sonner'
 
 export default function ResetPasswordForm() {

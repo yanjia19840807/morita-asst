@@ -1,11 +1,11 @@
-import { fetchKnowledges } from '@/dal/knowledges'
+import { fetchKnowledges } from '@/modules/knowledges/service'
 import { getPage } from '@/lib/pagination'
 import PageTitle from '@/components/layout/page-title'
 import { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
-import { PaginationParams } from '@/schemas/query'
+import { PaginationParams } from '@/lib/query'
 import KnowledgeGrid from '@/components/knowledges/knowledge-grid'
 
 const CreateBtn = function () {

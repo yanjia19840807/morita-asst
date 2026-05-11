@@ -25,8 +25,7 @@ export function useDocsParams() {
     {
       startTransition,
       shallow: false,
-      history: 'push',
-      limitUrlUpdates: debounce(250)
+      history: 'push'
     }
   )
 
@@ -34,14 +33,19 @@ export function useDocsParams() {
     nextSearchField: 'filename' | null,
     nextSearchValue: string | null
   ) => {
-    setParams({
-      searchField: nextSearchField,
-      searchValue: nextSearchValue,
-      page: 1
-    })
+    setParams(
+      {
+        searchField: nextSearchField,
+        searchValue: nextSearchValue,
+        page: 1
+      },
+      {
+        limitUrlUpdates: debounce(500)
+      }
+    )
   }
 
-  const setCategoryId = (value: string | null) => {
+  const setCategoryId = (value: string) => {
     setParams({ categoryId: value, page: 1 })
   }
 

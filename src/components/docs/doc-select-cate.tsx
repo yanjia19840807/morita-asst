@@ -1,8 +1,8 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { docCatesQueryKey, fetchSelectDocCates } from '@/lib/api/client/doc'
-import { getErrorMessage } from '@/lib/api/shared/response'
+import { docCatesQueryKey, fetchSelectDocCates } from '@/modules/docs/client'
+import { getErrorMessage } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { FieldContent, FieldLabel, FieldTitle } from '@/components/ui/field'
 import {

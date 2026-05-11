@@ -5,7 +5,7 @@ import {
   KNOWLEDGE_SOURCE_MODE,
   type KnowledgeCreateFormValues,
   type KnowledgeSourceModeValues
-} from '@/schemas/knowledge'
+} from '@/modules/knowledges/schemas'
 import { DocSelectTable } from './doc-select-table'
 import { DocSelectTab } from './doc-select-tab'
 import { DocSelectCate } from './doc-select-cate'

@@ -26,10 +26,10 @@ import {
   FieldSet
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { PromptProfileFormValues } from '@/schemas/prompt-profile'
 import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
-import { ResponseResult } from '@/lib/api/shared/response'
+import type { ResponseResult } from '@/lib/api/response'
 import MDEditor from '@/components/md-editor'
+import { PromptProfileFormValues } from '@/modules/prompt-profiles/schemas'
 
 type PromptProfileFormInput = PromptProfileFormValues & {
   id?: string

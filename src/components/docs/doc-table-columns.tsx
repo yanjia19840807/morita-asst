@@ -7,9 +7,9 @@ import Link from 'next/link'
 import { TableColumnHeader } from '../table/table-column-header'
 import { DocRowActions } from './doc-row-actions'
 import { Checkbox } from '../ui/checkbox'
-import type { DocRow } from '@/dal/docs'
+import type { DocRowDto } from '@/modules/docs/dto'
 
-export const docColumns: ColumnDef<DocRow>[] = [
+export const docColumns: ColumnDef<DocRowDto>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -36,7 +36,7 @@ export const docColumns: ColumnDef<DocRow>[] = [
     ),
     cell: ({ row }) => (
       <Link
-        href={`/documents/${row.original.id}`}
+        href={`/docs/${row.original.id}`}
         className='text-primary font-medium underline'
       >
         {row.original.filename}

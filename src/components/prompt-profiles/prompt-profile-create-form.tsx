@@ -3,8 +3,8 @@
 import {
   PromptProfileCreateFormValues,
   promptProfileCreateSchema
-} from '@/schemas/prompt-profile'
-import { createPromptProfileAction } from '@/actions/prompt-profiles/actions'
+} from '@/modules/prompt-profiles/schemas'
+import { createPromptProfileAction } from '@/modules/prompt-profiles/actions'
 import { PromptProfileForm } from './prompt-profile-form'
 
 export function PromptProfileCreateForm() {

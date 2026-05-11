@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/table'
 import { useTransition } from 'react'
 import { userColumns } from './user-table-columns'
-import type { UserRow } from '@/dal/auth'
+import type { AuthUserDto } from '@/modules/auth/dto'
 import TableFooterSection from '../table/table-footer-section'
 import { TableQsPagination } from '../table/table-qs-pagination'
 import TableActionSection from '../table/table-action-section'
@@ -28,14 +28,14 @@ import {
   bulkBanUsersAction,
   bulkRemoveUsersAction,
   bulkUnbanUsersAction
-} from '@/actions/auth/actions'
+} from '@/modules/auth/actions'
 import { toast } from 'sonner'
 import ConfirmDialog from '../confirm-dialog'
 import { useTableSelection } from '@/hooks/use-table-selection'
 import { useTableQsSort } from '@/hooks/use-table-qs-sort'
 
 interface UserTableProps {
-  data: UserRow[]
+  data: AuthUserDto[]
   total: number
   pageSize: number
 }
@@ -49,7 +49,7 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
     rowSelection,
     clearSelection,
     onRowSelectionChange
-  } = useTableSelection(data)
+  } = useTableSelection(data.map(item => item.id))
   const [isPending, startTransition] = useTransition()
   const { sorting, onSortingChange } = useTableQsSort()
 
@@ -106,7 +106,7 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
 
   const table = useReactTable({
     data,
-    columns: userColumns as ColumnDef<UserRow>[],
+    columns: userColumns as ColumnDef<AuthUserDto>[],
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
     enableRowSelection: isBulkMode,

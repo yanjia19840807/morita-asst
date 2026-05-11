@@ -6,7 +6,7 @@ import {
   SidebarGroupContent,
   SidebarHeader
 } from '@/components/layout/sidebar'
-import { fetchDocCates } from '@/dal/docs'
+import { fetchDocCates } from '@/modules/docs/service'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 
@@ -18,7 +18,7 @@ export default async function DocCateSidebar() {
       <SidebarHeader className='flex flex-row items-center justify-between gap-3'>
         <span className='text-base font-medium'>类目</span>
         <Button size='sm' variant='link' asChild>
-          <Link href='/documents/categories'>管理</Link>
+          <Link href='/docs/categories'>管理</Link>
         </Button>
       </SidebarHeader>
       <SidebarContent>

@@ -1,6 +1,9 @@
 'use client'
 
-import { EmailSignUpFormValues, emailSignUpSchema } from '@/schemas/auth'
+import {
+  EmailSignUpFormValues,
+  emailSignUpSchema
+} from '@/modules/auth/schemas'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -30,8 +33,8 @@ import {
   UseFormStateReturn
 } from 'react-hook-form'
 import { toast } from 'sonner'
-import { signUpEmailAction } from '@/actions/auth/actions'
-import { authClient } from '@/lib/auth-client'
+import { signUpEmailAction } from '@/modules/auth/actions'
+import { authClient } from '@/modules/auth/client'
 
 export default function EmailSignUpForm() {
   const router = useRouter()

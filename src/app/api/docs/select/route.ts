@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
 import z from 'zod'
-import { fetchDocs } from '@/dal/docs'
-import { toFetchSelectDocsResult } from '@/lib/api/shared/doc'
-import { handleApiError, handleApiResult } from '@/lib/api/server/response'
-import { fetchDocsParamsSchema } from '@/schemas/doc'
-import { ValidationError } from '@/lib/api/server/errors'
-import { withRole } from '@/lib/api/server/with-role'
+import { withRole } from '@/modules/auth/api'
+import { toFetchSelectDocsResult } from '@/modules/docs/mapper'
+import { fetchDocsParamsSchema } from '@/modules/docs/schemas'
+import { fetchDocs } from '@/modules/docs/service'
+import { ValidationError } from '@/lib/api/errors'
+import { handleApiError, handleApiResult } from '@/lib/api/response'
 
 export const GET = withRole(['admin'], async (request: NextRequest) => {
   const params = Object.fromEntries(request.nextUrl.searchParams.entries())

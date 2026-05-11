@@ -1,6 +1,6 @@
 'use client'
 
-import type { AgentRow } from '@/dal/agent'
+import type { AgentRowDto } from '@/modules/agents/dto'
 import {
   Card,
   CardAction,
@@ -13,7 +13,7 @@ import {
 import { Button } from '../ui/button'
 
 interface AgentCardProps {
-  agent: AgentRow
+  agent: AgentRowDto
 }
 
 const statusMap = {

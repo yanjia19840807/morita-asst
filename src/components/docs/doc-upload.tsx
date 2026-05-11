@@ -11,7 +11,11 @@ import {
 } from '../ui/file-upload'
 import { Upload, X } from 'lucide-react'
 import { Button } from '../ui/button'
-import { DOC_ACCEPT_TYPES, DOC_MAX_FILES, DOC_MAX_SIZE } from '@/schemas/doc'
+import {
+  DOC_ACCEPT_TYPES,
+  DOC_MAX_FILES,
+  DOC_MAX_SIZE
+} from '@/modules/docs/schemas'
 import React from 'react'
 
 interface DocUploadProps {

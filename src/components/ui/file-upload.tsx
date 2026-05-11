@@ -164,6 +164,7 @@ interface FileUploadContextValue {
   disabled: boolean
   dir: Direction
   inputRef: React.RefObject<HTMLInputElement | null>
+  onFilesChange: (files: File[]) => void
   urlCache: WeakMap<File, string>
 }
 
@@ -253,6 +254,11 @@ function FileUpload(props: FileUploadProps) {
   const files = useLazyRef<Map<File, FileState>>(() => new Map()).current
   const urlCache = useLazyRef(() => new WeakMap<File, string>()).current
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const stateRef = React.useRef<StoreState>({
+    files,
+    dragOver: false,
+    invalid
+  })
   const isControlled = value !== undefined
 
   const propsRef = useAsRef({
@@ -265,12 +271,6 @@ function FileUpload(props: FileUploadProps) {
   })
 
   const store = React.useMemo<Store>(() => {
-    let state: StoreState = {
-      files,
-      dragOver: false,
-      invalid: invalid
-    }
-
     function reducer(state: StoreState, action: StoreAction): StoreState {
       switch (action.type) {
         case 'ADD_FILES': {
@@ -396,9 +396,9 @@ function FileUpload(props: FileUploadProps) {
     }
 
     return {
-      getState: () => state,
+      getState: () => stateRef.current,
       dispatch: action => {
-        state = reducer(state, action)
+        stateRef.current = reducer(stateRef.current, action)
         for (const listener of listeners) {
           listener()
         }
@@ -408,7 +408,7 @@ function FileUpload(props: FileUploadProps) {
         return () => listeners.delete(listener)
       }
     }
-  }, [listeners, files, invalid, propsRef, urlCache])
+  }, [files, listeners, propsRef, stateRef, urlCache])
 
   const acceptTypes = React.useMemo(
     () => accept?.split(',').map(t => t.trim()) ?? null,
@@ -655,9 +655,20 @@ function FileUpload(props: FileUploadProps) {
       dir,
       disabled,
       inputRef,
+      onFilesChange,
       urlCache
     }),
-    [dropzoneId, inputId, listId, labelId, dir, disabled, urlCache]
+    [
+      disabled,
+      dir,
+      dropzoneId,
+      inputId,
+      inputRef,
+      labelId,
+      listId,
+      onFilesChange,
+      urlCache
+    ]
   )
 
   const RootPrimitive = asChild ? SlotPrimitive.Slot : 'div'
@@ -804,18 +815,9 @@ function FileUploadDropzone(props: FileUploadDropzoneProps) {
       store.dispatch({ type: 'SET_DRAG_OVER', dragOver: false })
 
       const files = Array.from(event.dataTransfer.files)
-      const inputElement = context.inputRef.current
-      if (!inputElement) return
-
-      const dataTransfer = new DataTransfer()
-      for (const file of files) {
-        dataTransfer.items.add(file)
-      }
-
-      inputElement.files = dataTransfer.files
-      inputElement.dispatchEvent(new Event('change', { bubbles: true }))
+      context.onFilesChange(files)
     },
-    [store, context.inputRef, propsRef]
+    [context, propsRef, store]
   )
 
   const onPaste = React.useCallback(
@@ -843,18 +845,9 @@ function FileUploadDropzone(props: FileUploadDropzoneProps) {
 
       if (files.length === 0) return
 
-      const inputElement = context.inputRef.current
-      if (!inputElement) return
-
-      const dataTransfer = new DataTransfer()
-      for (const file of files) {
-        dataTransfer.items.add(file)
-      }
-
-      inputElement.files = dataTransfer.files
-      inputElement.dispatchEvent(new Event('change', { bubbles: true }))
+      context.onFilesChange(files)
     },
-    [store, context.inputRef, propsRef]
+    [context, propsRef, store]
   )
 
   const onKeyDown = React.useCallback(

@@ -1,7 +1,7 @@
 'use client'
 
-import { createUserAction } from '@/actions/auth/actions'
-import { UserCreateFormValues, userCreateSchema } from '@/schemas/auth'
+import { createUserAction } from '@/modules/auth/actions'
+import { UserCreateFormValues, userCreateSchema } from '@/modules/auth/schemas'
 import { UserForm } from './user-form'
 
 export function UserCreateForm() {

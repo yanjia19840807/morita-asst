@@ -1,5 +1,8 @@
 'use client'
-import { ForgotPasswordFormValues, forgotPasswordSchema } from '@/schemas/auth'
+import {
+  ForgotPasswordFormValues,
+  forgotPasswordSchema
+} from '@/modules/auth/schemas'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -16,7 +19,6 @@ import {
   FieldLabel
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { useAuthState } from '@/hooks/use-auth-state'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -28,7 +30,7 @@ import {
   useForm,
   UseFormStateReturn
 } from 'react-hook-form'
-import { forgotPasswordAction } from '@/actions/auth/actions'
+import { forgotPasswordAction } from '@/modules/auth/actions'
 import { toast } from 'sonner'
 import { LoaderCircle } from 'lucide-react'
 

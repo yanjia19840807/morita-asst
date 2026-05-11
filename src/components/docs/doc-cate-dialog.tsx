@@ -30,9 +30,12 @@ import {
 import { toast } from 'sonner'
 import { Input } from '../ui/input'
 import React, { useState, useTransition } from 'react'
-import { DocCateCreateFormValues, docCateCreateFormSchema } from '@/schemas/doc'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createDocCateAction } from '@/actions/docs/actions'
+import {
+  DocCateCreateFormValues,
+  docCateCreateFormSchema
+} from '@/modules/docs/schemas'
+import { createDocCateAction } from '@/modules/docs/actions'
 
 export default function DocCateDialog({
   children

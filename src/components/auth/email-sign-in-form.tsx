@@ -1,6 +1,9 @@
 'use client'
 
-import { EmailSignInFormValues, emailSignInSchema } from '@/schemas/auth'
+import {
+  EmailSignInFormValues,
+  emailSignInSchema
+} from '@/modules/auth/schemas'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -30,8 +33,8 @@ import { useRouter } from 'next/navigation'
 import { LoaderCircle } from 'lucide-react'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
-import { signInEmailAction } from '@/actions/auth/actions'
-import { authClient } from '@/lib/auth-client'
+import { signInEmailAction } from '@/modules/auth/actions'
+import { authClient } from '@/modules/auth/client'
 
 export default function EmailSignInForm() {
   const router = useRouter()

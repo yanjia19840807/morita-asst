@@ -1,6 +1,6 @@
 'use client'
 
-import type { AgentsWithTotal } from '@/dal/agent'
+import type { AgentsWithTotalDto } from '@/modules/agents/dto'
 import TableActionSection from '../table/table-action-section'
 import TableFooterSection from '../table/table-footer-section'
 import { TableQsPagination } from '../table/table-qs-pagination'
@@ -8,7 +8,7 @@ import AgentCard from './agent-card'
 import AgentSearch from './agent-search'
 
 interface AgentGridProps {
-  data: AgentsWithTotal
+  data: AgentsWithTotalDto
   pageSize: number
 }
 

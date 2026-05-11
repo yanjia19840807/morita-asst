@@ -1,14 +1,14 @@
 import KnowledgeForm from '@/components/knowledges/knowledge-form'
-import { fetchDocCates, fetchDocs } from '@/dal/docs'
+import { fetchDocCates, fetchDocs } from '@/modules/docs/service'
 import {
   docCatesQueryKey,
   getDocsQueryKey,
   initialDocsParams
-} from '@/lib/api/client/doc'
+} from '@/modules/docs/client'
 import {
   toFetchSelectDocsResult,
   toSelectDocCateItems
-} from '@/lib/api/shared/doc'
+} from '@/modules/docs/mapper'
 import { getQueryClient } from '@/lib/get-query-client'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 

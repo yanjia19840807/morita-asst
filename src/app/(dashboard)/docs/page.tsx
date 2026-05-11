@@ -6,14 +6,14 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import DocCateSidebar from '@/components/docs/doc-cate-sidebar'
 import { SidebarInset } from '@/components/layout/sidebar'
-import { fetchDocs } from '@/dal/docs'
+import { fetchDocs } from '@/modules/docs/service'
 import { getPage } from '@/lib/pagination'
-import { FetchDocsParams } from '@/schemas/doc'
+import { FetchDocsParams } from '@/modules/docs/schemas'
 
 function ImportBtn() {
   return (
     <Button asChild>
-      <Link href='/documents/new'>
+      <Link href='/docs/new'>
         <Plus />
         导入数据
       </Link>

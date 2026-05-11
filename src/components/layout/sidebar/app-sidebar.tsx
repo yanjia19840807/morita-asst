@@ -21,7 +21,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from '@/components/ui/collapsible'
-import { menuConfig } from '@/lib/side-menu'
+import { menuConfig } from '@/modules/layout'
 import NavLogo from './nav-logo'
 import NavUser from './nav-user'
 

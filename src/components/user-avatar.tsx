@@ -1,7 +1,7 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { authClient } from '@/lib/auth-client'
+import { authClient } from '@/modules/auth/client'
 import {
   DropdownMenu,
   DropdownMenuContent,

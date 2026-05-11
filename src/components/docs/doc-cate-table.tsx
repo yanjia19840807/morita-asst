@@ -22,7 +22,7 @@ import { DocCate } from '@/generated/prisma/client'
 import { docCateColumns } from './doc-cate-table-columns'
 import ConfirmDialog from '../confirm-dialog'
 import { useTableSelection } from '@/hooks/use-table-selection'
-import { reorderDocCatesAction } from '@/actions/docs/actions'
+import { reorderDocCatesAction } from '@/modules/docs/actions'
 import { DragDropProvider } from '@dnd-kit/react'
 import { useTransition } from 'react'
 import type { DragEndEvent } from '@dnd-kit/abstract'
@@ -44,7 +44,7 @@ function DocCateTable({ data }: DocCateTableProps) {
     rowSelection,
     onRowSelectionChange,
     selectedLength
-  } = useTableSelection(data)
+  } = useTableSelection(data.map(item => item.id))
 
   const handleBulkRemove = () => {}
 

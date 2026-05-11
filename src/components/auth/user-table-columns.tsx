@@ -4,13 +4,13 @@ import { format } from 'date-fns'
 import { ColumnDef } from '@tanstack/react-table'
 
 import Link from 'next/link'
-import type { UserRow } from '@/dal/auth'
+import type { AuthUserDto } from '@/modules/auth/dto'
 import { TableColumnHeader } from '../table/table-column-header'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { UserTableRowActions } from './user-row-actions'
 import { Checkbox } from '../ui/checkbox'
 
-export const userColumns: ColumnDef<UserRow>[] = [
+export const userColumns: ColumnDef<AuthUserDto>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -70,7 +70,9 @@ export const userColumns: ColumnDef<UserRow>[] = [
       <TableColumnHeader column={column} title={'创建时间'} />
     ),
     cell: ({ row }) =>
-      format(new Date(row.original.createdAt), 'yyyy/MM/dd HH:mm')
+      row.original.createdAt
+        ? format(row.original.createdAt, 'yyyy/MM/dd HH:mm')
+        : '-'
   },
   {
     accessorKey: 'emailVerified',
@@ -111,7 +113,7 @@ export const userColumns: ColumnDef<UserRow>[] = [
     ),
     cell: ({ row }) =>
       row.original.banExpires
-        ? format(new Date(row.original.banExpires), 'yyyy/MM/dd HH:mm')
+        ? format(row.original.banExpires, 'yyyy/MM/dd HH:mm')
         : '-'
   },
   {

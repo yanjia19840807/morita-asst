@@ -19,7 +19,7 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/layout/sidebar'
-import { authClient } from '@/lib/auth-client'
+import { authClient } from '@/modules/auth/client'
 
 export default function NavUser() {
   const { isMobile } = useSidebar()

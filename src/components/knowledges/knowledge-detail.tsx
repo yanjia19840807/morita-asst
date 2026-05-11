@@ -5,10 +5,10 @@ import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ChevronLeft } from 'lucide-react'
 import PageTitle from '../layout/page-title'
-import { KNOWLEDGE_SOURCE_MODE } from '@/schemas/knowledge'
 import DetailItem from '../data-item'
 import { KnowledgeDocsTable } from './knowledge-docs-table'
-import { KnowledgeRow } from '@/dal/knowledges'
+import { KNOWLEDGE_SOURCE_MODE } from '@/modules/knowledges/schemas'
+import { KnowledgeRow } from '@/modules/knowledges/service'
 
 interface KnowledgeDetailProps {
   knowledge: KnowledgeRow
@@ -26,7 +26,7 @@ export function KnowledgeDetail({ knowledge }: KnowledgeDetailProps) {
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
             <Link
-              href='/knowledge'
+              href='/knowledges'
               className={buttonVariants({ variant: 'ghost' })}
             >
               <ChevronLeft />

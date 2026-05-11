@@ -15,7 +15,6 @@ function MainLayout({
 }: Readonly<{
   children: React.ReactNode
   breadcrumb: React.ReactNode
-  toolbar: React.ReactNode
 }>) {
   return (
     <TooltipProvider>

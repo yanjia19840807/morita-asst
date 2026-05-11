@@ -1428,6 +1428,7 @@ export const ChunkScalarFieldEnum = {
   knowledgeDocId: 'knowledgeDocId',
   content: 'content',
   metadata: 'metadata',
+  vector: 'vector',
   embeddingStatus: 'embeddingStatus',
   embeddingId: 'embeddingId',
   createdAt: 'createdAt',

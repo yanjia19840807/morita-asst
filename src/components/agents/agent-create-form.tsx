@@ -39,17 +39,20 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { createAgentAction } from '@/actions/agents/actions'
-import { AgentCreateFormValues, agentCreateSchema } from '@/schemas/agent'
 import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
-import { PromptProfileOption } from '@/dal/prompt-profiles'
-import { KnowledgeOption } from '@/dal/knowledges'
+import { createAgentAction } from '@/modules/agents/actions'
+import {
+  AgentCreateFormValues,
+  agentCreateSchema
+} from '@/modules/agents/schemas'
+import type { KnowledgeOptionDto } from '@/modules/knowledges/dto'
+import type { PromptProfileOptionDto } from '@/modules/prompt-profiles/dto'
 import { PromptProfileSelect } from './prompt-profile-select'
 import { KnowledgeSelect } from './knowledge-select'
 
 interface AgentCreateFormProps {
-  promptPromise: Promise<Array<PromptProfileOption>>
-  knowledgePromise: Promise<Array<KnowledgeOption>>
+  promptPromise: Promise<Array<PromptProfileOptionDto>>
+  knowledgePromise: Promise<Array<KnowledgeOptionDto>>
 }
 
 const statusOptions = [

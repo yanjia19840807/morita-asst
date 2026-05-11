@@ -5,18 +5,11 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { buttonVariants } from '@/components/ui/button'
 import { Pencil } from 'lucide-react'
 import Link from 'next/link'
-import { FetchSessionResult } from '@/dal/auth'
+import type { AuthUserDto } from '@/modules/auth/dto'
 import PageTitle from '../layout/page-title'
 import DetailItem from '../data-item'
 
-export default async function ProfileDetail({
-  session
-}: {
-  session: FetchSessionResult
-}) {
-  const user = session?.user
-  if (!user) return null
-
+export default async function ProfileDetail({ user }: { user: AuthUserDto }) {
   return (
     <div className='flex min-h-0 flex-1 flex-col gap-3'>
       <PageTitle

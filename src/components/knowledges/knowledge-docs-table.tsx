@@ -3,8 +3,7 @@
 import { format } from 'date-fns'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { fetchKnowledgeDocsClient } from '@/lib/api/client/knowledge'
-import { getErrorMessage } from '@/lib/api/shared/response'
+import { fetchKnowledgeDocsClient } from '@/modules/knowledges/client'
 import {
   type ColumnDef,
   type OnChangeFn,
@@ -13,8 +12,8 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import type { FetchKnowledgeDocsParams } from '@/schemas/knowledge'
-import type { FetchKnowledgeDocsListResult } from '@/lib/api/shared/knowledge'
+import type { FetchKnowledgeDocsListResult } from '@/modules/knowledges/dto'
+import type { FetchKnowledgeDocsParams } from '@/modules/knowledges/schemas'
 import { Input } from '../ui/input'
 import {
   Table,
@@ -28,6 +27,7 @@ import { TableColumnHeader } from '../table/table-column-header'
 import TablePagination from '../table/table-pagination'
 import { Badge } from '../ui/badge'
 import _ from 'lodash'
+import { getErrorMessage } from '@/lib/utils'
 
 type KnowledgeDocItem = FetchKnowledgeDocsListResult['docs'][number]
 
@@ -96,7 +96,6 @@ interface KnowledgeDocsTableProps {
 }
 
 export function KnowledgeDocsTable({ knowledgeId }: KnowledgeDocsTableProps) {
-  const [searchText, setSearchText] = useState<string | undefined>()
   const [page, setPage] = useState<number | undefined>()
   const [sortBy, setSortBy] = useState<string | undefined>(undefined)
   const [sortDirection, setSortDirection] = useState<
@@ -105,7 +104,6 @@ export function KnowledgeDocsTable({ knowledgeId }: KnowledgeDocsTableProps) {
 
   const knowledgeDocsParams: FetchKnowledgeDocsParams = {
     knowledgeId,
-    ...(_.isNil(searchText) ? {} : { searchText }),
     ...(_.isNil(page) ? {} : { page }),
     ...(_.isNil(sortBy) ? {} : { sortBy }),
     ...(_.isNil(sortDirection) ? {} : { sortDirection })
@@ -150,6 +148,7 @@ export function KnowledgeDocsTable({ knowledgeId }: KnowledgeDocsTableProps) {
     }
   }
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns: knowledgeDocColumns,
@@ -161,19 +160,6 @@ export function KnowledgeDocsTable({ knowledgeId }: KnowledgeDocsTableProps) {
 
   return (
     <div className='flex min-h-0 flex-1 flex-col gap-3'>
-      <div className='w-full max-w-sm'>
-        <Input
-          onKeyDown={event =>
-            event.key === 'Enter' && event.currentTarget.blur()
-          }
-          value={searchText}
-          onChange={event => {
-            setSearchText(event.target.value)
-            setPage(1)
-          }}
-          placeholder='搜索文档名称'
-        />
-      </div>
       {error && <div className='text-destructive text-sm'>{error}</div>}
       <Table>
         <TableHeader>

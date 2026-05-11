@@ -35,9 +35,9 @@ import {
   KNOWLEDGE_SOURCE_MODE,
   knowledgeCreateSchema,
   KnowledgeCreateFormValues
-} from '@/schemas/knowledge'
+} from '@/modules/knowledges/schemas'
 import DocSelect, { type DocSelectValue } from '../docs/doc-select'
-import { createKnowledgeAction } from '@/actions/knowledges/actions'
+import { createKnowledgeAction } from '@/modules/knowledges/actions'
 import { toast } from 'sonner'
 
 export default function KnowledgeForm() {
@@ -146,7 +146,7 @@ export default function KnowledgeForm() {
 
         if (result.success) {
           toast.success('知识库创建成功')
-          router.replace(`/knowledge/${result.data.id}`)
+          router.replace(`/knowledges/${result.data.id}`)
         } else {
           toast.error(result.error.message)
         }
@@ -172,7 +172,7 @@ export default function KnowledgeForm() {
               保存
             </Button>
             <Link
-              href='/knowledge'
+              href='/knowledges'
               className={buttonVariants({ variant: 'ghost' })}
             >
               <ChevronLeft />

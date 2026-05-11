@@ -1,6 +1,6 @@
 'use client'
 
-import type { KnowledgeRow } from '@/dal/knowledges'
+import type { KnowledgeRowDto } from '@/modules/knowledges/dto'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import {
@@ -15,7 +15,7 @@ import { FileText, Fingerprint } from 'lucide-react'
 import { Button, buttonVariants } from '../ui/button'
 
 interface KnowledgeCardProps {
-  knowledge: KnowledgeRow
+  knowledge: KnowledgeRowDto
 }
 
 export default function KnowledgeCard({ knowledge }: KnowledgeCardProps) {

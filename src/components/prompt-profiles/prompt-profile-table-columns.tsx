@@ -2,8 +2,8 @@
 
 import { format } from 'date-fns'
 import { ColumnDef } from '@tanstack/react-table'
-import type { PromptProfileRow } from '@/dal/prompt-profiles'
 import { TableColumnHeader } from '../table/table-column-header'
+import type { PromptProfileRowDto } from '@/modules/prompt-profiles/dto'
 
 function getPromptProfileSummary(systemPrompt: string) {
   const normalized = systemPrompt.replace(/\s+/g, ' ').trim()
@@ -13,7 +13,7 @@ function getPromptProfileSummary(systemPrompt: string) {
     : normalized || '未填写'
 }
 
-export const promptProfileColumns: ColumnDef<PromptProfileRow>[] = [
+export const promptProfileColumns: ColumnDef<PromptProfileRowDto>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => <TableColumnHeader column={column} title='名称' />,

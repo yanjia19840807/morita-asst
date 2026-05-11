@@ -1,6 +1,6 @@
 'use client'
 
-import type { KnowLedgesWithTotal } from '@/dal/knowledges'
+import type { KnowledgesWithTotalDto } from '@/modules/knowledges/dto'
 import TableActionSection from '../table/table-action-section'
 import TableFooterSection from '../table/table-footer-section'
 import { TableQsPagination } from '../table/table-qs-pagination'
@@ -8,7 +8,7 @@ import KnowledgeCard from './knowledge-card'
 import KnowledgeSearch from './knowledge-search'
 
 interface KnowledgeGridProps {
-  data: KnowLedgesWithTotal
+  data: KnowledgesWithTotalDto
   pageSize: number
 }
 

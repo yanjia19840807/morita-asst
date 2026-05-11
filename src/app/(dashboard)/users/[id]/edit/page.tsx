@@ -1,6 +1,6 @@
-import { fetchUserById } from '@/dal/auth'
 import { UserEditForm } from '@/components/auth/user-edit-form'
-import { UserEditFormValues } from '@/schemas/auth'
+import { toUserEditFormValues } from '@/modules/auth/mapper'
+import { fetchUserById } from '@/modules/auth/service'
 
 export default async function UserEditPage({
   params
@@ -12,7 +12,7 @@ export default async function UserEditPage({
 
   return (
     <div className='flex flex-1 flex-col gap-3 px-4'>
-      <UserEditForm data={data as UserEditFormValues} />
+      <UserEditForm data={toUserEditFormValues(data)} />
     </div>
   )
 }

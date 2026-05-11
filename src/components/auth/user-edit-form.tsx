@@ -1,7 +1,7 @@
 'use client'
 
-import { editUserAction } from '@/actions/auth/actions'
-import { UserEditFormValues, userEditSchema } from '@/schemas/auth'
+import { editUserAction } from '@/modules/auth/actions'
+import { UserEditFormValues, userEditSchema } from '@/modules/auth/schemas'
 import { UserForm } from './user-form'
 
 export function UserEditForm({ data }: { data: UserEditFormValues }) {

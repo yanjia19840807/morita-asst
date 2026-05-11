@@ -6,7 +6,6 @@ import {
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import type { PromptProfileRow } from '@/dal/prompt-profiles'
 import {
   Table,
   TableBody,
@@ -21,9 +20,10 @@ import { TableQsPagination } from '../table/table-qs-pagination'
 import PromptProfileSearch from './prompt-profile-search'
 import { promptProfileColumns } from './prompt-profile-table-columns'
 import { useTableQsSort } from '@/hooks/use-table-qs-sort'
+import type { PromptProfileRowDto } from '@/modules/prompt-profiles/dto'
 
 interface PromptProfileTableProps {
-  data: PromptProfileRow[]
+  data: PromptProfileRowDto[]
   total: number
   pageSize: number
 }
@@ -37,7 +37,7 @@ export function PromptProfileTable({
 
   const table = useReactTable({
     data,
-    columns: promptProfileColumns as ColumnDef<PromptProfileRow>[],
+    columns: promptProfileColumns as ColumnDef<PromptProfileRowDto>[],
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
     state: {

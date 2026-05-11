@@ -1,27 +1,17 @@
-import { getSTS } from '@/dal/sts-token'
-import { withAuth } from '@/lib/api/server/with-auth'
-import { APIError } from '@/lib/api/server/errors'
 import { NextRequest } from 'next/server'
-import { resolveBucketConfig } from '@/services/oss-server'
-import type { BucketAccess } from '@/types/oss'
-import { handleApiError, handleApiResult } from '@/lib/api/server/response'
+import { withAuth } from '@/modules/auth/api'
+import { getStsTokenResponse } from '@/modules/sts/service'
+import { handleApiError, handleApiResult } from '@/lib/api/response'
+import { APIError } from '@/lib/api/errors'
 
-export const GET = withAuth(async (request: NextRequest, { user }) => {
+export const GET = withAuth(async (request: NextRequest) => {
   try {
     const searchParams = request.nextUrl.searchParams
-    const bucketAccess = searchParams.get('bucketAccess') as BucketAccess
-    const bucketData = resolveBucketConfig(bucketAccess)
-
-    const response = await getSTS(user.id)
-    const { accessKeyId, accessKeySecret, securityToken, expiration } = response
-
-    return handleApiResult({
-      accessKeyId,
-      accessKeySecret,
-      securityToken,
-      expiration,
-      bucketData
+    const response = await getStsTokenResponse({
+      bucketAccess: searchParams.get('bucketAccess')
     })
+
+    return handleApiResult(response)
   } catch (error) {
     console.error('STS AssumeRole Error:', error)
 

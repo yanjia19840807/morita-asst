@@ -7,7 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
-import { getRouteLabel } from '@/lib/route-labels'
+import { getRouteLabel } from '@/modules/layout'
 
 export default function AppBreadCrumb({ segments }: { segments: string[] }) {
   const crumbs = segments.map((seg, index) => ({

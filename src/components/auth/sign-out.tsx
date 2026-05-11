@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, buttonVariants } from '../ui/button'
-import { authClient } from '@/lib/auth-client'
+import { authClient } from '@/modules/auth/client'
 import { useRouter } from 'next/navigation'
 
 export default function SignOut() {

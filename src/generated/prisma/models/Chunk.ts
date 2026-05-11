@@ -28,6 +28,7 @@ export type ChunkMinAggregateOutputType = {
   id: string | null
   knowledgeDocId: string | null
   content: string | null
+  vector: string | null
   embeddingStatus: $Enums.ChunkEmbeddingStatus | null
   embeddingId: string | null
   createdAt: Date | null
@@ -38,6 +39,7 @@ export type ChunkMaxAggregateOutputType = {
   id: string | null
   knowledgeDocId: string | null
   content: string | null
+  vector: string | null
   embeddingStatus: $Enums.ChunkEmbeddingStatus | null
   embeddingId: string | null
   createdAt: Date | null
@@ -49,6 +51,7 @@ export type ChunkCountAggregateOutputType = {
   knowledgeDocId: number
   content: number
   metadata: number
+  vector: number
   embeddingStatus: number
   embeddingId: number
   createdAt: number
@@ -61,6 +64,7 @@ export type ChunkMinAggregateInputType = {
   id?: true
   knowledgeDocId?: true
   content?: true
+  vector?: true
   embeddingStatus?: true
   embeddingId?: true
   createdAt?: true
@@ -71,6 +75,7 @@ export type ChunkMaxAggregateInputType = {
   id?: true
   knowledgeDocId?: true
   content?: true
+  vector?: true
   embeddingStatus?: true
   embeddingId?: true
   createdAt?: true
@@ -82,6 +87,7 @@ export type ChunkCountAggregateInputType = {
   knowledgeDocId?: true
   content?: true
   metadata?: true
+  vector?: true
   embeddingStatus?: true
   embeddingId?: true
   createdAt?: true
@@ -166,6 +172,7 @@ export type ChunkGroupByOutputType = {
   knowledgeDocId: string
   content: string
   metadata: runtime.JsonValue
+  vector: string | null
   embeddingStatus: $Enums.ChunkEmbeddingStatus
   embeddingId: string | null
   createdAt: Date
@@ -198,6 +205,7 @@ export type ChunkWhereInput = {
   knowledgeDocId?: Prisma.StringFilter<"Chunk"> | string
   content?: Prisma.StringFilter<"Chunk"> | string
   metadata?: Prisma.JsonFilter<"Chunk">
+  vector?: Prisma.StringNullableFilter<"Chunk"> | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFilter<"Chunk"> | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.StringNullableFilter<"Chunk"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Chunk"> | Date | string
@@ -210,6 +218,7 @@ export type ChunkOrderByWithRelationInput = {
   knowledgeDocId?: Prisma.SortOrder
   content?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
+  vector?: Prisma.SortOrderInput | Prisma.SortOrder
   embeddingStatus?: Prisma.SortOrder
   embeddingId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -225,6 +234,7 @@ export type ChunkWhereUniqueInput = Prisma.AtLeast<{
   knowledgeDocId?: Prisma.StringFilter<"Chunk"> | string
   content?: Prisma.StringFilter<"Chunk"> | string
   metadata?: Prisma.JsonFilter<"Chunk">
+  vector?: Prisma.StringNullableFilter<"Chunk"> | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFilter<"Chunk"> | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.StringNullableFilter<"Chunk"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Chunk"> | Date | string
@@ -237,6 +247,7 @@ export type ChunkOrderByWithAggregationInput = {
   knowledgeDocId?: Prisma.SortOrder
   content?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
+  vector?: Prisma.SortOrderInput | Prisma.SortOrder
   embeddingStatus?: Prisma.SortOrder
   embeddingId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -254,6 +265,7 @@ export type ChunkScalarWhereWithAggregatesInput = {
   knowledgeDocId?: Prisma.StringWithAggregatesFilter<"Chunk"> | string
   content?: Prisma.StringWithAggregatesFilter<"Chunk"> | string
   metadata?: Prisma.JsonWithAggregatesFilter<"Chunk">
+  vector?: Prisma.StringNullableWithAggregatesFilter<"Chunk"> | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusWithAggregatesFilter<"Chunk"> | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.StringNullableWithAggregatesFilter<"Chunk"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Chunk"> | Date | string
@@ -264,6 +276,7 @@ export type ChunkCreateInput = {
   id?: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: string | null
   embeddingStatus?: $Enums.ChunkEmbeddingStatus
   embeddingId?: string | null
   createdAt?: Date | string
@@ -276,6 +289,7 @@ export type ChunkUncheckedCreateInput = {
   knowledgeDocId: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: string | null
   embeddingStatus?: $Enums.ChunkEmbeddingStatus
   embeddingId?: string | null
   createdAt?: Date | string
@@ -286,6 +300,7 @@ export type ChunkUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFieldUpdateOperationsInput | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -298,6 +313,7 @@ export type ChunkUncheckedUpdateInput = {
   knowledgeDocId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFieldUpdateOperationsInput | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -309,6 +325,7 @@ export type ChunkCreateManyInput = {
   knowledgeDocId: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: string | null
   embeddingStatus?: $Enums.ChunkEmbeddingStatus
   embeddingId?: string | null
   createdAt?: Date | string
@@ -319,6 +336,7 @@ export type ChunkUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFieldUpdateOperationsInput | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -330,6 +348,7 @@ export type ChunkUncheckedUpdateManyInput = {
   knowledgeDocId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFieldUpdateOperationsInput | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -351,6 +370,7 @@ export type ChunkCountOrderByAggregateInput = {
   knowledgeDocId?: Prisma.SortOrder
   content?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
+  vector?: Prisma.SortOrder
   embeddingStatus?: Prisma.SortOrder
   embeddingId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -361,6 +381,7 @@ export type ChunkMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   knowledgeDocId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  vector?: Prisma.SortOrder
   embeddingStatus?: Prisma.SortOrder
   embeddingId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -371,6 +392,7 @@ export type ChunkMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   knowledgeDocId?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  vector?: Prisma.SortOrder
   embeddingStatus?: Prisma.SortOrder
   embeddingId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -427,6 +449,7 @@ export type ChunkCreateWithoutKnowledgeDocInput = {
   id?: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: string | null
   embeddingStatus?: $Enums.ChunkEmbeddingStatus
   embeddingId?: string | null
   createdAt?: Date | string
@@ -437,6 +460,7 @@ export type ChunkUncheckedCreateWithoutKnowledgeDocInput = {
   id?: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: string | null
   embeddingStatus?: $Enums.ChunkEmbeddingStatus
   embeddingId?: string | null
   createdAt?: Date | string
@@ -477,6 +501,7 @@ export type ChunkScalarWhereInput = {
   knowledgeDocId?: Prisma.StringFilter<"Chunk"> | string
   content?: Prisma.StringFilter<"Chunk"> | string
   metadata?: Prisma.JsonFilter<"Chunk">
+  vector?: Prisma.StringNullableFilter<"Chunk"> | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFilter<"Chunk"> | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.StringNullableFilter<"Chunk"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Chunk"> | Date | string
@@ -487,6 +512,7 @@ export type ChunkCreateManyKnowledgeDocInput = {
   id?: string
   content: string
   metadata: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: string | null
   embeddingStatus?: $Enums.ChunkEmbeddingStatus
   embeddingId?: string | null
   createdAt?: Date | string
@@ -497,6 +523,7 @@ export type ChunkUpdateWithoutKnowledgeDocInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFieldUpdateOperationsInput | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -507,6 +534,7 @@ export type ChunkUncheckedUpdateWithoutKnowledgeDocInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFieldUpdateOperationsInput | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -517,6 +545,7 @@ export type ChunkUncheckedUpdateManyWithoutKnowledgeDocInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  vector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   embeddingStatus?: Prisma.EnumChunkEmbeddingStatusFieldUpdateOperationsInput | $Enums.ChunkEmbeddingStatus
   embeddingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -530,6 +559,7 @@ export type ChunkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   knowledgeDocId?: boolean
   content?: boolean
   metadata?: boolean
+  vector?: boolean
   embeddingStatus?: boolean
   embeddingId?: boolean
   createdAt?: boolean
@@ -542,6 +572,7 @@ export type ChunkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   knowledgeDocId?: boolean
   content?: boolean
   metadata?: boolean
+  vector?: boolean
   embeddingStatus?: boolean
   embeddingId?: boolean
   createdAt?: boolean
@@ -554,6 +585,7 @@ export type ChunkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   knowledgeDocId?: boolean
   content?: boolean
   metadata?: boolean
+  vector?: boolean
   embeddingStatus?: boolean
   embeddingId?: boolean
   createdAt?: boolean
@@ -566,13 +598,14 @@ export type ChunkSelectScalar = {
   knowledgeDocId?: boolean
   content?: boolean
   metadata?: boolean
+  vector?: boolean
   embeddingStatus?: boolean
   embeddingId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ChunkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "knowledgeDocId" | "content" | "metadata" | "embeddingStatus" | "embeddingId" | "createdAt" | "updatedAt", ExtArgs["result"]["chunk"]>
+export type ChunkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "knowledgeDocId" | "content" | "metadata" | "vector" | "embeddingStatus" | "embeddingId" | "createdAt" | "updatedAt", ExtArgs["result"]["chunk"]>
 export type ChunkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   knowledgeDoc?: boolean | Prisma.KnowledgeDocDefaultArgs<ExtArgs>
 }
@@ -593,6 +626,7 @@ export type $ChunkPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     knowledgeDocId: string
     content: string
     metadata: runtime.JsonValue
+    vector: string | null
     embeddingStatus: $Enums.ChunkEmbeddingStatus
     embeddingId: string | null
     createdAt: Date
@@ -1025,6 +1059,7 @@ export interface ChunkFieldRefs {
   readonly knowledgeDocId: Prisma.FieldRef<"Chunk", 'String'>
   readonly content: Prisma.FieldRef<"Chunk", 'String'>
   readonly metadata: Prisma.FieldRef<"Chunk", 'Json'>
+  readonly vector: Prisma.FieldRef<"Chunk", 'String'>
   readonly embeddingStatus: Prisma.FieldRef<"Chunk", 'ChunkEmbeddingStatus'>
   readonly embeddingId: Prisma.FieldRef<"Chunk", 'String'>
   readonly createdAt: Prisma.FieldRef<"Chunk", 'DateTime'>

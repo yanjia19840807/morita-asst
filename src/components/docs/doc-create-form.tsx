@@ -1,6 +1,9 @@
 'use client'
 
-import { docCreateFormSchema, DocCreateFormValues } from '@/schemas/doc'
+import {
+  DocCreateFormValues,
+  docCreateFormSchema
+} from '@/modules/docs/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { DocCate } from '@/generated/prisma/client'
 import { useRouter } from 'next/navigation'
@@ -28,11 +31,11 @@ import {
   FieldError,
   FieldLabel
 } from '@/components/ui/field'
-import DocUpload from '@/components/doc/doc-upload'
-import { createDocAction } from '@/actions/docs/actions'
-import { authClient } from '@/lib/auth-client'
+import DocUpload from '@/components/docs/doc-upload'
+import { createDocAction } from '@/modules/docs/actions'
+import { authClient } from '@/modules/auth/client'
 import { FileUploadRef } from '@/components/ui/file-upload'
-import { uploadDocs } from '@/services/oss-client'
+import { uploadDocs } from '@/modules/oss/client'
 import DocCateCombobox from './doc-cate-combobox'
 import PageTitle from '../layout/page-title'
 import { Button, buttonVariants } from '../ui/button'
@@ -102,9 +105,9 @@ export default function DocCreateForm({
       <Field data-invalid={fieldState.invalid}>
         <FieldLabel htmlFor={field.name}>选择文件</FieldLabel>
         <DocUpload
-          ref={e => {
-            field.ref(e)
-            fileUploadRef.current = e
+          ref={(instance: FileUploadRef | null) => {
+            field.ref(instance)
+            fileUploadRef.current = instance
           }}
           value={field.value}
           onChange={field.onChange}
@@ -168,7 +171,7 @@ export default function DocCreateForm({
         })
 
         toast.success('保存成功')
-        router.push('/documents')
+        router.push('/docs')
       } catch (error) {
         console.error(error)
         const message =
@@ -188,7 +191,7 @@ export default function DocCreateForm({
               保存
             </Button>
             <Link
-              href='/documents'
+              href='/docs'
               className={buttonVariants({
                 variant: 'ghost'
               })}

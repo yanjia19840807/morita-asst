@@ -1,10 +1,8 @@
 'use client'
 
 import { useTransition } from 'react'
-import { DocCateCreateFormValues, docCateCreateFormSchema } from '@/schemas/doc'
 import {
   Field,
-  FieldContent,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -18,7 +16,11 @@ import {
   UseFormStateReturn
 } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createDocCateAction } from '@/actions/docs/actions'
+import {
+  DocCateCreateFormValues,
+  docCateCreateFormSchema
+} from '@/modules/docs/schemas'
+import { createDocCateAction } from '@/modules/docs/actions'
 import { toast } from 'sonner'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'

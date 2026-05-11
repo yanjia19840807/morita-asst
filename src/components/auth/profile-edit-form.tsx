@@ -1,6 +1,6 @@
 'use client'
 
-import { changePasswordAction, editProfileAction } from '@/actions/auth/actions'
+import { changePasswordAction, editProfileAction } from '@/modules/auth/actions'
 import {
   Card,
   CardContent,
@@ -35,8 +35,8 @@ import {
   ProfilePasswordFormValues,
   profileEditSchema,
   profilePasswordSchema
-} from '@/schemas/auth'
-import { uploadAvatar } from '@/services/oss-client'
+} from '@/modules/auth/schemas'
+import { uploadAvatar } from '@/modules/oss/client'
 import AvatarPicker from '../avatar-picker'
 import { useEffect, useTransition } from 'react'
 import PageTitle from '../layout/page-title'

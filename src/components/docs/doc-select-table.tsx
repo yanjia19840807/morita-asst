@@ -7,9 +7,8 @@ import {
   fetchSelectDocs,
   getDocsQueryKey,
   initialDocsParams
-} from '@/lib/api/client/doc'
-import type { FetchSelectDocsResult } from '@/lib/api/shared/doc'
-import { getErrorMessage } from '@/lib/api/shared/response'
+} from '@/modules/docs/client'
+import type { FetchSelectDocsResult } from '@/modules/docs/dto'
 import {
   type ColumnDef,
   type OnChangeFn,
@@ -32,6 +31,7 @@ import {
 } from '../ui/table'
 import { TableColumnHeader } from '../table/table-column-header'
 import TablePagination from '../table/table-pagination'
+import { getErrorMessage } from '@/lib/utils'
 
 type SelectableDoc = FetchSelectDocsResult['docs'][number]
 
@@ -180,6 +180,7 @@ export function DocSelectTable({
     setPage(1)
   }
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns: docSelectColumns,

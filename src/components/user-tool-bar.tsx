@@ -1,6 +1,6 @@
 'use client'
 
-import { useAuthenticatedUser } from '@/lib/auth-client'
+import { useAuthenticatedUser } from '@/modules/auth/client'
 import Link from 'next/link'
 import { buttonVariants } from './ui/button'
 

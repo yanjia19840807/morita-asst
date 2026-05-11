@@ -8,10 +8,11 @@ import { toast } from 'sonner'
 
 import ConfirmDialog from '@/components/confirm-dialog'
 import { Button } from '@/components/ui/button'
-import type { DocRow } from '@/dal/docs'
+import { deleteDocsAction } from '@/modules/docs/actions'
+import type { DocRowDto } from '@/modules/docs/dto'
 
 interface DocRowActionsProps {
-  row: Row<DocRow>
+  row: Row<DocRowDto>
 }
 
 export function DocRowActions({ row }: DocRowActionsProps) {
@@ -21,6 +22,12 @@ export function DocRowActions({ row }: DocRowActionsProps) {
   const handleRemove = () => {
     startTransition(async () => {
       try {
+        const result = await deleteDocsAction([row.original.id])
+        if (!result.success) {
+          toast.error(result.error.message)
+          return
+        }
+
         router.refresh()
       } catch (error) {
         console.error(error)

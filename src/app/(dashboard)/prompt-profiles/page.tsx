@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import { PromptProfileTable } from '@/components/prompt-profiles/prompt-profile-table'
-import { fetchPromptProfiles } from '@/dal/prompt-profiles'
 import { getPage } from '@/lib/pagination'
+import { fetchPromptProfiles } from '@/modules/prompt-profiles/service'
 
 interface PromptProfilesPageProps {
   page?: number

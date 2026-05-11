@@ -1,6 +1,6 @@
 import { AgentCreateForm } from '@/components/agents/agent-create-form'
-import { fetchAllKnowledges } from '@/dal/knowledges'
-import { fetchAllPromptProfiles } from '@/dal/prompt-profiles'
+import { fetchAllKnowledges } from '@/modules/knowledges/service'
+import { fetchAllPromptProfiles } from '@/modules/prompt-profiles/service'
 
 export default function AgentCreatePage() {
   const promptPromise = fetchAllPromptProfiles()

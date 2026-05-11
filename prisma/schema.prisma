@@ -231,6 +231,7 @@ model Chunk {
   content  String // Chunk 的实际文本内容（可编辑）
   metadata Json // LangChain 用的 metadata（包含 knowledgeId、docId 等）
 
+  vector          String?
   // 嵌入状态
   embeddingStatus ChunkEmbeddingStatus @default(PENDING)
   embeddingId     String? // 可选：LangChain pgvector 表里的 uuid，方便精准删除

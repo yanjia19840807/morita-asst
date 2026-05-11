@@ -1,11 +1,11 @@
 'use client'
 
-import { editPromptProfileAction } from '@/actions/prompt-profiles/actions'
-import { PromptProfileForm } from './prompt-profile-form'
+import { editPromptProfileAction } from '@/modules/prompt-profiles/actions'
 import {
   PromptProfileEditFormValues,
   promptProfileEditSchema
-} from '@/schemas/prompt-profile'
+} from '@/modules/prompt-profiles/schemas'
+import { PromptProfileForm } from './prompt-profile-form'
 
 export function PromptProfileEditForm({
   data

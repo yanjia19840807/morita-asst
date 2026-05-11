@@ -1,7 +1,6 @@
 'use client'
 
 import { use } from 'react'
-import type { PromptProfileOption } from '@/dal/prompt-profiles'
 import {
   Combobox,
   ComboboxContent,
@@ -11,9 +10,10 @@ import {
   ComboboxList,
   useComboboxAnchor
 } from '@/components/ui/combobox'
+import type { PromptProfileOptionDto } from '@/modules/prompt-profiles/dto'
 
 interface PromptProfileSelectProps {
-  promptPromise: Promise<Array<PromptProfileOption>>
+  promptPromise: Promise<Array<PromptProfileOptionDto>>
   value: string | undefined
   onChange: (value: string | undefined) => void
   onBlur: () => void
@@ -24,10 +24,7 @@ interface PromptProfileSelectProps {
 export function PromptProfileSelect({
   promptPromise,
   value,
-  onChange,
-  onBlur,
-  disabled,
-  invalid
+  onChange
 }: PromptProfileSelectProps) {
   const promptProfiles = use(promptPromise)
   const anchor = useComboboxAnchor()

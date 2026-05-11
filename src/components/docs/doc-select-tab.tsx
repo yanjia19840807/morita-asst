@@ -3,7 +3,7 @@
 import {
   KNOWLEDGE_SOURCE_MODE,
   type KnowledgeSourceModeValues
-} from '@/schemas/knowledge'
+} from '@/modules/knowledges/schemas'
 import {
   Field,
   FieldContent,

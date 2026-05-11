@@ -1,10 +1,10 @@
 import PageTitle from '@/components/layout/page-title'
-import DocCateForm from '@/components/doc/doc-cate-form'
-import DocCateTable from '@/components/doc/doc-cate-table'
-import { fetchDocCates } from '@/dal/docs'
+import { fetchDocCates } from '@/modules/docs/service'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import { ChevronLeft } from 'lucide-react'
+import DocCateForm from '@/components/docs/doc-cate-form'
+import DocCateTable from '@/components/docs/doc-cate-table'
 
 interface DocsPageProps {
   name?: string
@@ -15,7 +15,7 @@ export default async function DocsPage({
 }: {
   searchParams: Promise<DocsPageProps>
 }) {
-  const { name } = await searchParams
+  await searchParams
   const cates = await fetchDocCates()
 
   return (
@@ -24,7 +24,7 @@ export default async function DocsPage({
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
             <Link
-              href='/documents'
+              href='/docs'
               className={buttonVariants({
                 variant: 'ghost'
               })}

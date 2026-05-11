@@ -1,5 +1,5 @@
-import DocCreateForm from '@/components/doc/doc-create-form'
-import { fetchDocCates } from '@/dal/docs'
+import DocCreateForm from '@/components/docs/doc-create-form'
+import { fetchDocCates } from '@/modules/docs/service'
 import { Suspense } from 'react'
 
 export default function DocumentNewPage() {

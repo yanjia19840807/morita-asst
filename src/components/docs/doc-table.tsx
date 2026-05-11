@@ -38,10 +38,11 @@ import { toast } from 'sonner'
 import DocSearch from './doc-search'
 import { useTableSelection } from '@/hooks/use-table-selection'
 import { useTableQsSort } from '@/hooks/use-table-qs-sort'
-import type { DocRow } from '@/dal/docs'
+import { deleteDocsAction } from '@/modules/docs/actions'
+import type { DocRowDto } from '@/modules/docs/dto'
 
 interface DocTableProps {
-  data: DocRow[]
+  data: DocRowDto[]
   total: number
   pageSize: number
 }
@@ -55,7 +56,7 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
     onRowSelectionChange,
     clearSelection,
     handleToggle
-  } = useTableSelection(data)
+  } = useTableSelection(data.map(item => item.id))
   const { sorting, onSortingChange } = useTableQsSort()
 
   const [, startTransition] = useTransition()
@@ -63,6 +64,12 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
   const handleBulkRemove = () => {
     startTransition(async () => {
       try {
+        const result = await deleteDocsAction(selectedIds)
+        if (!result.success) {
+          toast.error(result.error.message)
+          return
+        }
+
         clearSelection()
         setIsBulkMode(false)
       } catch {
@@ -73,9 +80,10 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
 
   const table = useReactTable({
     data,
-    columns: docColumns as ColumnDef<DocRow>[],
+    columns: docColumns as ColumnDef<DocRowDto>[],
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: isBulkMode,
+    getRowId: row => row.id,
     state: {
       sorting,
       rowSelection,
@@ -102,7 +110,7 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
                     <AlertDialogTitle>确认批量删除</AlertDialogTitle>
                     <AlertDialogDescription>
                       即将删除 {selectedIds.length}
-                      个用户，此操作不可撤销，是否继续？
+                      个文档，此操作不可撤销，是否继续？
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

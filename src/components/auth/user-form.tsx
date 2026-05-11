@@ -34,11 +34,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { authClient } from '@/lib/auth-client'
-import { ResponseResult } from '@/lib/api/shared/response'
-import { uploadAvatar } from '@/services/oss-client'
-import { UserEditFormValues } from '@/schemas/auth'
+import { authClient } from '@/modules/auth/client'
+import { UserEditFormValues } from '@/modules/auth/schemas'
+import { uploadAvatar } from '@/modules/oss/client'
 import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
+import { ResponseResult } from '@/lib/api/response'
 
 type UserFormInput = Omit<UserEditFormValues, 'id'> & {
   id?: string

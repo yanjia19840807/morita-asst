@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { fetchUsers } from '@/dal/auth'
+import { fetchUsers } from '@/modules/auth/service'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
