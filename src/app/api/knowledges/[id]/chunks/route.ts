@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
-import z from 'zod'
 import { withRole } from '@/modules/auth/api'
-import { toFetchKnowledgeDocsListResult } from '@/modules/knowledges/mapper'
-import { fetchKnowledgeDocsParamsSchema } from '@/modules/knowledges/schemas'
-import { fetchKnowledgeDocs } from '@/modules/knowledges/service'
+import { toFetchKnowledgeChunksListDto } from '@/modules/knowledges/mapper'
+import { fetchKnowledgeChunksParamsSchema } from '@/modules/knowledges/schemas'
+import { fetchKnowledgeChunks } from '@/modules/knowledges/service'
 import { ValidationError } from '@/lib/api/errors'
 import { handleApiError, handleApiResult } from '@/lib/api/response'
+import { formatZodError } from '../../../../../lib/zod'
 
 export const GET = withRole(
   ['admin'],
@@ -14,17 +14,17 @@ export const GET = withRole(
     const routeParams = await context.params
 
     try {
-      const validation = fetchKnowledgeDocsParamsSchema.safeParse({
+      const validation = fetchKnowledgeChunksParamsSchema.safeParse({
         ...params,
         knowledgeId: routeParams.id
       })
 
       if (!validation.success) {
-        throw new ValidationError(z.prettifyError(validation.error))
+        throw new ValidationError(formatZodError(validation.error))
       }
 
-      const result = await fetchKnowledgeDocs(validation.data)
-      return handleApiResult(toFetchKnowledgeDocsListResult(result))
+      const result = await fetchKnowledgeChunks(validation.data)
+      return handleApiResult(toFetchKnowledgeChunksListDto(result))
     } catch (error) {
       return handleApiError(error)
     }

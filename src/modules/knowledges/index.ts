@@ -1,5 +1,6 @@
 export * from './actions'
 export * from './dto'
+export * from './indexing'
 export * from './mapper'
 export * from './repository'
 export * from './schemas'

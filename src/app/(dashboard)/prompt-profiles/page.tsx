@@ -51,7 +51,7 @@ export default async function PromptProfilesPage({
           </div>
         }
       >
-        提示词管理
+        提示词
       </PageTitle>
       <Suspense fallback={null}>
         <PromptProfileTable

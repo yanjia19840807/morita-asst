@@ -1,4 +1,4 @@
-export default function DetailItem({
+export default function FieldDetail({
   label,
   children
 }: {

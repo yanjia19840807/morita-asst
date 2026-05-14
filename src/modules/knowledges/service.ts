@@ -1,21 +1,25 @@
 import type { Knowledge } from '@/generated/prisma/client'
 import { requireRoles } from '@/modules/auth/service'
 import { ValidationError } from '@/lib/api/errors'
-import z from 'zod'
+import { sendKnowledgeIngest } from './indexing/service'
+import { formatZodError } from '../../lib/zod'
 import {
-  KnowLedgeWithDocs,
   createKnowledgeRecord,
   findAllKnowledges,
   findKnowledgeById,
+  findKnowledgeChunks,
   findKnowledgeDocs,
   findKnowledges,
+  type FetchKnowledgeChunksResult,
   type FetchKnowledgeDocsResult,
+  type FetchKnowledgesParams,
   type FetchKnowledgesResult,
   type KnowledgeOption,
-  type KnowledgeRow,
-  type fetchKnowledgesParams
+  type KnowledgeRow
 } from './repository'
 import {
+  fetchKnowledgeChunksParamsSchema,
+  type FetchKnowledgeChunksParams,
   fetchKnowledgeDocsParamsSchema,
   knowledgeCreateSchema,
   type FetchKnowledgeDocsParams,
@@ -23,13 +27,15 @@ import {
 } from './schemas'
 
 export type {
+  FetchKnowledgeChunksResult,
   FetchKnowledgeDocsResult,
+  FetchKnowledgesParams,
   FetchKnowledgesResult,
   KnowledgeDocRow,
+  KnowledgeIngestTarget,
+  KnowledgeDocIngestTarget,
   KnowledgeOption,
-  KnowledgeRow,
-  fetchKnowledgesParams,
-  KnowLedgesWithTotal
+  KnowledgeRow
 } from './repository'
 
 export async function fetchAllKnowledges(): Promise<KnowledgeOption[]> {
@@ -38,7 +44,7 @@ export async function fetchAllKnowledges(): Promise<KnowledgeOption[]> {
 }
 
 export async function fetchKnowledges(
-  params: fetchKnowledgesParams
+  params: FetchKnowledgesParams
 ): Promise<FetchKnowledgesResult> {
   await requireRoles(['admin'])
   return findKnowledges(params)
@@ -56,19 +62,23 @@ export async function fetchKnowledgeDocs(
 
   const validation = fetchKnowledgeDocsParamsSchema.safeParse(params)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return findKnowledgeDocs(validation.data)
 }
 
-export async function embeddingKnowledge(knowledge: KnowLedgeWithDocs) {
-  const { embedDoc } = await import('../embedding/service')
-  const docs = knowledge.knowledgeDocs.map(kd => kd.doc)
+export async function fetchKnowledgeChunks(
+  params: FetchKnowledgeChunksParams
+): Promise<FetchKnowledgeChunksResult> {
+  await requireRoles(['admin'])
 
-  for (const doc of docs) {
-    await embedDoc(doc)
+  const validation = fetchKnowledgeChunksParamsSchema.safeParse(params)
+  if (!validation.success) {
+    throw new ValidationError(formatZodError(validation.error))
   }
+
+  return findKnowledgeChunks(validation.data)
 }
 
 export async function createKnowledge(
@@ -78,7 +88,7 @@ export async function createKnowledge(
   const validation = knowledgeCreateSchema.safeParse(data)
 
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   const knowledge = await createKnowledgeRecord({
@@ -86,8 +96,8 @@ export async function createKnowledge(
     userId: user.id
   })
 
-  void embeddingKnowledge(knowledge).catch(error => {
-    console.error(`Failed to embed knowledge ${knowledge.id}:`, error)
+  void sendKnowledgeIngest(knowledge.id).catch(error => {
+    console.error(`Failed to enqueue knowledge ${knowledge.id}:`, error)
   })
 
   return knowledge

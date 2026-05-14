@@ -1,6 +1,5 @@
 import { requireRoles } from '@/modules/auth/service'
 import { paginationSchema, type PaginationParams } from '@/lib/query'
-import z from 'zod'
 import {
   createAgentRecord,
   findAgentFormOptions,
@@ -10,6 +9,7 @@ import {
 } from './repository'
 import { agentCreateSchema, type AgentCreateFormValues } from './schemas'
 import { ValidationError } from '@/lib/api/errors'
+import { formatZodError } from '../../lib/zod'
 
 export type { AgentFormOptions, AgentRow, AgentsWithTotal } from './repository'
 
@@ -20,7 +20,7 @@ export async function fetchAgents(
 
   const validation = paginationSchema.safeParse(params)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return findAgents(validation.data)
@@ -36,7 +36,7 @@ export async function createAgent(data: AgentCreateFormValues) {
   const validation = agentCreateSchema.safeParse(data)
 
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return createAgentRecord({

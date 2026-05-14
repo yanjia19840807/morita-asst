@@ -1,5 +1,4 @@
 import STS from '@alicloud/sts-sdk'
-import z from 'zod'
 import { toStsTokenResponseDto } from './mapper'
 import type {
   BucketAccess,
@@ -10,6 +9,7 @@ import type {
 import { bucketAccessSchema } from './schemas'
 import { ValidationError } from '@/lib/api/errors'
 import { serverEnv } from '@/lib/env/server'
+import { formatZodError } from '../../lib/zod'
 
 let credentialCache: StsCredentialsDto | null = null
 const endpoint = 'sts.aliyuncs.com'
@@ -22,7 +22,7 @@ function isValid(expiresAt: number): boolean {
 function parseBucketAccess(bucketAccess?: string | null): BucketAccess {
   const validation = bucketAccessSchema.safeParse(bucketAccess ?? 'public')
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return validation.data

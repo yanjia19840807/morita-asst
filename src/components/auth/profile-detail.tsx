@@ -7,7 +7,7 @@ import { Pencil } from 'lucide-react'
 import Link from 'next/link'
 import type { AuthUserDto } from '@/modules/auth/dto'
 import PageTitle from '../layout/page-title'
-import DetailItem from '../data-item'
+import FieldDetail from '../field-detail'
 
 export default async function ProfileDetail({ user }: { user: AuthUserDto }) {
   return (
@@ -29,13 +29,13 @@ export default async function ProfileDetail({ user }: { user: AuthUserDto }) {
         <CardContent>
           <div className='flex flex-col gap-6'>
             <div className='flex flex-row justify-between gap-3'>
-              <DetailItem label='头像'>
+              <FieldDetail label='头像'>
                 <Avatar>
                   <AvatarImage src={user.image || '/avatar-default.svg'} />
                   <AvatarFallback>U</AvatarFallback>
                 </Avatar>
-              </DetailItem>
-              <DetailItem label='状态'>
+              </FieldDetail>
+              <FieldDetail label='状态'>
                 <div className='flex flex-wrap gap-2'>
                   <Badge variant={user.emailVerified ? 'secondary' : 'outline'}>
                     {user.emailVerified ? '邮箱已验证' : '邮箱未验证'}
@@ -44,17 +44,17 @@ export default async function ProfileDetail({ user }: { user: AuthUserDto }) {
                     {user.banned ? '已禁用' : '正常'}
                   </Badge>
                 </div>
-              </DetailItem>
+              </FieldDetail>
             </div>
-            <DetailItem label='邮件地址'>{user.email}</DetailItem>
-            <DetailItem label='用户名'>{user.name}</DetailItem>
-            <DetailItem label='角色'>{user.role}</DetailItem>
-            <DetailItem label='禁用原因'>{user.banReason ?? '-'}</DetailItem>
-            <DetailItem label='禁用截止'>
+            <FieldDetail label='邮件地址'>{user.email}</FieldDetail>
+            <FieldDetail label='用户名'>{user.name}</FieldDetail>
+            <FieldDetail label='角色'>{user.role}</FieldDetail>
+            <FieldDetail label='禁用原因'>{user.banReason ?? '-'}</FieldDetail>
+            <FieldDetail label='禁用截止'>
               {user.banExpires
                 ? format(new Date(user.banExpires), 'yyyy/MM/dd HH:mm')
                 : '-'}
-            </DetailItem>
+            </FieldDetail>
           </div>
         </CardContent>
         <CardFooter className='flex flex-wrap items-center gap-2'></CardFooter>

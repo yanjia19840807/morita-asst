@@ -12,7 +12,7 @@ export const routeLabels: Record<string, string> = {
   agents: '助手管理',
   documents: '文档数据',
   knowledge: '知识库',
-  'prompt-profiles': '提示词管理',
+  'prompt-profiles': '提示词',
   users: '用户',
   new: '新增',
   profile: '个人资料',
@@ -66,7 +66,7 @@ export const menuConfig: MenuConfig = [
         items: []
       },
       {
-        title: '提示词管理',
+        title: '提示词',
         url: '/prompt-profiles',
         icon: ScrollText,
         isActive: false,

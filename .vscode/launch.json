@@ -8,23 +8,16 @@
       "command": "npm run dev -- --inspect"
     },
     {
+      "name": "Knowledge Index Worker: debug",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run worker:index"
+    },
+    {
       "name": "Next.js: debug client-side",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000"
-    },
-    {
-      "name": "Next.js: debug client-side (Firefox)",
-      "type": "firefox",
-      "request": "launch",
-      "url": "http://localhost:3000",
-      "reAttach": true,
-      "pathMappings": [
-        {
-          "url": "webpack://_N_E",
-          "path": "${workspaceFolder}"
-        }
-      ]
     },
     {
       "name": "Next.js: debug full stack",

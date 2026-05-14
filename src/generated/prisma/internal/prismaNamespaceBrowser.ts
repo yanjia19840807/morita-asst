@@ -194,9 +194,6 @@ export const KnowledgeDocScalarFieldEnum = {
   errorMessage: 'errorMessage',
   lastIndexedAt: 'lastIndexedAt',
   chunkCount: 'chunkCount',
-  embeddingModel: 'embeddingModel',
-  splitConfig: 'splitConfig',
-  metadata: 'metadata',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -241,9 +238,6 @@ export const ChunkScalarFieldEnum = {
   knowledgeDocId: 'knowledgeDocId',
   content: 'content',
   metadata: 'metadata',
-  vector: 'vector',
-  embeddingStatus: 'embeddingStatus',
-  embeddingId: 'embeddingId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

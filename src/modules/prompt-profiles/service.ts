@@ -1,6 +1,6 @@
 import { requireRoles } from '@/modules/auth/service'
 import { ValidationError } from '@/lib/api/errors'
-import z from 'zod'
+import { formatZodError } from '../../lib/zod'
 import {
   createPromptProfileRecord,
   findAllPromptProfiles,
@@ -43,7 +43,7 @@ export async function fetchPromptProfileById(id: string) {
   const validation = promptProfileIdSchema.safeParse(id)
 
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return findPromptProfileById(validation.data)
@@ -54,7 +54,7 @@ export async function createPromptProfile(data: PromptProfileCreateFormValues) {
   const validation = promptProfileCreateSchema.safeParse(data)
 
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return createPromptProfileRecord({
@@ -68,7 +68,7 @@ export async function editPromptProfile(data: PromptProfileEditFormValues) {
   const validation = promptProfileEditSchema.safeParse(data)
 
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return updatePromptProfileRecord(validation.data)

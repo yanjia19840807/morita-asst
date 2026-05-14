@@ -8,7 +8,7 @@ export const nameSchema = z
   .max(30, '长度不能大于30个字符')
   .trim()
 
-export const emailSchema = z.email('邮箱地址不正确').trim()
+export const emailSchema = z.string().trim().email('邮箱地址不正确')
 
 export const passwordSchema = z
   .string()

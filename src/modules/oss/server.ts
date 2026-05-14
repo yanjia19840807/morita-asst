@@ -1,5 +1,3 @@
-import 'server-only'
-
 import OSS from 'ali-oss'
 import {
   getStsCredentials,

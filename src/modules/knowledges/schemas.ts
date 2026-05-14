@@ -89,6 +89,10 @@ export const fetchKnowledgeDocsParamsSchema = paginationSchema.extend({
   knowledgeId: knowledgeIdSchema
 })
 
+export const fetchKnowledgeChunksParamsSchema = paginationSchema.extend({
+  knowledgeId: knowledgeIdSchema
+})
+
 export const knowledgeEditSchema = knowledgeSchema
 
 export const knowledgeViewSchema = knowledgeSchema
@@ -116,3 +120,8 @@ export type FetchKnowledgeDocsParams = z.infer<
   typeof fetchKnowledgeDocsParamsSchema
 >
 export type FetchKnowledgeDocsQuery = FetchKnowledgeDocsParams
+
+export type FetchKnowledgeChunksParams = z.infer<
+  typeof fetchKnowledgeChunksParamsSchema
+>
+export type FetchKnowledgeChunksQuery = FetchKnowledgeChunksParams

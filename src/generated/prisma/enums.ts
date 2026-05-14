@@ -10,25 +10,15 @@
 */
 
 export const KnowledgeDocStatus = {
-  UPLOADED: 'UPLOADED',
+  PENDING: 'PENDING',
+  LOADING: 'LOADING',
   SPLITTING: 'SPLITTING',
-  SPLITTED: 'SPLITTED',
   EMBEDDING: 'EMBEDDING',
   READY: 'READY',
   FAILED: 'FAILED'
 } as const
 
 export type KnowledgeDocStatus = (typeof KnowledgeDocStatus)[keyof typeof KnowledgeDocStatus]
-
-
-export const ChunkEmbeddingStatus = {
-  PENDING: 'PENDING',
-  EMBEDDING: 'EMBEDDING',
-  EMBEDDED: 'EMBEDDED',
-  FAILED: 'FAILED'
-} as const
-
-export type ChunkEmbeddingStatus = (typeof ChunkEmbeddingStatus)[keyof typeof ChunkEmbeddingStatus]
 
 
 export const KnowledgeSourceMode = {

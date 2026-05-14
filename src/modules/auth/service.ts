@@ -1,6 +1,5 @@
 import { auth } from './server'
 import { headers } from 'next/headers'
-import z from 'zod'
 import type { PaginationParams } from '@/lib/query'
 import {
   toAuthSessionDto,
@@ -36,6 +35,7 @@ import {
   UnauthorizedError,
   ValidationError
 } from '@/lib/api/errors'
+import { formatZodError } from '../../lib/zod'
 
 export type SessionUser = AuthUserDto
 
@@ -64,7 +64,7 @@ async function getRequiredSessionData() {
 export async function signUpEmail(data: EmailSignUpFormValues) {
   const validation = emailSignUpSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
   const { email, name, password } = validation.data
 
@@ -80,7 +80,7 @@ export async function signUpEmail(data: EmailSignUpFormValues) {
 export async function signInEmail(data: EmailSignInFormValues) {
   const validation = emailSignInSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
   const { email, password } = validation.data
 
@@ -96,7 +96,7 @@ export async function signInEmail(data: EmailSignInFormValues) {
 export async function forgotPassword(data: ForgotPasswordFormValues) {
   const validation = forgotPasswordSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return auth.api.requestPasswordReset({
@@ -110,7 +110,7 @@ export async function forgotPassword(data: ForgotPasswordFormValues) {
 export async function resetPassword(data: ResetPasswordFormValues) {
   const validation = resetPasswordSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
   const { password, token } = validation.data
 
@@ -126,7 +126,7 @@ export async function changePassword(data: ProfilePasswordFormValues) {
   await requireAuth()
   const validation = profilePasswordSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   const { currentPassword, newPassword } = validation.data
@@ -143,7 +143,7 @@ export async function editProfile(data: Omit<ProfileEditFormValues, 'id'>) {
   await requireAuth()
   const validation = profileEditSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
   const { name, image } = validation.data
 
@@ -207,7 +207,7 @@ export async function createUser(data: UserCreateFormValues) {
   await requireRoles(['admin'])
   const validation = userCreateSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
   const { email, name, password, role, image } = validation.data
 
@@ -229,7 +229,7 @@ export async function editUser(data: UserEditFormValues) {
   await requireRoles(['admin'])
   const validation = userEditSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   const { id, name, role, image, password } = validation.data
@@ -263,7 +263,7 @@ export async function removeUser(id: UserId) {
   await requireRoles(['admin'])
   const validation = userIdSchema.safeParse(id)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return auth.api.removeUser({
@@ -278,7 +278,7 @@ export async function banUser(data: UserBanValues) {
   await requireRoles(['admin'])
   const validation = userBanSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   const { id, banReason } = validation.data
@@ -295,7 +295,7 @@ export async function unbanUser(id: UserId) {
   await requireRoles(['admin'])
   const validation = userIdSchema.safeParse(id)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return auth.api.unbanUser({

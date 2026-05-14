@@ -42,7 +42,6 @@ export type KnowledgeDocMinAggregateOutputType = {
   errorMessage: string | null
   lastIndexedAt: Date | null
   chunkCount: number | null
-  embeddingModel: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -55,7 +54,6 @@ export type KnowledgeDocMaxAggregateOutputType = {
   errorMessage: string | null
   lastIndexedAt: Date | null
   chunkCount: number | null
-  embeddingModel: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -68,9 +66,6 @@ export type KnowledgeDocCountAggregateOutputType = {
   errorMessage: number
   lastIndexedAt: number
   chunkCount: number
-  embeddingModel: number
-  splitConfig: number
-  metadata: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -93,7 +88,6 @@ export type KnowledgeDocMinAggregateInputType = {
   errorMessage?: true
   lastIndexedAt?: true
   chunkCount?: true
-  embeddingModel?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,7 +100,6 @@ export type KnowledgeDocMaxAggregateInputType = {
   errorMessage?: true
   lastIndexedAt?: true
   chunkCount?: true
-  embeddingModel?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -119,9 +112,6 @@ export type KnowledgeDocCountAggregateInputType = {
   errorMessage?: true
   lastIndexedAt?: true
   chunkCount?: true
-  embeddingModel?: true
-  splitConfig?: true
-  metadata?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -221,9 +211,6 @@ export type KnowledgeDocGroupByOutputType = {
   errorMessage: string | null
   lastIndexedAt: Date | null
   chunkCount: number
-  embeddingModel: string | null
-  splitConfig: runtime.JsonValue | null
-  metadata: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: KnowledgeDocCountAggregateOutputType | null
@@ -259,9 +246,6 @@ export type KnowledgeDocWhereInput = {
   errorMessage?: Prisma.StringNullableFilter<"KnowledgeDoc"> | string | null
   lastIndexedAt?: Prisma.DateTimeNullableFilter<"KnowledgeDoc"> | Date | string | null
   chunkCount?: Prisma.IntFilter<"KnowledgeDoc"> | number
-  embeddingModel?: Prisma.StringNullableFilter<"KnowledgeDoc"> | string | null
-  splitConfig?: Prisma.JsonNullableFilter<"KnowledgeDoc">
-  metadata?: Prisma.JsonNullableFilter<"KnowledgeDoc">
   createdAt?: Prisma.DateTimeFilter<"KnowledgeDoc"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"KnowledgeDoc"> | Date | string
   knowledge?: Prisma.XOR<Prisma.KnowledgeScalarRelationFilter, Prisma.KnowledgeWhereInput>
@@ -277,9 +261,6 @@ export type KnowledgeDocOrderByWithRelationInput = {
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   lastIndexedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
-  embeddingModel?: Prisma.SortOrderInput | Prisma.SortOrder
-  splitConfig?: Prisma.SortOrderInput | Prisma.SortOrder
-  metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   knowledge?: Prisma.KnowledgeOrderByWithRelationInput
@@ -299,9 +280,6 @@ export type KnowledgeDocWhereUniqueInput = Prisma.AtLeast<{
   errorMessage?: Prisma.StringNullableFilter<"KnowledgeDoc"> | string | null
   lastIndexedAt?: Prisma.DateTimeNullableFilter<"KnowledgeDoc"> | Date | string | null
   chunkCount?: Prisma.IntFilter<"KnowledgeDoc"> | number
-  embeddingModel?: Prisma.StringNullableFilter<"KnowledgeDoc"> | string | null
-  splitConfig?: Prisma.JsonNullableFilter<"KnowledgeDoc">
-  metadata?: Prisma.JsonNullableFilter<"KnowledgeDoc">
   createdAt?: Prisma.DateTimeFilter<"KnowledgeDoc"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"KnowledgeDoc"> | Date | string
   knowledge?: Prisma.XOR<Prisma.KnowledgeScalarRelationFilter, Prisma.KnowledgeWhereInput>
@@ -317,9 +295,6 @@ export type KnowledgeDocOrderByWithAggregationInput = {
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   lastIndexedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
-  embeddingModel?: Prisma.SortOrderInput | Prisma.SortOrder
-  splitConfig?: Prisma.SortOrderInput | Prisma.SortOrder
-  metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.KnowledgeDocCountOrderByAggregateInput
@@ -340,9 +315,6 @@ export type KnowledgeDocScalarWhereWithAggregatesInput = {
   errorMessage?: Prisma.StringNullableWithAggregatesFilter<"KnowledgeDoc"> | string | null
   lastIndexedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"KnowledgeDoc"> | Date | string | null
   chunkCount?: Prisma.IntWithAggregatesFilter<"KnowledgeDoc"> | number
-  embeddingModel?: Prisma.StringNullableWithAggregatesFilter<"KnowledgeDoc"> | string | null
-  splitConfig?: Prisma.JsonNullableWithAggregatesFilter<"KnowledgeDoc">
-  metadata?: Prisma.JsonNullableWithAggregatesFilter<"KnowledgeDoc">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"KnowledgeDoc"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"KnowledgeDoc"> | Date | string
 }
@@ -353,9 +325,6 @@ export type KnowledgeDocCreateInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   knowledge: Prisma.KnowledgeCreateNestedOneWithoutKnowledgeDocsInput
@@ -371,9 +340,6 @@ export type KnowledgeDocUncheckedCreateInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   chunks?: Prisma.ChunkUncheckedCreateNestedManyWithoutKnowledgeDocInput
@@ -385,9 +351,6 @@ export type KnowledgeDocUpdateInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   knowledge?: Prisma.KnowledgeUpdateOneRequiredWithoutKnowledgeDocsNestedInput
@@ -403,9 +366,6 @@ export type KnowledgeDocUncheckedUpdateInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chunks?: Prisma.ChunkUncheckedUpdateManyWithoutKnowledgeDocNestedInput
@@ -419,9 +379,6 @@ export type KnowledgeDocCreateManyInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -432,9 +389,6 @@ export type KnowledgeDocUpdateManyMutationInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -447,9 +401,6 @@ export type KnowledgeDocUncheckedUpdateManyInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -477,9 +428,6 @@ export type KnowledgeDocCountOrderByAggregateInput = {
   errorMessage?: Prisma.SortOrder
   lastIndexedAt?: Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
-  embeddingModel?: Prisma.SortOrder
-  splitConfig?: Prisma.SortOrder
-  metadata?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -496,7 +444,6 @@ export type KnowledgeDocMaxOrderByAggregateInput = {
   errorMessage?: Prisma.SortOrder
   lastIndexedAt?: Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
-  embeddingModel?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -509,7 +456,6 @@ export type KnowledgeDocMinOrderByAggregateInput = {
   errorMessage?: Prisma.SortOrder
   lastIndexedAt?: Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
-  embeddingModel?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -639,9 +585,6 @@ export type KnowledgeDocCreateWithoutKnowledgeInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   doc: Prisma.DocCreateNestedOneWithoutKnowledgeDocsInput
@@ -655,9 +598,6 @@ export type KnowledgeDocUncheckedCreateWithoutKnowledgeInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   chunks?: Prisma.ChunkUncheckedCreateNestedManyWithoutKnowledgeDocInput
@@ -700,9 +640,6 @@ export type KnowledgeDocScalarWhereInput = {
   errorMessage?: Prisma.StringNullableFilter<"KnowledgeDoc"> | string | null
   lastIndexedAt?: Prisma.DateTimeNullableFilter<"KnowledgeDoc"> | Date | string | null
   chunkCount?: Prisma.IntFilter<"KnowledgeDoc"> | number
-  embeddingModel?: Prisma.StringNullableFilter<"KnowledgeDoc"> | string | null
-  splitConfig?: Prisma.JsonNullableFilter<"KnowledgeDoc">
-  metadata?: Prisma.JsonNullableFilter<"KnowledgeDoc">
   createdAt?: Prisma.DateTimeFilter<"KnowledgeDoc"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"KnowledgeDoc"> | Date | string
 }
@@ -713,9 +650,6 @@ export type KnowledgeDocCreateWithoutDocInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   knowledge: Prisma.KnowledgeCreateNestedOneWithoutKnowledgeDocsInput
@@ -729,9 +663,6 @@ export type KnowledgeDocUncheckedCreateWithoutDocInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   chunks?: Prisma.ChunkUncheckedCreateNestedManyWithoutKnowledgeDocInput
@@ -769,9 +700,6 @@ export type KnowledgeDocCreateWithoutChunksInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   knowledge: Prisma.KnowledgeCreateNestedOneWithoutKnowledgeDocsInput
@@ -786,9 +714,6 @@ export type KnowledgeDocUncheckedCreateWithoutChunksInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -815,9 +740,6 @@ export type KnowledgeDocUpdateWithoutChunksInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   knowledge?: Prisma.KnowledgeUpdateOneRequiredWithoutKnowledgeDocsNestedInput
@@ -832,9 +754,6 @@ export type KnowledgeDocUncheckedUpdateWithoutChunksInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -846,9 +765,6 @@ export type KnowledgeDocCreateManyKnowledgeInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -859,9 +775,6 @@ export type KnowledgeDocUpdateWithoutKnowledgeInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   doc?: Prisma.DocUpdateOneRequiredWithoutKnowledgeDocsNestedInput
@@ -875,9 +788,6 @@ export type KnowledgeDocUncheckedUpdateWithoutKnowledgeInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chunks?: Prisma.ChunkUncheckedUpdateManyWithoutKnowledgeDocNestedInput
@@ -890,9 +800,6 @@ export type KnowledgeDocUncheckedUpdateManyWithoutKnowledgeInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -904,9 +811,6 @@ export type KnowledgeDocCreateManyDocInput = {
   errorMessage?: string | null
   lastIndexedAt?: Date | string | null
   chunkCount?: number
-  embeddingModel?: string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -917,9 +821,6 @@ export type KnowledgeDocUpdateWithoutDocInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   knowledge?: Prisma.KnowledgeUpdateOneRequiredWithoutKnowledgeDocsNestedInput
@@ -933,9 +834,6 @@ export type KnowledgeDocUncheckedUpdateWithoutDocInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chunks?: Prisma.ChunkUncheckedUpdateManyWithoutKnowledgeDocNestedInput
@@ -948,9 +846,6 @@ export type KnowledgeDocUncheckedUpdateManyWithoutDocInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastIndexedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
-  embeddingModel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  splitConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -994,9 +889,6 @@ export type KnowledgeDocSelect<ExtArgs extends runtime.Types.Extensions.Internal
   errorMessage?: boolean
   lastIndexedAt?: boolean
   chunkCount?: boolean
-  embeddingModel?: boolean
-  splitConfig?: boolean
-  metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   knowledge?: boolean | Prisma.KnowledgeDefaultArgs<ExtArgs>
@@ -1013,9 +905,6 @@ export type KnowledgeDocSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   errorMessage?: boolean
   lastIndexedAt?: boolean
   chunkCount?: boolean
-  embeddingModel?: boolean
-  splitConfig?: boolean
-  metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   knowledge?: boolean | Prisma.KnowledgeDefaultArgs<ExtArgs>
@@ -1030,9 +919,6 @@ export type KnowledgeDocSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   errorMessage?: boolean
   lastIndexedAt?: boolean
   chunkCount?: boolean
-  embeddingModel?: boolean
-  splitConfig?: boolean
-  metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   knowledge?: boolean | Prisma.KnowledgeDefaultArgs<ExtArgs>
@@ -1047,14 +933,11 @@ export type KnowledgeDocSelectScalar = {
   errorMessage?: boolean
   lastIndexedAt?: boolean
   chunkCount?: boolean
-  embeddingModel?: boolean
-  splitConfig?: boolean
-  metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type KnowledgeDocOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "knowledgeId" | "docId" | "status" | "errorMessage" | "lastIndexedAt" | "chunkCount" | "embeddingModel" | "splitConfig" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["knowledgeDoc"]>
+export type KnowledgeDocOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "knowledgeId" | "docId" | "status" | "errorMessage" | "lastIndexedAt" | "chunkCount" | "createdAt" | "updatedAt", ExtArgs["result"]["knowledgeDoc"]>
 export type KnowledgeDocInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   knowledge?: boolean | Prisma.KnowledgeDefaultArgs<ExtArgs>
   doc?: boolean | Prisma.DocDefaultArgs<ExtArgs>
@@ -1085,9 +968,6 @@ export type $KnowledgeDocPayload<ExtArgs extends runtime.Types.Extensions.Intern
     errorMessage: string | null
     lastIndexedAt: Date | null
     chunkCount: number
-    embeddingModel: string | null
-    splitConfig: runtime.JsonValue | null
-    metadata: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["knowledgeDoc"]>
@@ -1523,9 +1403,6 @@ export interface KnowledgeDocFieldRefs {
   readonly errorMessage: Prisma.FieldRef<"KnowledgeDoc", 'String'>
   readonly lastIndexedAt: Prisma.FieldRef<"KnowledgeDoc", 'DateTime'>
   readonly chunkCount: Prisma.FieldRef<"KnowledgeDoc", 'Int'>
-  readonly embeddingModel: Prisma.FieldRef<"KnowledgeDoc", 'String'>
-  readonly splitConfig: Prisma.FieldRef<"KnowledgeDoc", 'Json'>
-  readonly metadata: Prisma.FieldRef<"KnowledgeDoc", 'Json'>
   readonly createdAt: Prisma.FieldRef<"KnowledgeDoc", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"KnowledgeDoc", 'DateTime'>
 }

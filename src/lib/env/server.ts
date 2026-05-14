@@ -1,4 +1,4 @@
-import 'server-only'
+import 'dotenv/config'
 
 import { cleanEnv, port, str, url } from 'envalid'
 

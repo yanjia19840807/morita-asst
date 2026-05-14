@@ -1,30 +1,43 @@
-import {
-  PGVectorStore,
-  type DistanceStrategy
-} from '@langchain/community/vectorstores/pgvector'
-import type { PoolConfig } from 'pg'
+import { PrismaVectorStore } from '@langchain/community/vectorstores/prisma'
+import { Prisma } from '@/generated/prisma/client'
 import { embeddings } from './embedding'
-import { serverEnv } from './env/server'
+import { prisma } from './prisma'
 
-const postgresConnectionOptions: PoolConfig = {
-  host: serverEnv.dbHost,
-  port: serverEnv.dbPort,
-  user: serverEnv.dbUser,
-  password: serverEnv.dbPassword,
-  database: serverEnv.dbName
-}
-const config = {
-  postgresConnectionOptions,
-  preDeleteCollection: true,
-  tableName: 'chunk',
-  columns: {
-    idColumnName: 'id',
-    vectorColumnName: 'vector',
-    contentColumnName: 'content',
-    metadataColumnName: 'metadata'
-  },
-  // supported distance strategies: cosine (default), innerProduct, or euclidean
-  distanceStrategy: 'cosine' as DistanceStrategy
+type ChunkVectorModel = {
+  id: string
+  content: string
+  metadata: Prisma.JsonValue
+  knowledgeDocId: string
+  vector?: unknown
 }
 
-export const vectorStore = await PGVectorStore.initialize(embeddings, config)
+let vectorStorePromise: Promise<
+  ReturnType<
+    ReturnType<typeof PrismaVectorStore.withModel<ChunkVectorModel>>['create']
+  >
+> | null = null
+
+export function getVectorStore() {
+  if (!vectorStorePromise) {
+    vectorStorePromise = Promise.resolve(
+      PrismaVectorStore.withModel<ChunkVectorModel>(prisma).create(embeddings, {
+        prisma: Prisma,
+        tableName: 'chunk' as unknown as 'Chunk',
+        vectorColumnName: 'vector',
+        columns: {
+          id: PrismaVectorStore.IdColumn,
+          content: PrismaVectorStore.ContentColumn,
+          metadata: true,
+          knowledgeDocId: true
+        },
+        columnTypes: {
+          id: 'text',
+          knowledgeDocId: 'text',
+          metadata: 'jsonb'
+        }
+      })
+    )
+  }
+
+  return vectorStorePromise
+}

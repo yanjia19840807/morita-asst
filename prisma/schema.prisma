@@ -155,13 +155,10 @@ model KnowledgeDoc {
   docId          String
   knowledge      Knowledge          @relation(fields: [knowledgeId], references: [id], onDelete: Cascade)
   doc            Doc                @relation(fields: [docId], references: [id], onDelete: Cascade)
-  status         KnowledgeDocStatus @default(UPLOADED)
+  status         KnowledgeDocStatus @default(PENDING)
   errorMessage   String?
   lastIndexedAt  DateTime?
   chunkCount     Int                @default(0)
-  embeddingModel String?
-  splitConfig    Json?
-  metadata       Json?
   chunks         Chunk[]
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
@@ -231,33 +228,22 @@ model Chunk {
   content  String // Chunk 的实际文本内容（可编辑）
   metadata Json // LangChain 用的 metadata（包含 knowledgeId、docId 等）
 
-  vector          String?
-  // 嵌入状态
-  embeddingStatus ChunkEmbeddingStatus @default(PENDING)
-  embeddingId     String? // 可选：LangChain pgvector 表里的 uuid，方便精准删除
+  vector Unsupported("vector")?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([knowledgeDocId])
-  @@index([embeddingStatus])
   @@map("chunk")
 }
 
 enum KnowledgeDocStatus {
-  UPLOADED // 已上传（文档初始状态）
+  PENDING // 待处理（已关联到知识库，但尚未开始）
+  LOADING // 加载中（从 OSS 下载并由 loader 读取）
   SPLITTING // 切分中
-  SPLITTED // 已切分（文档切分完成）
   EMBEDDING // 嵌入中（正在执行嵌入操作）
   READY // 已完成嵌入，可被 RAG 检索
   FAILED // 失败（通用失败状态，文档或 Chunk 都可用）
-}
-
-enum ChunkEmbeddingStatus {
-  PENDING // 待嵌入
-  EMBEDDING // 嵌入中
-  EMBEDDED // 已嵌入
-  FAILED // 嵌入失败
 }
 
 enum KnowledgeSourceMode {

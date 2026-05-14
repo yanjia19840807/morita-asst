@@ -1,6 +1,5 @@
 import type { DocCate } from '@/generated/prisma/client'
 import { requireRoles } from '@/modules/auth/service'
-import z from 'zod'
 import {
   createDocCateRecord,
   createDocs,
@@ -26,6 +25,7 @@ import {
   type FetchDocsParams
 } from './schemas'
 import { ValidationError } from '@/lib/api/errors'
+import { formatZodError } from '../../lib/zod'
 
 export type { DocRow, FetchDocsResult }
 
@@ -34,7 +34,7 @@ export async function createDoc(data: DocCreateValues) {
   const validation = docCreateSchema.safeParse(data)
 
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   const { categoryId, files } = validation.data
@@ -53,7 +53,7 @@ export async function fetchDocs(
 
   const validation = fetchDocsParamsSchema.safeParse(params)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return findDocs(validation.data)
@@ -64,7 +64,7 @@ export async function deleteDocs(ids: string[]) {
 
   const validation = deleteDocsParamsSchema.safeParse(ids)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return deleteDocRecords(validation.data)
@@ -76,7 +76,7 @@ export async function createDocCate(
   const user = await requireRoles(['admin'])
   const validation = docCateCreateFormSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return createDocCateRecord({
@@ -91,7 +91,7 @@ export async function editDocCate(
   await requireRoles(['admin'])
   const validation = docCateEditFormSchema.safeParse(data)
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   return updateDocCateRecord(validation.data)
@@ -109,7 +109,7 @@ export async function reorderDocCates(
   const validation = docCateReorderSchema.safeParse(data)
 
   if (!validation.success) {
-    throw new ValidationError(z.prettifyError(validation.error))
+    throw new ValidationError(formatZodError(validation.error))
   }
 
   const categories = await findDocCates()
