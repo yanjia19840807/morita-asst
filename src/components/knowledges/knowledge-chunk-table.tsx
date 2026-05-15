@@ -66,12 +66,16 @@ function KnowledgeChunkTable({
           className='w-1/2'
         />
       </TableActionSection>
-      <Table>
+      <Table className='table-fixed'>
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map(header => (
-                <TableHead key={header.id}>
+                <TableHead
+                  key={header.id}
+                  style={{ width: header.getSize() }}
+                  className='truncate'
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -88,7 +92,11 @@ function KnowledgeChunkTable({
             table.getRowModel().rows.map(row => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map(cell => (
-                  <TableCell key={cell.id}>
+                  <TableCell
+                    key={cell.id}
+                    style={{ width: cell.column.getSize() }}
+                    className='align-top whitespace-normal'
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

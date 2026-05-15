@@ -21,6 +21,7 @@ model User {
   knowledges     Knowledge[]
   docs           Doc[]
   docCates       DocCate[]
+  userProfile    UserProfile?
   name           String
   emailVerified  Boolean         @default(false)
   image          String?
@@ -84,6 +85,36 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model UserProfile {
+  id         String      @id @default(uuid())
+  userId     String      @unique
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gender     String?
+  ageRange   String?
+  occupation String?
+  issues     UserIssue[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([userId])
+  @@map("user-profile")
+}
+
+model UserIssue {
+  id            String      @id @default(uuid())
+  userProfileId String
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  priority      Int         @default(1)
+  tags          Json?
+  description   String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([userProfileId])
+  @@index([priority])
+  @@map("user-issue")
 }
 
 model Agent {

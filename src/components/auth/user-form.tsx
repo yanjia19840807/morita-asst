@@ -17,7 +17,13 @@ import type z from 'zod'
 import AvatarPicker from '@/components/avatar-picker'
 import PageTitle from '@/components/layout/page-title'
 import { Button, buttonVariants } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 import {
   Field,
   FieldDescription,
@@ -53,6 +59,10 @@ interface UserFormProps {
   defaultValues: UserFormInput
   schema: z.ZodType<UserFormInput>
   onSubmitAction: (values: UserFormInput) => Promise<ResponseResult>
+  children?: React.ReactNode
+  renderExtra?: (context: {
+    selectedRole: UserFormInput['role']
+  }) => React.ReactNode
 }
 
 export function UserForm({
@@ -61,7 +71,9 @@ export function UserForm({
   formId,
   defaultValues,
   schema,
-  onSubmitAction
+  onSubmitAction,
+  children,
+  renderExtra
 }: UserFormProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
@@ -71,6 +83,7 @@ export function UserForm({
     resolver: zodResolver(schema as never) as Resolver<UserFormInput>,
     defaultValues
   })
+  const selectedRole = form.watch('role')
 
   useEffect(() => {
     form.reset(defaultValues)
@@ -263,6 +276,10 @@ export function UserForm({
           <input type='hidden' {...form.register('id')} />
         )}
         <Card>
+          <CardHeader>
+            <CardTitle>基本信息</CardTitle>
+            <CardDescription>维护用户账号基础资料和权限</CardDescription>
+          </CardHeader>
           <CardContent>
             <FieldGroup>
               <FieldSet>
@@ -302,6 +319,8 @@ export function UserForm({
           </CardContent>
         </Card>
       </form>
+      {renderExtra ? renderExtra({ selectedRole }) : null}
+      {children}
     </div>
   )
 }

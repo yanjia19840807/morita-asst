@@ -1,6 +1,12 @@
 'use client'
 
+import { useEffect, useRef, useTransition } from 'react'
 import { changePasswordAction, editProfileAction } from '@/modules/auth/actions'
+import { saveMyUserProfileAction } from '@/modules/profiles/actions'
+import {
+  UserProfileForm,
+  type UserProfileFormHandle
+} from '@/components/profiles/user-profile-form'
 import {
   Card,
   CardContent,
@@ -36,18 +42,26 @@ import {
   profileEditSchema,
   profilePasswordSchema
 } from '@/modules/auth/schemas'
+import {
+  userProfileEditSchema,
+  type UserProfileEditValues
+} from '@/modules/profiles/schemas'
 import { uploadAvatar } from '@/modules/oss/client'
 import AvatarPicker from '../avatar-picker'
-import { useEffect, useTransition } from 'react'
 import PageTitle from '../layout/page-title'
 import { toast } from 'sonner'
 
 export default function ProfileEditForm({
-  data
+  data,
+  userRole,
+  profileData
 }: {
   data: ProfileEditFormValues & { id: string }
+  userRole: string | null
+  profileData?: UserProfileEditValues | null
 }) {
   const router = useRouter()
+  const profileFormRef = useRef<UserProfileFormHandle>(null)
   const [isProfilePending, startProfileTransition] = useTransition()
   const [isPasswordPending, startPasswordTransition] = useTransition()
 
@@ -189,6 +203,20 @@ export default function ProfileEditForm({
   async function onSubmit(values: ProfileEditFormValues) {
     startProfileTransition(async () => {
       try {
+        const nextProfileValues =
+          userRole !== 'admin' && profileFormRef.current
+            ? await profileFormRef.current.getValidatedValues()
+            : null
+
+        if (
+          userRole !== 'admin' &&
+          profileFormRef.current &&
+          !nextProfileValues
+        ) {
+          toast.error('请先完善用户画像后再保存')
+          return
+        }
+
         const name = values.name
         const image = values.image
         const isNewImage = image instanceof File
@@ -202,6 +230,16 @@ export default function ProfileEditForm({
         })
 
         if (result.success) {
+          if (userRole !== 'admin' && nextProfileValues) {
+            const profileResult =
+              await saveMyUserProfileAction(nextProfileValues)
+
+            if (!profileResult.success) {
+              toast.error(profileResult.error.message)
+              return
+            }
+          }
+
           toast.success('资料更新成功')
           router.replace('/profile')
         } else {
@@ -303,6 +341,20 @@ export default function ProfileEditForm({
             <CardFooter className='flex flex-wrap items-center gap-2'></CardFooter>
           </Card>
         </form>
+        {userRole !== 'admin' && profileData ? (
+          <UserProfileForm
+            ref={profileFormRef}
+            title='用户画像'
+            formId='myEmbeddedUserProfileForm'
+            backHref='/profile'
+            defaultValues={profileData}
+            schema={userProfileEditSchema}
+            onSubmitAction={saveMyUserProfileAction}
+            embedded
+            cardDescription='补充当前问题背景、标签和主要困扰，用于支持后续问答与案例检索。'
+            hideSubmitButton
+          />
+        ) : null}
         <form
           id='profilePasswordForm'
           onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}

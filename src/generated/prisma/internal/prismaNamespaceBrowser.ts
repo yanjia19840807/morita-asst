@@ -55,6 +55,8 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
+  UserProfile: 'UserProfile',
+  UserIssue: 'UserIssue',
   Agent: 'Agent',
   PromptProfile: 'PromptProfile',
   Knowledge: 'Knowledge',
@@ -141,6 +143,32 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const UserProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  gender: 'gender',
+  ageRange: 'ageRange',
+  occupation: 'occupation',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserProfileScalarFieldEnum = (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum]
+
+
+export const UserIssueScalarFieldEnum = {
+  id: 'id',
+  userProfileId: 'userProfileId',
+  priority: 'priority',
+  tags: 'tags',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserIssueScalarFieldEnum = (typeof UserIssueScalarFieldEnum)[keyof typeof UserIssueScalarFieldEnum]
 
 
 export const AgentScalarFieldEnum = {

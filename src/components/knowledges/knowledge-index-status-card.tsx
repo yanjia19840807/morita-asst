@@ -2,12 +2,19 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 import {
   queryKnowledgeIndexSummary,
   getKnowledgeIndexSummaryQueryKey
 } from '@/modules/knowledges/indexing/client'
-import FieldDetail from '../field-detail'
+import InfoItem from '../info-item'
+import { Separator } from '../ui/separator'
 import { KnowledgeDocsReadonlyTable } from './knowledge-docs-readonly-table'
 
 export function KnowledgeIndexStatusCard({
@@ -32,6 +39,7 @@ export function KnowledgeIndexStatusCard({
     <Card>
       <CardHeader>
         <CardTitle>索引状态</CardTitle>
+        <CardDescription>文档处理进度和各阶段统计概览</CardDescription>
       </CardHeader>
       <CardContent>
         <div className='flex flex-col gap-6'>
@@ -52,20 +60,21 @@ export function KnowledgeIndexStatusCard({
             </div>
           </div>
 
-          <div className='flex flex-row justify-between gap-3'>
-            <FieldDetail label='总文档数'>{summary.total}</FieldDetail>
-            <FieldDetail label='已完成'>{summary.ready}</FieldDetail>
-            <FieldDetail label='处理中'>{summary.processing}</FieldDetail>
-            <FieldDetail label='失败'>{summary.failed}</FieldDetail>
+          <div className='grid grid-cols-2 gap-x-6 gap-y-4 md:grid-cols-4'>
+            <InfoItem label='总文档数' value={summary.total} />
+            <InfoItem label='已完成' value={summary.ready} />
+            <InfoItem label='处理中' value={summary.processing} />
+            <InfoItem label='失败' value={summary.failed} />
           </div>
 
-          <div className='flex flex-row justify-between gap-3'>
-            <FieldDetail label='待处理'>{summary.counts.PENDING}</FieldDetail>
-            <FieldDetail label='加载中'>{summary.counts.LOADING}</FieldDetail>
-            <FieldDetail label='切分中'>{summary.counts.SPLITTING}</FieldDetail>
-            <FieldDetail label='嵌入中'>{summary.counts.EMBEDDING}</FieldDetail>
+          <div className='grid grid-cols-2 gap-x-6 gap-y-4 md:grid-cols-4'>
+            <InfoItem label='待处理' value={summary.counts.PENDING} />
+            <InfoItem label='加载中' value={summary.counts.LOADING} />
+            <InfoItem label='切分中' value={summary.counts.SPLITTING} />
+            <InfoItem label='嵌入中' value={summary.counts.EMBEDDING} />
           </div>
 
+          <Separator />
           <KnowledgeDocsReadonlyTable knowledgeId={knowledgeId} />
         </div>
       </CardContent>

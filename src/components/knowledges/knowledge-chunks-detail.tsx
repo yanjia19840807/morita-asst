@@ -57,7 +57,7 @@ export function KnowledgeChunksDetail({
         {knowledge ? `${knowledge.name} / Chunk 浏览` : 'Chunk 浏览'}
       </PageTitle>
 
-      <div className='grid grid-cols-3 gap-3'>
+      <div className='grid gap-3 md:grid-cols-3'>
         <Card size='sm'>
           <CardHeader>
             <CardDescription>Chunk总数</CardDescription>

@@ -5,10 +5,10 @@ export default function PreviewCell({ value }: { value: string | null }) {
 
   return (
     <div
-      className='max-w-[24rem] min-w-56 wrap-break-word whitespace-pre-wrap'
+      className='w-full min-w-0 overflow-hidden wrap-break-word whitespace-pre-wrap'
       title={value}
     >
-      <div className='line-clamp-4'>{value}</div>
+      <div className='line-clamp-4 wrap-break-word'>{value}</div>
     </div>
   )
 }

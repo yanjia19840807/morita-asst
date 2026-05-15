@@ -13,6 +13,7 @@ export const routeLabels: Record<string, string> = {
   documents: '文档数据',
   knowledge: '知识库',
   'prompt-profiles': '提示词',
+  'user-profile': '用户画像',
   users: '用户',
   new: '新增',
   profile: '个人资料',

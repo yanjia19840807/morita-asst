@@ -62,6 +62,16 @@ export type Account = Prisma.AccountModel
  */
 export type Verification = Prisma.VerificationModel
 /**
+ * Model UserProfile
+ * 
+ */
+export type UserProfile = Prisma.UserProfileModel
+/**
+ * Model UserIssue
+ * 
+ */
+export type UserIssue = Prisma.UserIssueModel
+/**
  * Model Agent
  * 
  */

@@ -235,6 +235,7 @@ export type UserWhereInput = {
   knowledges?: Prisma.KnowledgeListRelationFilter
   docs?: Prisma.DocListRelationFilter
   docCates?: Prisma.DocCateListRelationFilter
+  userProfile?: Prisma.XOR<Prisma.UserProfileNullableScalarRelationFilter, Prisma.UserProfileWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
 }
@@ -256,6 +257,7 @@ export type UserOrderByWithRelationInput = {
   knowledges?: Prisma.KnowledgeOrderByRelationAggregateInput
   docs?: Prisma.DocOrderByRelationAggregateInput
   docCates?: Prisma.DocCateOrderByRelationAggregateInput
+  userProfile?: Prisma.UserProfileOrderByWithRelationInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
 }
@@ -280,6 +282,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   knowledges?: Prisma.KnowledgeListRelationFilter
   docs?: Prisma.DocListRelationFilter
   docCates?: Prisma.DocCateListRelationFilter
+  userProfile?: Prisma.XOR<Prisma.UserProfileNullableScalarRelationFilter, Prisma.UserProfileWhereInput> | null
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
 }, "id" | "email">
@@ -335,6 +338,7 @@ export type UserCreateInput = {
   knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -356,6 +360,7 @@ export type UserUncheckedCreateInput = {
   knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -377,6 +382,7 @@ export type UserUpdateInput = {
   knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -398,6 +404,7 @@ export type UserUncheckedUpdateInput = {
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -543,6 +550,20 @@ export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
 }
 
+export type UserCreateNestedOneWithoutUserProfileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserProfileInput, Prisma.UserUncheckedCreateWithoutUserProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutUserProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserProfileInput, Prisma.UserUncheckedCreateWithoutUserProfileInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserProfileInput
+  upsert?: Prisma.UserUpsertWithoutUserProfileInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserProfileInput, Prisma.UserUpdateWithoutUserProfileInput>, Prisma.UserUncheckedUpdateWithoutUserProfileInput>
+}
+
 export type UserCreateNestedOneWithoutAgentsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAgentsInput, Prisma.UserUncheckedCreateWithoutAgentsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAgentsInput
@@ -630,6 +651,7 @@ export type UserCreateWithoutSessionsInput = {
   knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
 
@@ -650,6 +672,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -686,6 +709,7 @@ export type UserUpdateWithoutSessionsInput = {
   knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
 
@@ -706,6 +730,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -726,6 +751,7 @@ export type UserCreateWithoutAccountsInput = {
   knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
@@ -746,6 +772,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -782,6 +809,7 @@ export type UserUpdateWithoutAccountsInput = {
   knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
@@ -802,7 +830,108 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutUserProfileInput = {
+  id?: string
+  email: string
+  createdAt?: Date | string
+  name: string
+  emailVerified?: boolean
+  image?: string | null
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  agents?: Prisma.AgentCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
+  docs?: Prisma.DocCreateNestedManyWithoutUserInput
+  docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutUserProfileInput = {
+  id?: string
+  email: string
+  createdAt?: Date | string
+  name: string
+  emailVerified?: boolean
+  image?: string | null
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  agents?: Prisma.AgentUncheckedCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
+  docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
+  docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutUserProfileInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserProfileInput, Prisma.UserUncheckedCreateWithoutUserProfileInput>
+}
+
+export type UserUpsertWithoutUserProfileInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUserProfileInput, Prisma.UserUncheckedUpdateWithoutUserProfileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserProfileInput, Prisma.UserUncheckedCreateWithoutUserProfileInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUserProfileInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUserProfileInput, Prisma.UserUncheckedUpdateWithoutUserProfileInput>
+}
+
+export type UserUpdateWithoutUserProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  agents?: Prisma.AgentUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
+  docs?: Prisma.DocUpdateManyWithoutUserNestedInput
+  docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUserProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  agents?: Prisma.AgentUncheckedUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
+  docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
+  docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAgentsInput = {
@@ -821,6 +950,7 @@ export type UserCreateWithoutAgentsInput = {
   knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -841,6 +971,7 @@ export type UserUncheckedCreateWithoutAgentsInput = {
   knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -877,6 +1008,7 @@ export type UserUpdateWithoutAgentsInput = {
   knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -897,6 +1029,7 @@ export type UserUncheckedUpdateWithoutAgentsInput = {
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -917,6 +1050,7 @@ export type UserCreateWithoutPromptProfilesInput = {
   knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -937,6 +1071,7 @@ export type UserUncheckedCreateWithoutPromptProfilesInput = {
   knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -973,6 +1108,7 @@ export type UserUpdateWithoutPromptProfilesInput = {
   knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -993,6 +1129,7 @@ export type UserUncheckedUpdateWithoutPromptProfilesInput = {
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1013,6 +1150,7 @@ export type UserCreateWithoutKnowledgesInput = {
   promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1033,6 +1171,7 @@ export type UserUncheckedCreateWithoutKnowledgesInput = {
   promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1069,6 +1208,7 @@ export type UserUpdateWithoutKnowledgesInput = {
   promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1089,6 +1229,7 @@ export type UserUncheckedUpdateWithoutKnowledgesInput = {
   promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1109,6 +1250,7 @@ export type UserCreateWithoutDocCatesInput = {
   promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
   knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1129,6 +1271,7 @@ export type UserUncheckedCreateWithoutDocCatesInput = {
   promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
   knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1165,6 +1308,7 @@ export type UserUpdateWithoutDocCatesInput = {
   promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
   knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1185,6 +1329,7 @@ export type UserUncheckedUpdateWithoutDocCatesInput = {
   promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1205,6 +1350,7 @@ export type UserCreateWithoutDocsInput = {
   promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
   knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1225,6 +1371,7 @@ export type UserUncheckedCreateWithoutDocsInput = {
   promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
   knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1261,6 +1408,7 @@ export type UserUpdateWithoutDocsInput = {
   promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
   knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1281,6 +1429,7 @@ export type UserUncheckedUpdateWithoutDocsInput = {
   promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1387,6 +1536,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   knowledges?: boolean | Prisma.User$knowledgesArgs<ExtArgs>
   docs?: boolean | Prisma.User$docsArgs<ExtArgs>
   docCates?: boolean | Prisma.User$docCatesArgs<ExtArgs>
+  userProfile?: boolean | Prisma.User$userProfileArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1441,6 +1591,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   knowledges?: boolean | Prisma.User$knowledgesArgs<ExtArgs>
   docs?: boolean | Prisma.User$docsArgs<ExtArgs>
   docCates?: boolean | Prisma.User$docCatesArgs<ExtArgs>
+  userProfile?: boolean | Prisma.User$userProfileArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1456,6 +1607,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     knowledges: Prisma.$KnowledgePayload<ExtArgs>[]
     docs: Prisma.$DocPayload<ExtArgs>[]
     docCates: Prisma.$DocCatePayload<ExtArgs>[]
+    userProfile: Prisma.$UserProfilePayload<ExtArgs> | null
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
   }
@@ -1870,6 +2022,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   knowledges<T extends Prisma.User$knowledgesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$knowledgesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KnowledgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   docs<T extends Prisma.User$docsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$docsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   docCates<T extends Prisma.User$docCatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$docCatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocCatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userProfile<T extends Prisma.User$userProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userProfileArgs<ExtArgs>>): Prisma.Prisma__UserProfileClient<runtime.Types.Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2422,6 +2575,25 @@ export type User$docCatesArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.DocCateScalarFieldEnum | Prisma.DocCateScalarFieldEnum[]
+}
+
+/**
+ * User.userProfile
+ */
+export type User$userProfileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserProfile
+   */
+  select?: Prisma.UserProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserProfile
+   */
+  omit?: Prisma.UserProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserProfileInclude<ExtArgs> | null
+  where?: Prisma.UserProfileWhereInput
 }
 
 /**

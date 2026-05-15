@@ -3,25 +3,27 @@ import { format } from 'date-fns'
 
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
-import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldSeparator,
-  FieldSet
-} from '@/components/ui/field'
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ChevronLeft, Edit } from 'lucide-react'
 import type { AuthUserDto } from '@/modules/auth/dto'
+import type { UserProfileDetailDto } from '@/modules/profiles/dto'
+import InfoItem from '@/components/info-item'
 import PageTitle from '../layout/page-title'
+import { UserProfileDetail } from '../profiles/user-profile-detail'
 
 interface UserDetailViewProps {
   user: AuthUserDto
+  profile?: UserProfileDetailDto | null
 }
 
-export function UserDetail({ user }: UserDetailViewProps) {
+export function UserDetail({ user, profile }: UserDetailViewProps) {
   return (
     <div className='flex min-h-0 flex-1 flex-col gap-3'>
       <PageTitle
@@ -49,19 +51,24 @@ export function UserDetail({ user }: UserDetailViewProps) {
         用户信息
       </PageTitle>
       <Card>
+        <CardHeader>
+          <CardTitle>基本信息</CardTitle>
+          <CardDescription>用户账号状态、身份和基础资料</CardDescription>
+        </CardHeader>
         <CardContent>
-          <FieldGroup>
-            <FieldSet>
-              <Field orientation='horizontal'>
-                <FieldLabel>头像</FieldLabel>
+          <div className='grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2'>
+            <InfoItem
+              label='头像'
+              value={
                 <Avatar>
                   <AvatarImage src={user.image ?? '/avatar-default.svg'} />
                   <AvatarFallback>U</AvatarFallback>
                 </Avatar>
-              </Field>
-              <FieldSeparator />
-              <Field orientation='horizontal'>
-                <FieldLabel>状态</FieldLabel>
+              }
+            />
+            <InfoItem
+              label='状态'
+              value={
                 <div className='flex flex-wrap gap-2'>
                   <Badge variant={user.emailVerified ? 'secondary' : 'outline'}>
                     {user.emailVerified ? '邮箱已验证' : '邮箱未验证'}
@@ -70,36 +77,32 @@ export function UserDetail({ user }: UserDetailViewProps) {
                     {user.banned ? '已禁用' : '正常'}
                   </Badge>
                 </div>
-              </Field>
-              <Field orientation='horizontal'>
-                <FieldLabel>邮件地址</FieldLabel>
-                <FieldDescription>{user.email}</FieldDescription>
-              </Field>
-              <Field orientation='horizontal'>
-                <FieldLabel>用户名</FieldLabel>
-                <FieldDescription>{user.name}</FieldDescription>
-              </Field>
-              <Field orientation='horizontal'>
-                <FieldLabel>角色</FieldLabel>
-                <FieldDescription>{user.role ?? '-'}</FieldDescription>
-              </Field>
-              <Field orientation='horizontal'>
-                <FieldLabel>禁用原因</FieldLabel>
-                <FieldDescription>{user.banReason ?? '-'}</FieldDescription>
-              </Field>
-              <Field orientation='horizontal'>
-                <FieldLabel>禁用截止</FieldLabel>
-                <FieldDescription>
-                  {user.banExpires
-                    ? format(new Date(user.banExpires), 'yyyy/MM/dd HH:mm')
-                    : '-'}
-                </FieldDescription>
-              </Field>
-            </FieldSet>
-          </FieldGroup>
+              }
+            />
+            <InfoItem label='邮件地址' value={user.email} />
+            <InfoItem label='用户名' value={user.name} />
+            <InfoItem label='角色' value={user.role ?? '-'} />
+            <InfoItem label='禁用原因' value={user.banReason ?? '-'} />
+            <InfoItem
+              label='禁用截止'
+              value={
+                user.banExpires
+                  ? format(new Date(user.banExpires), 'yyyy/MM/dd HH:mm')
+                  : '-'
+              }
+            />
+          </div>
         </CardContent>
-        <CardFooter className='flex flex-wrap items-center gap-2'></CardFooter>
       </Card>
+      {user.role !== 'admin' && profile ? (
+        <UserProfileDetail
+          data={profile}
+          title='用户画像'
+          embedded
+          showUserFields={false}
+          description='用于维护该用户的主要问题、标签和背景信息。'
+        />
+      ) : null}
     </div>
   )
 }
