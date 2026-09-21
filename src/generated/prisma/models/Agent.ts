@@ -225,6 +225,7 @@ export type AgentWhereInput = {
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   knowledge?: Prisma.XOR<Prisma.KnowledgeNullableScalarRelationFilter, Prisma.KnowledgeWhereInput> | null
   promptProfile?: Prisma.XOR<Prisma.PromptProfileNullableScalarRelationFilter, Prisma.PromptProfileWhereInput> | null
+  conversations?: Prisma.ConversationListRelationFilter
 }
 
 export type AgentOrderByWithRelationInput = {
@@ -241,6 +242,7 @@ export type AgentOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   knowledge?: Prisma.KnowledgeOrderByWithRelationInput
   promptProfile?: Prisma.PromptProfileOrderByWithRelationInput
+  conversations?: Prisma.ConversationOrderByRelationAggregateInput
 }
 
 export type AgentWhereUniqueInput = Prisma.AtLeast<{
@@ -260,6 +262,7 @@ export type AgentWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   knowledge?: Prisma.XOR<Prisma.KnowledgeNullableScalarRelationFilter, Prisma.KnowledgeWhereInput> | null
   promptProfile?: Prisma.XOR<Prisma.PromptProfileNullableScalarRelationFilter, Prisma.PromptProfileWhereInput> | null
+  conversations?: Prisma.ConversationListRelationFilter
 }, "id" | "name">
 
 export type AgentOrderByWithAggregationInput = {
@@ -305,6 +308,7 @@ export type AgentCreateInput = {
   user: Prisma.UserCreateNestedOneWithoutAgentsInput
   knowledge?: Prisma.KnowledgeCreateNestedOneWithoutAgentsInput
   promptProfile?: Prisma.PromptProfileCreateNestedOneWithoutAgentsInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAgentInput
 }
 
 export type AgentUncheckedCreateInput = {
@@ -318,6 +322,7 @@ export type AgentUncheckedCreateInput = {
   promptProfileId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAgentInput
 }
 
 export type AgentUpdateInput = {
@@ -331,6 +336,7 @@ export type AgentUpdateInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutAgentsNestedInput
   knowledge?: Prisma.KnowledgeUpdateOneWithoutAgentsNestedInput
   promptProfile?: Prisma.PromptProfileUpdateOneWithoutAgentsNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAgentNestedInput
 }
 
 export type AgentUncheckedUpdateInput = {
@@ -344,6 +350,7 @@ export type AgentUncheckedUpdateInput = {
   promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAgentNestedInput
 }
 
 export type AgentCreateManyInput = {
@@ -431,6 +438,11 @@ export type AgentMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type AgentScalarRelationFilter = {
+  is?: Prisma.AgentWhereInput
+  isNot?: Prisma.AgentWhereInput
+}
+
 export type AgentCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.AgentCreateWithoutUserInput, Prisma.AgentUncheckedCreateWithoutUserInput> | Prisma.AgentCreateWithoutUserInput[] | Prisma.AgentUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.AgentCreateOrConnectWithoutUserInput | Prisma.AgentCreateOrConnectWithoutUserInput[]
@@ -475,6 +487,20 @@ export type AgentUncheckedUpdateManyWithoutUserNestedInput = {
 
 export type EnumAgentStatusFieldUpdateOperationsInput = {
   set?: $Enums.AgentStatus
+}
+
+export type AgentCreateNestedOneWithoutConversationsInput = {
+  create?: Prisma.XOR<Prisma.AgentCreateWithoutConversationsInput, Prisma.AgentUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.AgentCreateOrConnectWithoutConversationsInput
+  connect?: Prisma.AgentWhereUniqueInput
+}
+
+export type AgentUpdateOneRequiredWithoutConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.AgentCreateWithoutConversationsInput, Prisma.AgentUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.AgentCreateOrConnectWithoutConversationsInput
+  upsert?: Prisma.AgentUpsertWithoutConversationsInput
+  connect?: Prisma.AgentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AgentUpdateToOneWithWhereWithoutConversationsInput, Prisma.AgentUpdateWithoutConversationsInput>, Prisma.AgentUncheckedUpdateWithoutConversationsInput>
 }
 
 export type AgentCreateNestedManyWithoutPromptProfileInput = {
@@ -571,6 +597,7 @@ export type AgentCreateWithoutUserInput = {
   updatedAt?: Date | string
   knowledge?: Prisma.KnowledgeCreateNestedOneWithoutAgentsInput
   promptProfile?: Prisma.PromptProfileCreateNestedOneWithoutAgentsInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAgentInput
 }
 
 export type AgentUncheckedCreateWithoutUserInput = {
@@ -583,6 +610,7 @@ export type AgentUncheckedCreateWithoutUserInput = {
   promptProfileId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAgentInput
 }
 
 export type AgentCreateOrConnectWithoutUserInput = {
@@ -627,6 +655,74 @@ export type AgentScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Agent"> | Date | string
 }
 
+export type AgentCreateWithoutConversationsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  status?: $Enums.AgentStatus
+  model?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutAgentsInput
+  knowledge?: Prisma.KnowledgeCreateNestedOneWithoutAgentsInput
+  promptProfile?: Prisma.PromptProfileCreateNestedOneWithoutAgentsInput
+}
+
+export type AgentUncheckedCreateWithoutConversationsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  userId: string
+  status?: $Enums.AgentStatus
+  model?: string | null
+  knowledgeId?: string | null
+  promptProfileId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AgentCreateOrConnectWithoutConversationsInput = {
+  where: Prisma.AgentWhereUniqueInput
+  create: Prisma.XOR<Prisma.AgentCreateWithoutConversationsInput, Prisma.AgentUncheckedCreateWithoutConversationsInput>
+}
+
+export type AgentUpsertWithoutConversationsInput = {
+  update: Prisma.XOR<Prisma.AgentUpdateWithoutConversationsInput, Prisma.AgentUncheckedUpdateWithoutConversationsInput>
+  create: Prisma.XOR<Prisma.AgentCreateWithoutConversationsInput, Prisma.AgentUncheckedCreateWithoutConversationsInput>
+  where?: Prisma.AgentWhereInput
+}
+
+export type AgentUpdateToOneWithWhereWithoutConversationsInput = {
+  where?: Prisma.AgentWhereInput
+  data: Prisma.XOR<Prisma.AgentUpdateWithoutConversationsInput, Prisma.AgentUncheckedUpdateWithoutConversationsInput>
+}
+
+export type AgentUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutAgentsNestedInput
+  knowledge?: Prisma.KnowledgeUpdateOneWithoutAgentsNestedInput
+  promptProfile?: Prisma.PromptProfileUpdateOneWithoutAgentsNestedInput
+}
+
+export type AgentUncheckedUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  knowledgeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type AgentCreateWithoutPromptProfileInput = {
   id?: string
   name: string
@@ -637,6 +733,7 @@ export type AgentCreateWithoutPromptProfileInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAgentsInput
   knowledge?: Prisma.KnowledgeCreateNestedOneWithoutAgentsInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAgentInput
 }
 
 export type AgentUncheckedCreateWithoutPromptProfileInput = {
@@ -649,6 +746,7 @@ export type AgentUncheckedCreateWithoutPromptProfileInput = {
   knowledgeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAgentInput
 }
 
 export type AgentCreateOrConnectWithoutPromptProfileInput = {
@@ -687,6 +785,7 @@ export type AgentCreateWithoutKnowledgeInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAgentsInput
   promptProfile?: Prisma.PromptProfileCreateNestedOneWithoutAgentsInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAgentInput
 }
 
 export type AgentUncheckedCreateWithoutKnowledgeInput = {
@@ -699,6 +798,7 @@ export type AgentUncheckedCreateWithoutKnowledgeInput = {
   promptProfileId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAgentInput
 }
 
 export type AgentCreateOrConnectWithoutKnowledgeInput = {
@@ -749,6 +849,7 @@ export type AgentUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   knowledge?: Prisma.KnowledgeUpdateOneWithoutAgentsNestedInput
   promptProfile?: Prisma.PromptProfileUpdateOneWithoutAgentsNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAgentNestedInput
 }
 
 export type AgentUncheckedUpdateWithoutUserInput = {
@@ -761,6 +862,7 @@ export type AgentUncheckedUpdateWithoutUserInput = {
   promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAgentNestedInput
 }
 
 export type AgentUncheckedUpdateManyWithoutUserInput = {
@@ -797,6 +899,7 @@ export type AgentUpdateWithoutPromptProfileInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAgentsNestedInput
   knowledge?: Prisma.KnowledgeUpdateOneWithoutAgentsNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAgentNestedInput
 }
 
 export type AgentUncheckedUpdateWithoutPromptProfileInput = {
@@ -809,6 +912,7 @@ export type AgentUncheckedUpdateWithoutPromptProfileInput = {
   knowledgeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAgentNestedInput
 }
 
 export type AgentUncheckedUpdateManyWithoutPromptProfileInput = {
@@ -845,6 +949,7 @@ export type AgentUpdateWithoutKnowledgeInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAgentsNestedInput
   promptProfile?: Prisma.PromptProfileUpdateOneWithoutAgentsNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAgentNestedInput
 }
 
 export type AgentUncheckedUpdateWithoutKnowledgeInput = {
@@ -857,6 +962,7 @@ export type AgentUncheckedUpdateWithoutKnowledgeInput = {
   promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAgentNestedInput
 }
 
 export type AgentUncheckedUpdateManyWithoutKnowledgeInput = {
@@ -871,6 +977,35 @@ export type AgentUncheckedUpdateManyWithoutKnowledgeInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type AgentCountOutputType
+ */
+
+export type AgentCountOutputType = {
+  conversations: number
+}
+
+export type AgentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  conversations?: boolean | AgentCountOutputTypeCountConversationsArgs
+}
+
+/**
+ * AgentCountOutputType without action
+ */
+export type AgentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AgentCountOutputType
+   */
+  select?: Prisma.AgentCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * AgentCountOutputType without action
+ */
+export type AgentCountOutputTypeCountConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationWhereInput
+}
 
 
 export type AgentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -887,6 +1022,8 @@ export type AgentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   knowledge?: boolean | Prisma.Agent$knowledgeArgs<ExtArgs>
   promptProfile?: boolean | Prisma.Agent$promptProfileArgs<ExtArgs>
+  conversations?: boolean | Prisma.Agent$conversationsArgs<ExtArgs>
+  _count?: boolean | Prisma.AgentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["agent"]>
 
 export type AgentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -939,6 +1076,8 @@ export type AgentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   knowledge?: boolean | Prisma.Agent$knowledgeArgs<ExtArgs>
   promptProfile?: boolean | Prisma.Agent$promptProfileArgs<ExtArgs>
+  conversations?: boolean | Prisma.Agent$conversationsArgs<ExtArgs>
+  _count?: boolean | Prisma.AgentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AgentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -957,6 +1096,7 @@ export type $AgentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     user: Prisma.$UserPayload<ExtArgs>
     knowledge: Prisma.$KnowledgePayload<ExtArgs> | null
     promptProfile: Prisma.$PromptProfilePayload<ExtArgs> | null
+    conversations: Prisma.$ConversationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1366,6 +1506,7 @@ export interface Prisma__AgentClient<T, Null = never, ExtArgs extends runtime.Ty
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   knowledge<T extends Prisma.Agent$knowledgeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Agent$knowledgeArgs<ExtArgs>>): Prisma.Prisma__KnowledgeClient<runtime.Types.Result.GetResult<Prisma.$KnowledgePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   promptProfile<T extends Prisma.Agent$promptProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Agent$promptProfileArgs<ExtArgs>>): Prisma.Prisma__PromptProfileClient<runtime.Types.Result.GetResult<Prisma.$PromptProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  conversations<T extends Prisma.Agent$conversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Agent$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1841,6 +1982,30 @@ export type Agent$promptProfileArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   include?: Prisma.PromptProfileInclude<ExtArgs> | null
   where?: Prisma.PromptProfileWhereInput
+}
+
+/**
+ * Agent.conversations
+ */
+export type Agent$conversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Conversation
+   */
+  select?: Prisma.ConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Conversation
+   */
+  omit?: Prisma.ConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationInclude<ExtArgs> | null
+  where?: Prisma.ConversationWhereInput
+  orderBy?: Prisma.ConversationOrderByWithRelationInput | Prisma.ConversationOrderByWithRelationInput[]
+  cursor?: Prisma.ConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConversationScalarFieldEnum | Prisma.ConversationScalarFieldEnum[]
 }
 
 /**

@@ -1,24 +1,17 @@
-import {
-  debounce,
-  parseAsInteger,
-  parseAsString,
-  parseAsStringEnum,
-  useQueryStates
-} from 'nuqs'
+import { debounce, parseAsInteger, parseAsString, parseAsStringEnum, useQueryStates } from 'nuqs'
 import { useTransition } from 'react'
 
 export function useUserParams() {
   const [, startTransition] = useTransition()
-  const [{ searchValue, searchField, page, sortBy, sortDirection }, setParams] =
+  const [{ searchValue, page, sortBy, sortDirection }, setParams] =
     useQueryStates(
       {
         searchValue: parseAsString.withDefault(''),
-        searchField: parseAsStringEnum(['name', 'email'] as const).withDefault(
-          'name'
-        ),
         page: parseAsInteger.withDefault(1),
         sortBy: parseAsString.withDefault('createdAt'),
-        sortDirection: parseAsStringEnum(['asc', 'desc']).withDefault('desc')
+        sortDirection: parseAsStringEnum(['asc', 'desc'] as const).withDefault(
+          'desc'
+        )
       },
       {
         shallow: false,
@@ -28,11 +21,8 @@ export function useUserParams() {
       }
     )
 
-  const setSearch = (
-    searchField: 'name' | 'email' | null,
-    searchValue: string | null
-  ) => {
-    setParams({ searchField, searchValue, page: 1 })
+  const setSearchValue = (value: string | null) => {
+    setParams({ searchValue: value, page: 1 })
   }
 
   const setSorting = (
@@ -44,11 +34,10 @@ export function useUserParams() {
 
   return {
     searchValue,
-    searchField,
     page,
     sortBy,
     sortDirection,
-    setSearch,
+    setSearchValue,
     setSorting
   }
 }

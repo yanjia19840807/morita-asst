@@ -10,3 +10,5 @@ export const DOC_ACCEPT_MINE_TYPES = [
   'text/plain'
 ]
 export const DOC_ACCEPT_TYPES = ['PDF', 'DOC', 'TXT']
+export const DOCX_MIME_TYPE =
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'

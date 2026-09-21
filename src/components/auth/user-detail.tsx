@@ -25,8 +25,10 @@ interface UserDetailViewProps {
 
 export function UserDetail({ user, profile }: UserDetailViewProps) {
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title='用户信息'
+        description='查看账号状态、身份和基础资料'
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
             <Link
@@ -47,9 +49,7 @@ export function UserDetail({ user, profile }: UserDetailViewProps) {
             </Link>
           </div>
         }
-      >
-        用户信息
-      </PageTitle>
+      />
       <Card>
         <CardHeader>
           <CardTitle>基本信息</CardTitle>

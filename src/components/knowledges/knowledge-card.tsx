@@ -11,14 +11,42 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import { FileText, Fingerprint } from 'lucide-react'
-import { Button, buttonVariants } from '../ui/button'
+import { FileText, Fingerprint, Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
+import { toast } from 'sonner'
+import ConfirmDialog from '@/components/confirm-dialog'
+import { deleteKnowledgeAction } from '@/modules/knowledges/actions'
+import { Button } from '../ui/button'
 
 interface KnowledgeCardProps {
   knowledge: KnowledgeRowDto
 }
 
 export default function KnowledgeCard({ knowledge }: KnowledgeCardProps) {
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
+
+  const handleDelete = () => {
+    startTransition(async () => {
+      try {
+        const result = await deleteKnowledgeAction(knowledge.id)
+        if (!result.success) {
+          toast.error(result.error.message)
+          return
+        }
+
+        toast.success('知识库已删除')
+        router.refresh()
+      } catch (error) {
+        console.error(error)
+        toast.error(
+          error instanceof Error ? error.message : '操作失败，请稍后重试'
+        )
+      }
+    })
+  }
+
   return (
     <Card className='border-border/70 bg-card/80 flex h-full flex-col shadow-sm'>
       <CardHeader className='gap-3'>
@@ -67,21 +95,31 @@ export default function KnowledgeCard({ knowledge }: KnowledgeCardProps) {
       </CardContent>
       <CardFooter className='flex-row border-t'>
         <Button variant='ghost' size='sm' className='flex-1' asChild>
-          <Link
-            href={`/knowledges/${knowledge.id}`}
-            className={buttonVariants({ variant: 'ghost', size: 'sm' })}
-          >
-            编辑
-          </Link>
+          <Link href={`/knowledges/${knowledge.id}/edit`}>编辑</Link>
         </Button>
         <Button variant='ghost' size='sm' className='flex-1' asChild>
-          <Link
-            href={`/knowledges/${knowledge.id}`}
-            className={buttonVariants({ variant: 'ghost', size: 'sm' })}
-          >
-            查看
-          </Link>
+          <Link href={`/knowledges/${knowledge.id}`}>查看</Link>
         </Button>
+        <ConfirmDialog
+          title='删除知识库'
+          description={`确认删除知识库「${knowledge.name}」吗？关联文档索引和切片会一并删除，已绑定该知识库的助手将解除绑定。此操作不可撤销。`}
+          actions={{
+            label: '删除',
+            onClick: handleDelete,
+            className:
+              'bg-destructive text-destructive-foreground hover:bg-destructive/90'
+          }}
+        >
+          <Button
+            variant='ghost'
+            size='sm'
+            className='text-destructive flex-1'
+            disabled={isPending}
+          >
+            {isPending && <Loader2 className='h-4 w-4 animate-spin' />}
+            删除
+          </Button>
+        </ConfirmDialog>
       </CardFooter>
     </Card>
   )

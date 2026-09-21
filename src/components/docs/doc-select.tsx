@@ -88,7 +88,7 @@ export default function DocSelect({
         onModeChange={handleModeChange}
         disabled={disabled}
       />
-      <div className='flex min-h-0 flex-1 overflow-hidden rounded-md border'>
+      <div className='flex min-h-[360px] overflow-hidden rounded-md border'>
         <DocSelectCate
           selectedCategoryId={selectedCategoryId}
           onSelectCategory={handleCategoryChange}

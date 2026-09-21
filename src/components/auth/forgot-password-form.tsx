@@ -31,10 +31,15 @@ import {
   UseFormStateReturn
 } from 'react-hook-form'
 import { forgotPasswordAction } from '@/modules/auth/actions'
+import { SIGN_IN_PATH, withCallbackUrl } from '@/modules/auth/redirect'
 import { toast } from 'sonner'
 import { LoaderCircle } from 'lucide-react'
 
-export default function ForgotPasswordForm() {
+export default function ForgotPasswordForm({
+  callbackUrl
+}: {
+  callbackUrl?: string
+}) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
@@ -74,7 +79,7 @@ export default function ForgotPasswordForm() {
       const result = await forgotPasswordAction(data)
       if (result.success) {
         toast.success('密码重置链接已发送至您的电子邮箱')
-        router.replace('/')
+        router.replace(withCallbackUrl(SIGN_IN_PATH, callbackUrl))
       } else {
         toast.error(result.error.message)
       }
@@ -106,7 +111,7 @@ export default function ForgotPasswordForm() {
           </Field>
           <Field orientation='horizontal'>
             <Link
-              href='/sign-in/email'
+              href={withCallbackUrl(SIGN_IN_PATH, callbackUrl)}
               className={`flex-1 ${buttonVariants({
                 variant: 'secondary'
               })}`}

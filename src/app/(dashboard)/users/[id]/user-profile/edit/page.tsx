@@ -1,4 +1,5 @@
 import { UserProfileEditForm } from '@/components/profiles/user-profile-edit-form'
+import { PageShell } from '@/components/layout/page-shell'
 import { fetchUserProfileByUserId } from '@/modules/profiles/service'
 
 export default async function UserProfileEditPage({
@@ -10,8 +11,8 @@ export default async function UserProfileEditPage({
   const profile = await fetchUserProfileByUserId(id)
 
   return (
-    <div className='flex flex-1 flex-col gap-3 px-4'>
+    <PageShell>
       <UserProfileEditForm mode='admin' data={profile} />
-    </div>
+    </PageShell>
   )
 }

@@ -1,11 +1,11 @@
 import { DocTable } from '@/components/docs/doc-table'
-import PageTitle from '@/components/layout/page-title'
+import { PageHeader } from '@/components/layout/page-title'
+import { PageShell } from '@/components/layout/page-shell'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import DocCateSidebar from '@/components/docs/doc-cate-sidebar'
-import { SidebarInset } from '@/components/layout/sidebar'
 import { fetchDocs } from '@/modules/docs/service'
 import { getPage } from '@/lib/pagination'
 import { FetchDocsParams } from '@/modules/docs/schemas'
@@ -41,16 +41,20 @@ export default async function DocsPage({
   })
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3 px-4'>
-      <PageTitle actionButtons={<ImportBtn />}>文档数据</PageTitle>
+    <PageShell>
+      <PageHeader
+        title='文档'
+        description='上传、分类并检索文档资料'
+        actions={<ImportBtn />}
+      />
       <div className='flex min-h-0 flex-1'>
         <DocCateSidebar />
-        <SidebarInset>
+        <div className='flex min-h-0 flex-1 flex-col'>
           <Suspense fallback={null}>
             <DocTable data={data.docs} total={data.total} pageSize={pageSize} />
           </Suspense>
-        </SidebarInset>
+        </div>
       </div>
-    </div>
+    </PageShell>
   )
 }

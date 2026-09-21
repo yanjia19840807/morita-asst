@@ -121,7 +121,7 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
   })
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col px-2'>
+    <div className='flex min-h-0 flex-1 flex-col gap-4'>
       <TableActionSection className='justify-between'>
         <UserSearch />
         <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
@@ -212,11 +212,8 @@ export function UserTable({ data, total, pageSize }: UserTableProps) {
           )}
         </TableBody>
       </Table>
-      <TableFooterSection className='justify-between'>
-        <div></div>
-        <div>
-          <TableQsPagination pageSize={pageSize} total={total} />
-        </div>
+      <TableFooterSection>
+        <TableQsPagination pageSize={pageSize} total={total} />
       </TableFooterSection>
     </div>
   )

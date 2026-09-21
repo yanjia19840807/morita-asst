@@ -25,9 +25,14 @@ import { toast } from 'sonner'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { LoaderCircle, Save } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
-function DocCateForm({ className }: { className: string }) {
+export default function DocCateForm({
+  onCancel,
+  onCreated
+}: {
+  onCancel: () => void
+  onCreated: () => void
+}) {
   const [isPending, startTransition] = useTransition()
 
   const form = useForm({
@@ -46,24 +51,15 @@ function DocCateForm({ className }: { className: string }) {
     formState: UseFormStateReturn<DocCateCreateFormValues>
   }) {
     return (
-      <Field data-invalid={fieldState.invalid} className='w-1/2'>
-        <div className='flex flex-1 flex-row gap-3'>
-          <FieldLabel htmlFor={field.name} className='whitespace-nowrap'>
-            名称
-          </FieldLabel>
-          <Input
-            id={field.name}
-            type='text'
-            placeholder='填写类目名称'
-            aria-invalid={fieldState.invalid}
-            {...field}
-          />
-          <Button type='submit' disabled={isPending}>
-            {isPending && <LoaderCircle className='animate-spin' />}
-            <Save />
-            保存
-          </Button>
-        </div>
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel htmlFor={field.name}>类目名称</FieldLabel>
+        <Input
+          id={field.name}
+          type='text'
+          placeholder='填写类目名称'
+          aria-invalid={fieldState.invalid}
+          {...field}
+        />
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
         )}
@@ -71,16 +67,17 @@ function DocCateForm({ className }: { className: string }) {
     )
   }
 
-  const onSubmit = async (values: DocCateCreateFormValues) => {
+  const onSubmit = (values: DocCateCreateFormValues) => {
     startTransition(async () => {
       try {
-        const { name } = values
         const result = await createDocCateAction({
-          name
+          name: values.name
         })
 
         if (result.success) {
-          toast.success('保存成功')
+          toast.success('类目已创建')
+          form.reset({ name: '' })
+          onCreated()
         } else {
           toast.error(result.error.message)
         }
@@ -92,20 +89,31 @@ function DocCateForm({ className }: { className: string }) {
   }
 
   return (
-    <div className={cn(className)}>
-      <form id='docCateForm' onSubmit={form.handleSubmit(onSubmit)}>
-        <FieldGroup>
-          <FieldSet>
-            <Controller
-              name='name'
-              control={form.control}
-              render={renderNameInput}
-            />
-          </FieldSet>
-        </FieldGroup>
-      </form>
-    </div>
+    <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+      <FieldGroup>
+        <FieldSet>
+          <Controller
+            name='name'
+            control={form.control}
+            render={renderNameInput}
+          />
+        </FieldSet>
+      </FieldGroup>
+      <div className='flex items-center gap-2'>
+        <Button type='submit' disabled={isPending}>
+          {isPending && <LoaderCircle className='animate-spin' />}
+          <Save />
+          保存
+        </Button>
+        <Button
+          type='button'
+          variant='ghost'
+          disabled={isPending}
+          onClick={onCancel}
+        >
+          取消
+        </Button>
+      </div>
+    </form>
   )
 }
-
-export default DocCateForm

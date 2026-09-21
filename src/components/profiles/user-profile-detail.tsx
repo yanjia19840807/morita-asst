@@ -87,8 +87,10 @@ export function UserProfileDetail({
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title={title}
+        description='查看用户画像，帮助助手更好地理解来访者'
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
             {editHref ? (
@@ -109,9 +111,7 @@ export function UserProfileDetail({
             ) : null}
           </div>
         }
-      >
-        {title}
-      </PageTitle>
+      />
       {card}
     </div>
   )

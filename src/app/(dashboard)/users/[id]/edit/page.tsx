@@ -1,4 +1,5 @@
 import { UserEditForm } from '@/components/auth/user-edit-form'
+import { PageShell } from '@/components/layout/page-shell'
 import { toUserEditFormValues } from '@/modules/auth/mapper'
 import { fetchUserById } from '@/modules/auth/service'
 import {
@@ -17,11 +18,11 @@ export default async function UserEditPage({
     data.role === 'admin' ? null : await fetchUserProfileByUserId(id)
 
   return (
-    <div className='flex flex-1 flex-col gap-3 px-4'>
+    <PageShell>
       <UserEditForm
         data={toUserEditFormValues(data)}
         profileData={profile ? toUserProfileEditValues(profile) : null}
       />
-    </div>
+    </PageShell>
   )
 }

@@ -34,6 +34,9 @@ export default function ForbiddenPage() {
           <Button variant='outline' asChild>
             <Link href='/'>返回首页</Link>
           </Button>
+          <Button variant='outline' asChild>
+            <Link href='/agents'>进入工作台</Link>
+          </Button>
           <Button asChild>
             <Link href='/profile'>前往个人中心</Link>
           </Button>

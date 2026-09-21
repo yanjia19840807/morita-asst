@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import type { PaginationParams } from '@/lib/query'
 import type { KnowledgeOption } from '@/modules/knowledges/service'
 import type { PromptProfileOption } from '@/modules/prompt-profiles/service'
-import type { AgentCreateFormValues } from './schemas'
+import type { AgentCreateFormValues, AgentEditFormValues } from './schemas'
 import { NotFoundError, ValidationError } from '@/lib/api/errors'
 
 export type AgentRow = Prisma.AgentGetPayload<{
@@ -88,6 +88,34 @@ export async function findAgents({
   return { agents, total }
 }
 
+const agentDetailInclude = {
+  promptProfile: {
+    select: {
+      id: true,
+      name: true
+    }
+  },
+  knowledge: {
+    select: {
+      id: true,
+      name: true
+    }
+  }
+} satisfies Prisma.AgentInclude
+
+export async function findAgentById(id: string): Promise<AgentRow> {
+  const agent = await prisma.agent.findFirst({
+    where: { id },
+    include: agentDetailInclude
+  })
+
+  if (!agent) {
+    throw new NotFoundError('助手')
+  }
+
+  return agent
+}
+
 export async function findAgentFormOptions(
   userId: string
 ): Promise<AgentFormOptions> {
@@ -144,6 +172,75 @@ export async function createAgentRecord(
     throw new ValidationError('同名助手已存在')
   }
 
+  await assertAgentRelations({ userId, promptProfileId, knowledgeId })
+
+  return prisma.agent.create({
+    data: {
+      userId,
+      name,
+      description: description || null,
+      status,
+      model: model || null,
+      promptProfileId: promptProfileId || null,
+      knowledgeId: knowledgeId || null
+    }
+  })
+}
+
+export async function updateAgentRecord(
+  input: AgentEditFormValues & { userId: string }
+) {
+  const {
+    id,
+    userId,
+    name,
+    description,
+    status,
+    model,
+    promptProfileId,
+    knowledgeId
+  } = input
+
+  const existingAgent = await prisma.agent.findFirst({
+    where: {
+      name,
+      id: {
+        not: id
+      }
+    },
+    select: {
+      id: true
+    }
+  })
+
+  if (existingAgent) {
+    throw new ValidationError('同名助手已存在')
+  }
+
+  await assertAgentRelations({ userId, promptProfileId, knowledgeId })
+
+  return prisma.agent.update({
+    where: { id },
+    data: {
+      name,
+      description: description || null,
+      status,
+      model: model || null,
+      promptProfileId: promptProfileId || null,
+      knowledgeId: knowledgeId || null
+    }
+  })
+}
+
+async function assertAgentRelations({
+  userId,
+  promptProfileId,
+  knowledgeId
+}: {
+  userId: string
+  promptProfileId?: string
+  knowledgeId?: string
+}) {
   if (promptProfileId) {
     const promptProfile = await prisma.promptProfile.findFirst({
       where: {
@@ -171,19 +268,7 @@ export async function createAgentRecord(
     })
 
     if (!matchedKnowledge) {
-      throw new NotFoundError('Knowledge')
+      throw new NotFoundError('知识库')
     }
   }
-
-  return prisma.agent.create({
-    data: {
-      userId,
-      name,
-      description: description || null,
-      status,
-      model: model || null,
-      promptProfileId: promptProfileId || null,
-      knowledgeId: knowledgeId || null
-    }
-  })
 }

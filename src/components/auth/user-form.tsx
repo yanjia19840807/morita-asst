@@ -18,18 +18,13 @@ import AvatarPicker from '@/components/avatar-picker'
 import PageTitle from '@/components/layout/page-title'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
-import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
+  FieldSeparator,
   FieldSet
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -248,8 +243,12 @@ export function UserForm({
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title={title}
+        description={
+          mode === 'Create' ? '创建账号并设置角色' : '更新账号资料和角色'
+        }
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
             <Button type='submit' form={formId} disabled={isPending}>
@@ -268,58 +267,55 @@ export function UserForm({
             </Link>
           </div>
         }
-      >
-        {title}
-      </PageTitle>
-      <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
-        {'id' in defaultValues && (
-          <input type='hidden' {...form.register('id')} />
-        )}
-        <Card>
-          <CardHeader>
-            <CardTitle>基本信息</CardTitle>
-            <CardDescription>维护用户账号基础资料和权限</CardDescription>
-          </CardHeader>
-          <CardContent>
+      />
+      <FieldGroup>
+        <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+          {'id' in defaultValues && (
+            <input type='hidden' {...form.register('id')} />
+          )}
+          <FieldSet>
+            <FieldLegend>基本信息</FieldLegend>
+            <FieldDescription>维护用户账号基础资料和权限</FieldDescription>
             <FieldGroup>
-              <FieldSet>
-                <div className='flex w-1/2 flex-col gap-6 md:flex-row'>
-                  <Controller
-                    name='image'
-                    control={form.control}
-                    render={renderAvatarInput}
-                  />
-                </div>
-                <div className='flex flex-col gap-6 md:flex-row'>
-                  <Controller
-                    name='email'
-                    control={form.control}
-                    render={renderEmailInput}
-                  />
-                  <Controller
-                    name='name'
-                    control={form.control}
-                    render={renderNameInput}
-                  />
-                </div>
-                <div className='flex flex-col gap-6 md:flex-row'>
-                  <Controller
-                    name='password'
-                    control={form.control}
-                    render={renderPasswordInput}
-                  />
-                  <Controller
-                    name='role'
-                    control={form.control}
-                    render={renderRoleInput}
-                  />
-                </div>
-              </FieldSet>
+              <Controller
+                name='image'
+                control={form.control}
+                render={renderAvatarInput}
+              />
+              <div className='grid gap-6 md:grid-cols-2'>
+                <Controller
+                  name='email'
+                  control={form.control}
+                  render={renderEmailInput}
+                />
+                <Controller
+                  name='name'
+                  control={form.control}
+                  render={renderNameInput}
+                />
+              </div>
+              <div className='grid gap-6 md:grid-cols-2'>
+                <Controller
+                  name='password'
+                  control={form.control}
+                  render={renderPasswordInput}
+                />
+                <Controller
+                  name='role'
+                  control={form.control}
+                  render={renderRoleInput}
+                />
+              </div>
             </FieldGroup>
-          </CardContent>
-        </Card>
-      </form>
-      {renderExtra ? renderExtra({ selectedRole }) : null}
+          </FieldSet>
+        </form>
+        {renderExtra ? (
+          <>
+            <FieldSeparator />
+            {renderExtra({ selectedRole })}
+          </>
+        ) : null}
+      </FieldGroup>
       {children}
     </div>
   )

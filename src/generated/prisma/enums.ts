@@ -36,3 +36,11 @@ export const AgentStatus = {
 } as const
 
 export type AgentStatus = (typeof AgentStatus)[keyof typeof AgentStatus]
+
+
+export const MessageRole = {
+  USER: 'USER',
+  ASSISTANT: 'ASSISTANT'
+} as const
+
+export type MessageRole = (typeof MessageRole)[keyof typeof MessageRole]

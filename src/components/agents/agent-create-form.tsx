@@ -40,7 +40,12 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
-import { createAgentAction } from '@/modules/agents/actions'
+import { createAgentAction, editAgentAction } from '@/modules/agents/actions'
+import {
+  CHAT_MODEL_OPTIONS,
+  DEFAULT_CHAT_MODEL,
+  resolveChatModel
+} from '@/modules/agents/models/chat-models'
 import {
   AgentCreateFormValues,
   agentCreateSchema
@@ -50,9 +55,20 @@ import type { PromptProfileOptionDto } from '@/modules/prompt-profiles/dto'
 import { PromptProfileSelect } from './prompt-profile-select'
 import { KnowledgeSelect } from './knowledge-select'
 
+export type AgentFormData = {
+  id: string
+  name: string
+  description: string | null
+  status: AgentCreateFormValues['status']
+  model: string | null
+  promptProfileId: string | null
+  knowledgeId: string | null
+}
+
 interface AgentCreateFormProps {
   promptPromise: Promise<Array<PromptProfileOptionDto>>
   knowledgePromise: Promise<Array<KnowledgeOptionDto>>
+  agent?: AgentFormData
 }
 
 const statusOptions = [
@@ -61,23 +77,40 @@ const statusOptions = [
   { value: 'DISABLED', label: '已停用' }
 ] as const
 
+function toFormValues(agent?: AgentFormData): AgentCreateFormValues {
+  if (!agent) {
+    return {
+      name: '',
+      description: '',
+      status: 'DRAFT',
+      model: DEFAULT_CHAT_MODEL,
+      promptProfileId: undefined,
+      knowledgeId: undefined
+    }
+  }
+
+  return {
+    name: agent.name,
+    description: agent.description ?? '',
+    status: agent.status,
+    model: resolveChatModel(agent.model),
+    promptProfileId: agent.promptProfileId || undefined,
+    knowledgeId: agent.knowledgeId || undefined
+  }
+}
+
 export function AgentCreateForm({
   promptPromise,
-  knowledgePromise
+  knowledgePromise,
+  agent
 }: AgentCreateFormProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
+  const isEdit = Boolean(agent)
   use(promptPromise)
   use(knowledgePromise)
 
-  const defaultValues: AgentCreateFormValues = {
-    name: '',
-    description: '',
-    status: 'DRAFT',
-    model: '',
-    promptProfileId: undefined,
-    knowledgeId: undefined
-  }
+  const defaultValues = toFormValues(agent)
 
   const form = useForm<AgentCreateFormValues>({
     resolver: zodResolver(agentCreateSchema),
@@ -175,16 +208,21 @@ export function AgentCreateForm({
   }) => (
     <Field data-invalid={fieldState.invalid}>
       <FieldLabel htmlFor={field.name}>模型</FieldLabel>
-      <Input
-        id={field.name}
-        placeholder='例如：gpt-4.1-mini'
-        aria-invalid={fieldState.invalid}
-        value={field.value ?? ''}
-        onBlur={field.onBlur}
-        name={field.name}
-        ref={field.ref}
-        onChange={event => field.onChange(event.target.value)}
-      />
+      <Select
+        value={resolveChatModel(field.value)}
+        onValueChange={field.onChange}
+      >
+        <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
+          <SelectValue placeholder='请选择模型' />
+        </SelectTrigger>
+        <SelectContent>
+          {CHAT_MODEL_OPTIONS.map(option => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       {fieldState.invalid && fieldState.error && (
         <FieldError errors={[fieldState.error]} />
       )}
@@ -243,11 +281,13 @@ export function AgentCreateForm({
   const onSubmit = (values: AgentCreateFormValues) => {
     startTransition(async () => {
       try {
-        const result = await createAgentAction(values)
+        const result = agent
+          ? await editAgentAction({ ...values, id: agent.id })
+          : await createAgentAction(values)
 
         if (result.success) {
           toast.success('保存成功')
-          router.push('/agents')
+          router.push(agent ? `/agents/${agent.id}` : '/agents')
         } else {
           toast.error(result.error.message)
         }
@@ -259,8 +299,14 @@ export function AgentCreateForm({
   }
 
   return (
-    <div>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title={isEdit ? '编辑助手' : '新建助手'}
+        description={
+          isEdit
+            ? '更新助手基础信息，以及绑定的提示词与知识库'
+            : '填写基础信息，并绑定提示词与知识库'
+        }
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
             <Button type='submit' form='agentCreateForm' disabled={isPending}>
@@ -269,7 +315,7 @@ export function AgentCreateForm({
               保存
             </Button>
             <Link
-              href='/agents'
+              href={agent ? `/agents/${agent.id}` : '/agents'}
               className={buttonVariants({ variant: 'ghost' })}
             >
               <ChevronLeft />
@@ -277,9 +323,7 @@ export function AgentCreateForm({
             </Link>
           </div>
         }
-      >
-        新建助手
-      </PageTitle>
+      />
       <form id='agentCreateForm' onSubmit={form.handleSubmit(onSubmit)}>
         <Card className='w-full'>
           <CardHeader>

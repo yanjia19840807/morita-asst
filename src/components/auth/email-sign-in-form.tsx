@@ -35,11 +35,22 @@ import { useTransition } from 'react'
 import { toast } from 'sonner'
 import { signInEmailAction } from '@/modules/auth/actions'
 import { authClient } from '@/modules/auth/client'
+import {
+  FORGOT_PASSWORD_PATH,
+  resolveAuthRedirect,
+  SIGN_UP_PATH,
+  withCallbackUrl
+} from '@/modules/auth/redirect'
 
-export default function EmailSignInForm() {
+export default function EmailSignInForm({
+  callbackUrl
+}: {
+  callbackUrl?: string
+}) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const { refetch: refetchSession } = authClient.useSession()
+  const nextPath = resolveAuthRedirect(callbackUrl)
 
   const form = useForm({
     resolver: zodResolver(emailSignInSchema),
@@ -103,7 +114,7 @@ export default function EmailSignInForm() {
       if (result.success) {
         await refetchSession()
         toast.success('登录成功')
-        router.replace('/')
+        router.replace(nextPath)
       } else {
         toast.error(result.error.message)
       }
@@ -140,7 +151,7 @@ export default function EmailSignInForm() {
           </Field>
           <Field orientation='horizontal'>
             <Link
-              href='/forgot-password/email'
+              href={withCallbackUrl(FORGOT_PASSWORD_PATH, callbackUrl)}
               className={`flex-1 ${buttonVariants({
                 variant: 'secondary'
               })}`}
@@ -150,7 +161,7 @@ export default function EmailSignInForm() {
           </Field>
           <Field orientation='horizontal'>
             <Link
-              href='/sign-up/email'
+              href={withCallbackUrl(SIGN_UP_PATH, callbackUrl)}
               className={`flex-1 ${buttonVariants({
                 variant: 'secondary'
               })}`}

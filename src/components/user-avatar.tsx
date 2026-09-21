@@ -11,23 +11,26 @@ import {
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
 import { useRouter } from 'next/navigation'
-import { LogOut, UserRound } from 'lucide-react'
+import { Home, LogOut, UserRound } from 'lucide-react'
+import { DEFAULT_LOGOUT_REDIRECT } from '@/modules/auth/redirect'
+import { useMounted } from '@/hooks/use-mounted'
 
 export default function UserAvatar() {
   const router = useRouter()
+  const mounted = useMounted()
   const { data: userData } = authClient.useSession()
 
   const handleSignOut = () => {
     authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.replace('/')
+          router.replace(DEFAULT_LOGOUT_REDIRECT)
         }
       }
     })
   }
 
-  if (!userData) {
+  if (!mounted || !userData) {
     return null
   }
 
@@ -54,6 +57,10 @@ export default function UserAvatar() {
         <DropdownMenuItem onClick={() => router.push('/profile')}>
           <UserRound />
           个人中心
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push('/')}>
+          <Home />
+          返回首页
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>

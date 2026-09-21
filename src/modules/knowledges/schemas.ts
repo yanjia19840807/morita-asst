@@ -85,6 +85,49 @@ export const knowledgeCreateSchema = z.object({
   docSource: knowledgeDocSourceSchema
 })
 
+export const knowledgeUpdateSchema = z.object({
+  id: knowledgeIdSchema,
+  name: knowledgeBaseSchema.shape.name,
+  description: knowledgeBaseSchema.shape.description,
+  docSource: z.preprocess(value => {
+    if (!value || typeof value !== 'object') {
+      return undefined
+    }
+
+    const docSource = value as {
+      mode?: string
+      categoryId?: string
+      docIds?: string[]
+    }
+
+    if (
+      docSource.mode === KNOWLEDGE_SOURCE_MODE.DOC_CATE &&
+      !docSource.categoryId
+    ) {
+      return undefined
+    }
+
+    if (
+      docSource.mode === KNOWLEDGE_SOURCE_MODE.DOC &&
+      (!docSource.docIds || docSource.docIds.length === 0)
+    ) {
+      return undefined
+    }
+
+    return value
+  }, knowledgeDocSourceSchema.optional())
+})
+
+export const addKnowledgeDocsSchema = z.object({
+  knowledgeId: knowledgeIdSchema,
+  docSource: knowledgeDocSourceSchema
+})
+
+export const removeKnowledgeDocSchema = z.object({
+  knowledgeId: knowledgeIdSchema,
+  knowledgeDocId: knowledgeDocIdSchema
+})
+
 export const fetchKnowledgeDocsParamsSchema = paginationSchema.extend({
   knowledgeId: knowledgeIdSchema
 })
@@ -93,7 +136,7 @@ export const fetchKnowledgeChunksParamsSchema = paginationSchema.extend({
   knowledgeId: knowledgeIdSchema
 })
 
-export const knowledgeEditSchema = knowledgeSchema
+export const knowledgeEditSchema = knowledgeUpdateSchema
 
 export const knowledgeViewSchema = knowledgeSchema
 
@@ -102,7 +145,10 @@ export type KnowledgeFormValues = z.infer<typeof knowledgeSchema>
 export type KnowledgeCreateFormValues = z.infer<typeof knowledgeCreateSchema>
 export type CreateKnowledgeInput = KnowledgeCreateFormValues
 
-export type KnowledgeEditFormValues = z.infer<typeof knowledgeEditSchema>
+export type KnowledgeUpdateFormValues = z.infer<typeof knowledgeUpdateSchema>
+export type KnowledgeEditFormValues = KnowledgeUpdateFormValues
+export type AddKnowledgeDocsInput = z.infer<typeof addKnowledgeDocsSchema>
+export type RemoveKnowledgeDocInput = z.infer<typeof removeKnowledgeDocSchema>
 
 export type KnowledgeViewValues = z.infer<typeof knowledgeViewSchema>
 

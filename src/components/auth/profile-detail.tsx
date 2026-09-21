@@ -25,8 +25,10 @@ export default async function ProfileDetail({
   profile?: UserProfileDetailDto | null
 }) {
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title='我的资料'
+        description='查看当前账号状态、身份和基础资料'
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
             <Link
@@ -38,9 +40,7 @@ export default async function ProfileDetail({
             </Link>
           </div>
         }
-      >
-        我的资料
-      </PageTitle>
+      />
       <Card>
         <CardHeader>
           <CardTitle>基本信息</CardTitle>

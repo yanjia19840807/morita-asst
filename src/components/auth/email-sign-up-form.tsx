@@ -35,11 +35,21 @@ import {
 import { toast } from 'sonner'
 import { signUpEmailAction } from '@/modules/auth/actions'
 import { authClient } from '@/modules/auth/client'
+import {
+  resolveAuthRedirect,
+  SIGN_IN_PATH,
+  withCallbackUrl
+} from '@/modules/auth/redirect'
 
-export default function EmailSignUpForm() {
+export default function EmailSignUpForm({
+  callbackUrl
+}: {
+  callbackUrl?: string
+}) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const { refetch: refetchSession } = authClient.useSession()
+  const nextPath = resolveAuthRedirect(callbackUrl)
 
   const form = useForm({
     resolver: zodResolver(emailSignUpSchema),
@@ -155,7 +165,7 @@ export default function EmailSignUpForm() {
       if (result.success) {
         await refetchSession()
         toast.success('注册成功')
-        router.replace('/')
+        router.replace(nextPath)
       } else {
         toast.error(result.error.message)
       }
@@ -202,7 +212,7 @@ export default function EmailSignUpForm() {
           </Field>
           <Field orientation='horizontal'>
             <Link
-              href='/sign-in/email'
+              href={withCallbackUrl(SIGN_IN_PATH, callbackUrl)}
               className={`flex-1 ${buttonVariants({
                 variant: 'secondary'
               })}`}

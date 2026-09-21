@@ -20,7 +20,6 @@ import {
 } from '@tanstack/react-table'
 import { Checkbox } from '../ui/checkbox'
 import { Input } from '../ui/input'
-import { SidebarInset } from '../layout/sidebar'
 import {
   Table,
   TableBody,
@@ -197,7 +196,7 @@ export function DocSelectTable({
   })
 
   return (
-    <SidebarInset className='flex h-full min-h-0 flex-1 flex-col gap-3 p-4'>
+    <div className='flex h-full min-h-0 flex-1 flex-col gap-3 p-4'>
       <div className='w-1/2'>
         <Input
           onKeyDown={event =>
@@ -271,6 +270,6 @@ export function DocSelectTable({
         pageSize={pageSize}
         total={total}
       />
-    </SidebarInset>
+    </div>
   )
 }

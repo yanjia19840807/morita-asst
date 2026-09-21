@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
-import PageTitle from '@/components/layout/page-title'
+import { PageHeader } from '@/components/layout/page-title'
+import { PageShell } from '@/components/layout/page-shell'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
@@ -43,16 +44,12 @@ export default async function PromptProfilesPage({
   })
 
   return (
-    <div className='flex flex-1 flex-col gap-3 px-4'>
-      <PageTitle
-        actionButtons={
-          <div className='flex flex-row items-center gap-2'>
-            <CreateBtn />
-          </div>
-        }
-      >
-        提示词
-      </PageTitle>
+    <PageShell>
+      <PageHeader
+        title='提示词'
+        description='维护助手使用的系统提示词模板'
+        actions={<CreateBtn />}
+      />
       <Suspense fallback={null}>
         <PromptProfileTable
           data={data.promptProfiles}
@@ -60,6 +57,6 @@ export default async function PromptProfilesPage({
           pageSize={pageSize}
         />
       </Suspense>
-    </div>
+    </PageShell>
   )
 }

@@ -47,10 +47,9 @@ export function PromptProfileTable({
   })
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col px-2'>
-      <TableActionSection className='justify-between'>
+    <div className='flex min-h-0 flex-1 flex-col gap-4'>
+      <TableActionSection>
         <PromptProfileSearch />
-        <div></div>
       </TableActionSection>
       <Table>
         <TableHeader>
@@ -92,11 +91,8 @@ export function PromptProfileTable({
           )}
         </TableBody>
       </Table>
-      <TableFooterSection className='justify-between'>
-        <div></div>
-        <div>
-          <TableQsPagination pageSize={pageSize} total={total} />
-        </div>
+      <TableFooterSection>
+        <TableQsPagination pageSize={pageSize} total={total} />
       </TableFooterSection>
     </div>
   )

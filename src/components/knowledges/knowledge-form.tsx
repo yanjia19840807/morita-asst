@@ -34,38 +34,59 @@ import { Textarea } from '@/components/ui/textarea'
 import {
   KNOWLEDGE_SOURCE_MODE,
   knowledgeCreateSchema,
-  KnowledgeCreateFormValues
+  knowledgeUpdateSchema,
+  type KnowledgeCreateFormValues,
+  type KnowledgeUpdateFormValues
 } from '@/modules/knowledges/schemas'
 import DocSelect, { type DocSelectValue } from '../docs/doc-select'
-import { createKnowledgeAction } from '@/modules/knowledges/actions'
+import {
+  createKnowledgeAction,
+  updateKnowledgeAction
+} from '@/modules/knowledges/actions'
 import { toast } from 'sonner'
 
-export default function KnowledgeForm() {
+export type KnowledgeFormData = {
+  id: string
+  name: string
+  description: string | null
+}
+
+interface KnowledgeFormProps {
+  knowledge?: KnowledgeFormData
+}
+
+type KnowledgeFormValues = KnowledgeCreateFormValues & { id?: string }
+
+const defaultDocSource: KnowledgeCreateFormValues['docSource'] = {
+  mode: KNOWLEDGE_SOURCE_MODE.DOC_CATE,
+  categoryId: '',
+  docIds: undefined
+}
+
+export default function KnowledgeForm({ knowledge }: KnowledgeFormProps) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
+  const isEdit = Boolean(knowledge)
+  const formId = isEdit ? 'knowledgeEditForm' : 'knowledgeCreateForm'
+  const backHref = knowledge ? `/knowledges/${knowledge.id}` : '/knowledges'
 
-  const defaultValues: KnowledgeCreateFormValues = {
-    name: '',
-    description: '',
-    docSource: {
-      mode: KNOWLEDGE_SOURCE_MODE.DOC_CATE,
-      categoryId: '',
-      docIds: undefined
+  const form = useForm<KnowledgeFormValues>({
+    resolver: zodResolver(isEdit ? knowledgeUpdateSchema : knowledgeCreateSchema),
+    defaultValues: {
+      id: knowledge?.id,
+      name: knowledge?.name ?? '',
+      description: knowledge?.description ?? '',
+      docSource: defaultDocSource
     }
-  }
-
-  const form = useForm<KnowledgeCreateFormValues>({
-    resolver: zodResolver(knowledgeCreateSchema),
-    defaultValues
   })
 
   const renderNameInput = ({
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<KnowledgeCreateFormValues, 'name'>
+    field: ControllerRenderProps<KnowledgeFormValues, 'name'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<KnowledgeCreateFormValues>
+    formState: UseFormStateReturn<KnowledgeFormValues>
   }) => {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -87,16 +108,16 @@ export default function KnowledgeForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<KnowledgeCreateFormValues, 'description'>
+    field: ControllerRenderProps<KnowledgeFormValues, 'description'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<KnowledgeCreateFormValues>
+    formState: UseFormStateReturn<KnowledgeFormValues>
   }) => {
     return (
       <Field data-invalid={fieldState.invalid}>
         <FieldLabel htmlFor={field.name}>知识库描述</FieldLabel>
         <Textarea
           id={field.name}
-          placeholder='填写知识库的用途、范围或内容说明'
+          placeholder='用于说明该知识库包含的文档内容与使用场景'
           aria-invalid={fieldState.invalid}
           rows={5}
           {...field}
@@ -116,9 +137,9 @@ export default function KnowledgeForm() {
     field,
     fieldState
   }: {
-    field: ControllerRenderProps<KnowledgeCreateFormValues, 'docSource'>
+    field: ControllerRenderProps<KnowledgeFormValues, 'docSource'>
     fieldState: ControllerFieldState
-    formState: UseFormStateReturn<KnowledgeCreateFormValues>
+    formState: UseFormStateReturn<KnowledgeFormValues>
   }) => {
     return (
       <Field data-invalid={fieldState.invalid}>
@@ -139,9 +160,30 @@ export default function KnowledgeForm() {
     )
   }
 
-  const onSubmit = (values: KnowledgeCreateFormValues) => {
+  const onSubmit = (values: KnowledgeFormValues) => {
     startTransition(async () => {
       try {
+        if (knowledge) {
+          const result = await updateKnowledgeAction({
+            id: knowledge.id,
+            name: values.name,
+            description: values.description,
+            docSource: values.docSource
+          } as KnowledgeUpdateFormValues)
+
+          if (result.success) {
+            toast.success(
+              result.data.addedCount > 0
+                ? `知识库已更新，并追加了 ${result.data.addedCount} 份文档`
+                : '知识库已更新'
+            )
+            router.push(`/knowledges/${knowledge.id}`)
+          } else {
+            toast.error(result.error.message)
+          }
+          return
+        }
+
         const result = await createKnowledgeAction(values)
 
         if (result.success) {
@@ -158,21 +200,23 @@ export default function KnowledgeForm() {
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title={isEdit ? '编辑知识库' : '新建知识库'}
+        description={
+          isEdit
+            ? '更新名称和描述，并可继续选择文档追加到知识库'
+            : '设置名称，并选择要纳入检索的文档来源'
+        }
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
-            <Button
-              type='submit'
-              form='knowledgeCreateForm'
-              disabled={isPending}
-            >
+            <Button type='submit' form={formId} disabled={isPending}>
               {isPending && <LoaderCircle className='animate-spin' />}
               <Save />
               保存
             </Button>
             <Link
-              href='/knowledges'
+              href={backHref}
               className={buttonVariants({ variant: 'ghost' })}
             >
               <ChevronLeft />
@@ -180,12 +224,10 @@ export default function KnowledgeForm() {
             </Link>
           </div>
         }
-      >
-        新建知识库
-      </PageTitle>
+      />
 
-      <form id='knowledgeCreateForm' onSubmit={form.handleSubmit(onSubmit)}>
-        <div className='h-min-0 flex flex-col gap-3'>
+      <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+        <div className='flex flex-col gap-3'>
           <Card className='w-full'>
             <CardHeader>
               <CardTitle>基础信息</CardTitle>
@@ -211,7 +253,11 @@ export default function KnowledgeForm() {
           <Card className='w-full'>
             <CardHeader>
               <CardTitle>数据来源</CardTitle>
-              <CardDescription>选择知识库对应的类目或文件</CardDescription>
+              <CardDescription>
+                {isEdit
+                  ? '选择要追加的类目或文件，已关联的文档会自动跳过'
+                  : '选择知识库对应的类目或文件'}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <FieldGroup>

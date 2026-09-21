@@ -16,19 +16,26 @@ import type {
 import {
   createDoc,
   createDocCate,
+  deleteDocCate,
   deleteDocs,
   editDocCate,
   reorderDocCates
 } from './service'
 
 const docPath = '/docs'
+const docCatePath = '/docs/categories'
+
+function revalidateDocPaths() {
+  revalidatePath(docPath)
+  revalidatePath(docCatePath)
+}
 
 export async function createDocAction(
   data: DocCreateValues
 ): Promise<ResponseResult> {
   try {
     await createDoc(data)
-    revalidatePath(docPath)
+    revalidateDocPaths()
     return handleActionResult()
   } catch (error) {
     return handleActionError(error)
@@ -40,7 +47,7 @@ export async function createDocCateAction(
 ): Promise<ResponseResult<DocCate>> {
   try {
     const cate = await createDocCate(data)
-    revalidatePath(docPath)
+    revalidateDocPaths()
     return handleActionResult(cate)
   } catch (error) {
     return handleActionError(error)
@@ -52,7 +59,7 @@ export async function deleteDocsAction(
 ): Promise<ResponseResult<{ count: number }>> {
   try {
     const result = await deleteDocs(ids)
-    revalidatePath(docPath)
+    revalidateDocPaths()
     return handleActionResult({ count: result.count })
   } catch (error) {
     return handleActionError(error)
@@ -64,7 +71,7 @@ export async function editDocCateAction(
 ): Promise<ResponseResult<DocCate>> {
   try {
     const cate = await editDocCate(data)
-    revalidatePath(docPath)
+    revalidateDocPaths()
     return handleActionResult(cate)
   } catch (error) {
     return handleActionError(error)
@@ -76,8 +83,23 @@ export async function reorderDocCatesAction(
 ): Promise<ResponseResult<DocCate[]>> {
   try {
     const categories = await reorderDocCates(data)
-    revalidatePath(docPath)
+    revalidateDocPaths()
     return handleActionResult(categories)
+  } catch (error) {
+    return handleActionError(error)
+  }
+}
+
+export async function deleteDocCateAction(
+  id: string
+): Promise<ResponseResult<{ id: string; name: string }>> {
+  try {
+    const category = await deleteDocCate(id)
+    revalidateDocPaths()
+    return handleActionResult({
+      id: category.id,
+      name: category.name
+    })
   } catch (error) {
     return handleActionError(error)
   }

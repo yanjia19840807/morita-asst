@@ -287,8 +287,10 @@ export default function ProfileEditForm({
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title='编辑资料'
+        description='更新账号的基础信息和头像'
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
             <Link
@@ -302,9 +304,7 @@ export default function ProfileEditForm({
             </Link>
           </div>
         }
-      >
-        编辑资料
-      </PageTitle>
+      />
       <div className='flex flex-col gap-4'>
         <form id='profileEditForm' onSubmit={form.handleSubmit(onSubmit)}>
           <Card>

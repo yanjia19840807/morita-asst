@@ -1,6 +1,7 @@
 'use client'
 
 import type { AgentsWithTotalDto } from '@/modules/agents/dto'
+import { ListStack } from '@/components/layout/list-stack'
 import TableActionSection from '../table/table-action-section'
 import TableFooterSection from '../table/table-footer-section'
 import { TableQsPagination } from '../table/table-qs-pagination'
@@ -16,24 +17,24 @@ export default function AgentGrid({ data, pageSize }: AgentGridProps) {
   const { agents, total } = data
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
-      <TableActionSection className='justify-between'>
+    <ListStack>
+      <TableActionSection>
         <AgentSearch />
       </TableActionSection>
       {agents.length > 0 ? (
-        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-4'>
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-4'>
           {agents.map(agent => (
             <AgentCard key={agent.id} agent={agent} />
           ))}
         </div>
       ) : (
-        <div className='text-muted-foreground flex min-h-64 flex-1 items-center justify-center rounded-xl text-sm'>
-          没有数据
+        <div className='bg-card shadow-md ring-border text-muted-foreground flex min-h-64 flex-1 items-center justify-center rounded-[10px] text-sm ring-1'>
+          还没有助手，点击右上角新建一个。
         </div>
       )}
-      <TableFooterSection className='mt-4 justify-end px-0'>
+      <TableFooterSection>
         <TableQsPagination pageSize={pageSize} total={total} />
       </TableFooterSection>
-    </div>
+    </ListStack>
   )
 }

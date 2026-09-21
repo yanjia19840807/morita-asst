@@ -94,7 +94,7 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
   })
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3 px-2'>
+    <div className='flex min-h-0 flex-1 flex-col gap-4'>
       <TableActionSection className='justify-between'>
         <DocSearch />
         <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
@@ -170,11 +170,8 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
           )}
         </TableBody>
       </Table>
-      <TableFooterSection className='justify-between'>
-        <div></div>
-        <div>
-          <TableQsPagination pageSize={pageSize} total={total} />
-        </div>
+      <TableFooterSection>
+        <TableQsPagination pageSize={pageSize} total={total} />
       </TableFooterSection>
     </div>
   )

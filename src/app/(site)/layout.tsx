@@ -8,9 +8,9 @@ function SiteLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className='flex flex-1 flex-col px-4'>
+    <div className='flex flex-1 flex-col px-4 md:px-6'>
       <SiteHeader />
-      <main className='flex-1'>{children}</main>
+      <main className='flex flex-1 flex-col'>{children}</main>
       <SiteFooter />
     </div>
   )

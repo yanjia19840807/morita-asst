@@ -1,4 +1,5 @@
 import z from 'zod'
+import { CHAT_MODEL_VALUES } from './models/chat-models'
 
 export const agentIdSchema = z.string().trim().min(1, '助手ID不能为空')
 
@@ -18,11 +19,10 @@ export const agentStatusSchema = z.enum(['DRAFT', 'ACTIVE', 'DISABLED'], {
   message: '状态不合法'
 })
 
-export const agentModelSchema = z
-  .string()
-  .trim()
-  .max(100, '模型名称长度不能大于100个字符')
-  .optional()
+export const agentModelSchema = z.preprocess(
+  value => (typeof value === 'string' && value.trim() === '' ? undefined : value),
+  z.enum(CHAT_MODEL_VALUES, { message: '模型不合法' }).optional()
+)
 
 export const agentPromptProfileIdSchema = z
   .string()
@@ -48,6 +48,9 @@ export const agentSchema = z.object({
 
 export const agentCreateSchema = agentSchema.omit({ id: true })
 
+export const agentEditSchema = agentSchema
+
 export type AgentValues = z.infer<typeof agentSchema>
 export type AgentCreateFormValues = z.infer<typeof agentCreateSchema>
 export type CreateAgentInput = AgentCreateFormValues
+export type AgentEditFormValues = z.infer<typeof agentEditSchema>

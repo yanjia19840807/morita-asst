@@ -1,4 +1,5 @@
 import { UserDetail } from '@/components/auth/user-detail'
+import { PageShell } from '@/components/layout/page-shell'
 import { fetchUserById } from '@/modules/auth/service'
 import { fetchUserProfileByUserId } from '@/modules/profiles/service'
 
@@ -13,8 +14,8 @@ export default async function UserDetailPage({
     user.role === 'admin' ? null : await fetchUserProfileByUserId(id)
 
   return (
-    <div className='flex flex-1 flex-col gap-3 px-4'>
+    <PageShell>
       <UserDetail user={user} profile={profile} />
-    </div>
+    </PageShell>
   )
 }

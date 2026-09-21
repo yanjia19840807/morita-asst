@@ -1,6 +1,7 @@
 import { fetchKnowledges } from '@/modules/knowledges/service'
 import { getPage } from '@/lib/pagination'
-import PageTitle from '@/components/layout/page-title'
+import { PageHeader } from '@/components/layout/page-title'
+import { PageShell } from '@/components/layout/page-shell'
 import { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -36,21 +37,17 @@ export default async function KnowledgePage({
   })
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3 px-4'>
-      <PageTitle
-        actionButtons={
-          <div className='flex flex-row items-center gap-2'>
-            <CreateBtn />
-          </div>
-        }
-      >
-        知识库
-      </PageTitle>
+    <PageShell>
+      <PageHeader
+        title='知识库'
+        description='整理案例与资料，供助手检索使用'
+        actions={<CreateBtn />}
+      />
       <div className='flex min-h-0 flex-1'>
         <Suspense fallback={null}>
           <KnowledgeGrid data={data} pageSize={pageSize} />
         </Suspense>
       </div>
-    </div>
+    </PageShell>
   )
 }

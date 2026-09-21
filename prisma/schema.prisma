@@ -22,6 +22,7 @@ model User {
   docs           Doc[]
   docCates       DocCate[]
   userProfile    UserProfile?
+  conversations  Conversation[]
   name           String
   emailVerified  Boolean         @default(false)
   image          String?
@@ -129,6 +130,7 @@ model Agent {
   knowledge       Knowledge?     @relation(fields: [knowledgeId], references: [id], onDelete: SetNull)
   promptProfileId String?
   promptProfile   PromptProfile? @relation(fields: [promptProfileId], references: [id], onDelete: SetNull)
+  conversations   Conversation[]
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
@@ -138,6 +140,35 @@ model Agent {
   @@index([promptProfileId])
   @@index([status])
   @@map("agent")
+}
+
+model Conversation {
+  id       String    @id @default(uuid())
+  agentId  String
+  userId   String
+  agent    Agent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([agentId, userId])
+  @@index([userId])
+  @@map("conversation")
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           MessageRole
+  content        String
+  citations      Json?
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
+  @@map("message")
 }
 
 model PromptProfile {
@@ -286,4 +317,9 @@ enum AgentStatus {
   DRAFT
   ACTIVE
   DISABLED
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
 }

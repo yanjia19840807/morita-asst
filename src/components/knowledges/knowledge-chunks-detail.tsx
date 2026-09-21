@@ -1,11 +1,9 @@
 'use client'
 
-import { Blocks } from 'lucide-react'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle
@@ -35,8 +33,10 @@ export function KnowledgeChunksDetail({
     : '0.0'
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3 px-4'>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title={knowledge ? `${knowledge.name} / 切片` : '切片浏览'}
+        description='查看知识库切分后的文本片段'
         actionButtons={
           <div className='flex items-center gap-2'>
             <Link
@@ -53,9 +53,7 @@ export function KnowledgeChunksDetail({
             </Link>
           </div>
         }
-      >
-        {knowledge ? `${knowledge.name} / Chunk 浏览` : 'Chunk 浏览'}
-      </PageTitle>
+      />
 
       <div className='grid gap-3 md:grid-cols-3'>
         <Card size='sm'>
@@ -80,23 +78,11 @@ export function KnowledgeChunksDetail({
         </Card>
       </div>
 
-      <Card>
-        <CardHeader className='border-border/60 gap-3 border-b'>
-          <div>
-            <CardTitle className='flex items-center gap-2'>
-              <Blocks className='h-4 w-4' />
-              Chunk 列表
-            </CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className='flex flex-col gap-4'>
-          <KnowledgeChunkTable
-            chunks={chunks}
-            total={total}
-            pageSize={pageSize}
-          />
-        </CardContent>
-      </Card>
+      <KnowledgeChunkTable
+        chunks={chunks}
+        total={total}
+        pageSize={pageSize}
+      />
     </div>
   )
 }

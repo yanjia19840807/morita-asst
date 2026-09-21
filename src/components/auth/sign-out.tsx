@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, buttonVariants } from '../ui/button'
 import { authClient } from '@/modules/auth/client'
+import { DEFAULT_LOGOUT_REDIRECT } from '@/modules/auth/redirect'
 import { useRouter } from 'next/navigation'
 
 export default function SignOut() {
@@ -11,7 +12,7 @@ export default function SignOut() {
     authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.replace('/')
+          router.replace(DEFAULT_LOGOUT_REDIRECT)
         }
       }
     })

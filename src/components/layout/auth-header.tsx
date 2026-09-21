@@ -1,19 +1,11 @@
-import Link from 'next/link'
-import { buttonVariants } from '../ui/button'
-import { ArrowLeft } from 'lucide-react'
+import AppLogo from '@/components/app-logo'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export default function AuthHeader() {
   return (
-    <div className='flex py-4'>
-      <Link
-        href='/'
-        className={buttonVariants({
-          variant: 'ghost'
-        })}
-      >
-        <ArrowLeft size={4} />
-        返回
-      </Link>
+    <div className='flex h-16 items-center justify-between'>
+      <AppLogo />
+      <ThemeToggle />
     </div>
   )
 }

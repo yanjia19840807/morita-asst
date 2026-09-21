@@ -1,11 +1,12 @@
 import { auth } from './server'
 import { headers } from 'next/headers'
 import type { PaginationParams } from '@/lib/query'
+import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@/generated/prisma/client'
 import {
   toAuthSessionDto,
   toAuthSessionUserDto,
-  toAuthUserDto,
-  toAuthUsersListDto
+  toAuthUserDto
 } from './mapper'
 import type { AuthSessionDto, AuthUserDto, AuthUsersListDto } from './dto'
 import {
@@ -39,9 +40,7 @@ import { formatZodError } from '../../lib/zod'
 
 export type SessionUser = AuthUserDto
 
-export type FetchUsersParams = PaginationParams & {
-  searchField?: 'name' | 'email'
-}
+export type FetchUsersParams = PaginationParams
 
 export type fetchUsersParams = FetchUsersParams
 
@@ -169,25 +168,50 @@ export async function fetchUsers(
   const {
     page = 1,
     pageSize = 10,
-    searchField = 'name',
     searchValue,
     sortBy = 'createdAt',
     sortDirection = 'desc'
   } = params
 
-  const result = await auth.api.listUsers({
-    query: {
-      offset: (page - 1) * pageSize,
-      limit: pageSize,
-      searchField,
-      searchValue,
-      sortBy,
-      sortDirection
-    },
-    headers: await getRequestHeaders()
-  })
+  const keyword = searchValue?.trim()
+  const where: Prisma.UserWhereInput = keyword
+    ? {
+        OR: [
+          { name: { contains: keyword, mode: 'insensitive' } },
+          { email: { contains: keyword, mode: 'insensitive' } }
+        ]
+      }
+    : {}
 
-  return toAuthUsersListDto(result)
+  const sortableFields = new Set(['createdAt', 'name', 'email'])
+  const orderField = sortableFields.has(sortBy) ? sortBy : 'createdAt'
+
+  const [users, total] = await Promise.all([
+    prisma.user.findMany({
+      where,
+      orderBy: { [orderField]: sortDirection },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        image: true,
+        role: true,
+        emailVerified: true,
+        banned: true,
+        banReason: true,
+        banExpires: true,
+        createdAt: true
+      }
+    }),
+    prisma.user.count({ where })
+  ])
+
+  return {
+    users: users.map(toAuthUserDto),
+    total
+  }
 }
 
 export async function fetchUserById(

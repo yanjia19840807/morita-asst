@@ -3,15 +3,31 @@
   "configurations": [
     {
       "name": "Next.js: debug server-side",
-      "type": "node-terminal",
+      "type": "node",
       "request": "launch",
-      "command": "npm run dev -- --inspect"
+      "runtimeExecutable": "${env:HOME}/.nvm/versions/node/v22.12.0/bin/node",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "args": ["dev"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PATH": "${env:HOME}/.nvm/versions/node/v22.12.0/bin:${env:PATH}"
+      },
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
     },
     {
       "name": "Knowledge Index Worker: debug",
-      "type": "node-terminal",
+      "type": "node",
       "request": "launch",
-      "command": "npm run worker:index"
+      "runtimeExecutable": "${env:HOME}/.nvm/versions/node/v22.12.0/bin/node",
+      "program": "${workspaceFolder}/node_modules/tsx/dist/cli.mjs",
+      "args": ["src/scripts/knowledge-index-worker.ts"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PATH": "${env:HOME}/.nvm/versions/node/v22.12.0/bin:${env:PATH}"
+      },
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
     },
     {
       "name": "Next.js: debug client-side",
@@ -23,8 +39,13 @@
       "name": "Next.js: debug full stack",
       "type": "node",
       "request": "launch",
+      "runtimeExecutable": "${env:HOME}/.nvm/versions/node/v22.12.0/bin/node",
       "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
-      "runtimeArgs": ["--inspect"],
+      "args": ["dev"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PATH": "${env:HOME}/.nvm/versions/node/v22.12.0/bin:${env:PATH}"
+      },
       "skipFiles": ["<node_internals>/**"],
       "serverReadyAction": {
         "action": "debugWithEdge",

@@ -236,6 +236,7 @@ export type UserWhereInput = {
   docs?: Prisma.DocListRelationFilter
   docCates?: Prisma.DocCateListRelationFilter
   userProfile?: Prisma.XOR<Prisma.UserProfileNullableScalarRelationFilter, Prisma.UserProfileWhereInput> | null
+  conversations?: Prisma.ConversationListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
 }
@@ -258,6 +259,7 @@ export type UserOrderByWithRelationInput = {
   docs?: Prisma.DocOrderByRelationAggregateInput
   docCates?: Prisma.DocCateOrderByRelationAggregateInput
   userProfile?: Prisma.UserProfileOrderByWithRelationInput
+  conversations?: Prisma.ConversationOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
 }
@@ -283,6 +285,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   docs?: Prisma.DocListRelationFilter
   docCates?: Prisma.DocCateListRelationFilter
   userProfile?: Prisma.XOR<Prisma.UserProfileNullableScalarRelationFilter, Prisma.UserProfileWhereInput> | null
+  conversations?: Prisma.ConversationListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
 }, "id" | "email">
@@ -339,6 +342,7 @@ export type UserCreateInput = {
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -361,6 +365,7 @@ export type UserUncheckedCreateInput = {
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -383,6 +388,7 @@ export type UserUpdateInput = {
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -405,6 +411,7 @@ export type UserUncheckedUpdateInput = {
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -578,6 +585,20 @@ export type UserUpdateOneRequiredWithoutAgentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAgentsInput, Prisma.UserUpdateWithoutAgentsInput>, Prisma.UserUncheckedUpdateWithoutAgentsInput>
 }
 
+export type UserCreateNestedOneWithoutConversationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConversationsInput, Prisma.UserUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConversationsInput, Prisma.UserUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationsInput
+  upsert?: Prisma.UserUpsertWithoutConversationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConversationsInput, Prisma.UserUpdateWithoutConversationsInput>, Prisma.UserUncheckedUpdateWithoutConversationsInput>
+}
+
 export type UserCreateNestedOneWithoutPromptProfilesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutPromptProfilesInput, Prisma.UserUncheckedCreateWithoutPromptProfilesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutPromptProfilesInput
@@ -652,6 +673,7 @@ export type UserCreateWithoutSessionsInput = {
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
 
@@ -673,6 +695,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -710,6 +733,7 @@ export type UserUpdateWithoutSessionsInput = {
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
 
@@ -731,6 +755,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -752,6 +777,7 @@ export type UserCreateWithoutAccountsInput = {
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
@@ -773,6 +799,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -810,6 +837,7 @@ export type UserUpdateWithoutAccountsInput = {
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
@@ -831,6 +859,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -851,6 +880,7 @@ export type UserCreateWithoutUserProfileInput = {
   knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -872,6 +902,7 @@ export type UserUncheckedCreateWithoutUserProfileInput = {
   knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -909,6 +940,7 @@ export type UserUpdateWithoutUserProfileInput = {
   knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -930,6 +962,7 @@ export type UserUncheckedUpdateWithoutUserProfileInput = {
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -951,6 +984,7 @@ export type UserCreateWithoutAgentsInput = {
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -972,6 +1006,7 @@ export type UserUncheckedCreateWithoutAgentsInput = {
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1009,6 +1044,7 @@ export type UserUpdateWithoutAgentsInput = {
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1025,6 +1061,111 @@ export type UserUncheckedUpdateWithoutAgentsInput = {
   banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
+  docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
+  docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutConversationsInput = {
+  id?: string
+  email: string
+  createdAt?: Date | string
+  name: string
+  emailVerified?: boolean
+  image?: string | null
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  agents?: Prisma.AgentCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
+  docs?: Prisma.DocCreateNestedManyWithoutUserInput
+  docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutConversationsInput = {
+  id?: string
+  email: string
+  createdAt?: Date | string
+  name: string
+  emailVerified?: boolean
+  image?: string | null
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  agents?: Prisma.AgentUncheckedCreateNestedManyWithoutUserInput
+  promptProfiles?: Prisma.PromptProfileUncheckedCreateNestedManyWithoutUserInput
+  knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
+  docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
+  docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
+  userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutConversationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutConversationsInput, Prisma.UserUncheckedCreateWithoutConversationsInput>
+}
+
+export type UserUpsertWithoutConversationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutConversationsInput, Prisma.UserUncheckedUpdateWithoutConversationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutConversationsInput, Prisma.UserUncheckedCreateWithoutConversationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutConversationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutConversationsInput, Prisma.UserUncheckedUpdateWithoutConversationsInput>
+}
+
+export type UserUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  agents?: Prisma.AgentUpdateManyWithoutUserNestedInput
+  promptProfiles?: Prisma.PromptProfileUpdateManyWithoutUserNestedInput
+  knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
+  docs?: Prisma.DocUpdateManyWithoutUserNestedInput
+  docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
+  userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  agents?: Prisma.AgentUncheckedUpdateManyWithoutUserNestedInput
   promptProfiles?: Prisma.PromptProfileUncheckedUpdateManyWithoutUserNestedInput
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
@@ -1051,6 +1192,7 @@ export type UserCreateWithoutPromptProfilesInput = {
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1072,6 +1214,7 @@ export type UserUncheckedCreateWithoutPromptProfilesInput = {
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1109,6 +1252,7 @@ export type UserUpdateWithoutPromptProfilesInput = {
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1130,6 +1274,7 @@ export type UserUncheckedUpdateWithoutPromptProfilesInput = {
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1151,6 +1296,7 @@ export type UserCreateWithoutKnowledgesInput = {
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1172,6 +1318,7 @@ export type UserUncheckedCreateWithoutKnowledgesInput = {
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1209,6 +1356,7 @@ export type UserUpdateWithoutKnowledgesInput = {
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1230,6 +1378,7 @@ export type UserUncheckedUpdateWithoutKnowledgesInput = {
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1251,6 +1400,7 @@ export type UserCreateWithoutDocCatesInput = {
   knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   docs?: Prisma.DocCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1272,6 +1422,7 @@ export type UserUncheckedCreateWithoutDocCatesInput = {
   knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   docs?: Prisma.DocUncheckedCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1309,6 +1460,7 @@ export type UserUpdateWithoutDocCatesInput = {
   knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1330,6 +1482,7 @@ export type UserUncheckedUpdateWithoutDocCatesInput = {
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docs?: Prisma.DocUncheckedUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1351,6 +1504,7 @@ export type UserCreateWithoutDocsInput = {
   knowledges?: Prisma.KnowledgeCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
@@ -1372,6 +1526,7 @@ export type UserUncheckedCreateWithoutDocsInput = {
   knowledges?: Prisma.KnowledgeUncheckedCreateNestedManyWithoutUserInput
   docCates?: Prisma.DocCateUncheckedCreateNestedManyWithoutUserInput
   userProfile?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1409,6 +1564,7 @@ export type UserUpdateWithoutDocsInput = {
   knowledges?: Prisma.KnowledgeUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
@@ -1430,6 +1586,7 @@ export type UserUncheckedUpdateWithoutDocsInput = {
   knowledges?: Prisma.KnowledgeUncheckedUpdateManyWithoutUserNestedInput
   docCates?: Prisma.DocCateUncheckedUpdateManyWithoutUserNestedInput
   userProfile?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1445,6 +1602,7 @@ export type UserCountOutputType = {
   knowledges: number
   docs: number
   docCates: number
+  conversations: number
   sessions: number
   accounts: number
 }
@@ -1455,6 +1613,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   knowledges?: boolean | UserCountOutputTypeCountKnowledgesArgs
   docs?: boolean | UserCountOutputTypeCountDocsArgs
   docCates?: boolean | UserCountOutputTypeCountDocCatesArgs
+  conversations?: boolean | UserCountOutputTypeCountConversationsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
 }
@@ -1507,6 +1666,13 @@ export type UserCountOutputTypeCountDocCatesArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SessionWhereInput
 }
@@ -1537,6 +1703,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   docs?: boolean | Prisma.User$docsArgs<ExtArgs>
   docCates?: boolean | Prisma.User$docCatesArgs<ExtArgs>
   userProfile?: boolean | Prisma.User$userProfileArgs<ExtArgs>
+  conversations?: boolean | Prisma.User$conversationsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1592,6 +1759,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   docs?: boolean | Prisma.User$docsArgs<ExtArgs>
   docCates?: boolean | Prisma.User$docCatesArgs<ExtArgs>
   userProfile?: boolean | Prisma.User$userProfileArgs<ExtArgs>
+  conversations?: boolean | Prisma.User$conversationsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1608,6 +1776,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     docs: Prisma.$DocPayload<ExtArgs>[]
     docCates: Prisma.$DocCatePayload<ExtArgs>[]
     userProfile: Prisma.$UserProfilePayload<ExtArgs> | null
+    conversations: Prisma.$ConversationPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
   }
@@ -2023,6 +2192,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   docs<T extends Prisma.User$docsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$docsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   docCates<T extends Prisma.User$docCatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$docCatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocCatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userProfile<T extends Prisma.User$userProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userProfileArgs<ExtArgs>>): Prisma.Prisma__UserProfileClient<runtime.Types.Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  conversations<T extends Prisma.User$conversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2594,6 +2764,30 @@ export type User$userProfileArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   include?: Prisma.UserProfileInclude<ExtArgs> | null
   where?: Prisma.UserProfileWhereInput
+}
+
+/**
+ * User.conversations
+ */
+export type User$conversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Conversation
+   */
+  select?: Prisma.ConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Conversation
+   */
+  omit?: Prisma.ConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationInclude<ExtArgs> | null
+  where?: Prisma.ConversationWhereInput
+  orderBy?: Prisma.ConversationOrderByWithRelationInput | Prisma.ConversationOrderByWithRelationInput[]
+  cursor?: Prisma.ConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConversationScalarFieldEnum | Prisma.ConversationScalarFieldEnum[]
 }
 
 /**

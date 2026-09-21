@@ -1,6 +1,7 @@
 'use client'
 
 import type { KnowledgesWithTotalDto } from '@/modules/knowledges/dto'
+import { ListStack } from '@/components/layout/list-stack'
 import TableActionSection from '../table/table-action-section'
 import TableFooterSection from '../table/table-footer-section'
 import { TableQsPagination } from '../table/table-qs-pagination'
@@ -16,8 +17,8 @@ export default function KnowledgeGrid({ data, pageSize }: KnowledgeGridProps) {
   const { knowledges, total } = data
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
-      <TableActionSection className='justify-between'>
+    <ListStack>
+      <TableActionSection>
         <KnowledgeSearch />
       </TableActionSection>
       {knowledges.length > 0 ? (
@@ -27,13 +28,13 @@ export default function KnowledgeGrid({ data, pageSize }: KnowledgeGridProps) {
           ))}
         </div>
       ) : (
-        <div className='text-muted-foreground flex min-h-64 flex-1 items-center justify-center rounded-xl text-sm'>
-          没有数据
+        <div className='bg-card shadow-md ring-border text-muted-foreground flex min-h-64 flex-1 items-center justify-center rounded-[10px] text-sm ring-1'>
+          还没有知识库，点击右上角新建一个。
         </div>
       )}
-      <TableFooterSection className='mt-4 justify-end px-0'>
+      <TableFooterSection>
         <TableQsPagination pageSize={pageSize} total={total} />
       </TableFooterSection>
-    </div>
+    </ListStack>
   )
 }

@@ -58,6 +58,8 @@ export const ModelName = {
   UserProfile: 'UserProfile',
   UserIssue: 'UserIssue',
   Agent: 'Agent',
+  Conversation: 'Conversation',
+  Message: 'Message',
   PromptProfile: 'PromptProfile',
   Knowledge: 'Knowledge',
   KnowledgeDoc: 'KnowledgeDoc',
@@ -185,6 +187,29 @@ export const AgentScalarFieldEnum = {
 } as const
 
 export type AgentScalarFieldEnum = (typeof AgentScalarFieldEnum)[keyof typeof AgentScalarFieldEnum]
+
+
+export const ConversationScalarFieldEnum = {
+  id: 'id',
+  agentId: 'agentId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
+
+
+export const MessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  role: 'role',
+  content: 'content',
+  citations: 'citations',
+  createdAt: 'createdAt'
+} as const
+
+export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
 export const PromptProfileScalarFieldEnum = {

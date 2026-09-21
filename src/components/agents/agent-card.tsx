@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
+import Link from 'next/link'
 import { Button } from '../ui/button'
 
 interface AgentCardProps {
@@ -82,12 +83,27 @@ export default function AgentCard({ agent }: AgentCardProps) {
         </div>
       </CardContent>
       <CardFooter className='flex-row gap-2'>
-        <Button variant='ghost' size='sm' className='flex-1'>
-          编辑
+        <Button variant='ghost' size='sm' className='flex-1' asChild>
+          <Link href={`/agents/${agent.id}/edit`}>编辑</Link>
         </Button>
-        <Button variant='ghost' size='sm' className='flex-1'>
-          查看
+        <Button variant='ghost' size='sm' className='flex-1' asChild>
+          <Link href={`/agents/${agent.id}`}>查看</Link>
         </Button>
+        {agent.status === 'ACTIVE' ? (
+          <Button variant='ghost' size='sm' className='flex-1' asChild>
+            <Link href={`/agents/${agent.id}/chat`}>对话</Link>
+          </Button>
+        ) : (
+          <Button
+            variant='ghost'
+            size='sm'
+            className='flex-1'
+            disabled
+            title='仅启用中的助手可以试聊'
+          >
+            对话
+          </Button>
+        )}
       </CardFooter>
     </Card>
   )

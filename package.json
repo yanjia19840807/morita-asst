@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
+    "dev": "next dev",
+    "dev:webpack": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -40,6 +41,8 @@
     "cmdk": "^1.1.1",
     "cookies": "^0.9.1",
     "date-fns": "^4.1.0",
+    "docx-preview": "^0.3.7",
+    "jszip": "^3.10.1",
     "dotenv": "^16.4.5",
     "envalid": "^8.1.1",
     "langchain": "^1.4.0",

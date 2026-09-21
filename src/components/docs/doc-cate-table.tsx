@@ -1,14 +1,10 @@
 'use client'
 
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import TableActionSection from '../table/table-action-section'
-import TableBulkAction from '../table/table-bulk-action'
-import TableSelectionText from '../table/table-selection-text'
 import {
   TableHeader,
   TableRow,
@@ -17,39 +13,74 @@ import {
   TableCell,
   Table
 } from '../ui/table'
-import { Button } from '../ui/button'
-import { DocCate } from '@/generated/prisma/client'
-import { docCateColumns } from './doc-cate-table-columns'
-import ConfirmDialog from '../confirm-dialog'
-import { useTableSelection } from '@/hooks/use-table-selection'
+import { getDocCateColumns } from './doc-cate-table-columns'
 import { reorderDocCatesAction } from '@/modules/docs/actions'
 import { DragDropProvider } from '@dnd-kit/react'
-import { useTransition } from 'react'
+import { useMemo, useState, useTransition } from 'react'
 import type { DragEndEvent } from '@dnd-kit/abstract'
 import DraggableRow from '../draggable-row'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { editDocCateAction } from '@/modules/docs/actions'
+import { docCateCreateFormSchema } from '@/modules/docs/schemas'
+import type { DocCateRow } from '@/modules/docs/service'
 
 interface DocCateTableProps {
-  data: DocCate[]
+  data: DocCateRow[]
 }
 
 function DocCateTable({ data }: DocCateTableProps) {
   const [isPending, startTransition] = useTransition()
+  const [isSaving, startSaving] = useTransition()
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [nameDraft, setNameDraft] = useState('')
   const router = useRouter()
 
-  const {
-    isBulkMode,
-    handleToggle,
-    rowSelection,
-    onRowSelectionChange,
-    selectedLength
-  } = useTableSelection(data.map(item => item.id))
+  const handleStartEdit = (category: DocCateRow) => {
+    setEditingId(category.id)
+    setNameDraft(category.name)
+  }
 
-  const handleBulkRemove = () => {}
+  const handleCancelEdit = () => {
+    setEditingId(null)
+    setNameDraft('')
+  }
+
+  const handleSaveEdit = () => {
+    if (!editingId) {
+      return
+    }
+
+    const validation = docCateCreateFormSchema.safeParse({ name: nameDraft })
+    if (!validation.success) {
+      toast.error(validation.error.issues[0]?.message ?? '类目名称无效')
+      return
+    }
+
+    startSaving(async () => {
+      try {
+        const result = await editDocCateAction({
+          id: editingId,
+          name: validation.data.name
+        })
+
+        if (!result.success) {
+          toast.error(result.error.message)
+          return
+        }
+
+        toast.success('类目名称已更新')
+        handleCancelEdit()
+        router.refresh()
+      } catch (error) {
+        console.error(error)
+        toast.error('操作失败，请稍后重试')
+      }
+    })
+  }
 
   function handleDragEnd({ operation, canceled }: DragEndEvent) {
-    if (canceled || isPending) {
+    if (canceled || isPending || editingId) {
       return
     }
 
@@ -97,76 +128,61 @@ function DocCateTable({ data }: DocCateTableProps) {
     })
   }
 
+  const columns = useMemo(
+    () =>
+      getDocCateColumns({
+        editingId,
+        nameDraft,
+        isSaving,
+        onNameDraftChange: setNameDraft,
+        onStartEdit: handleStartEdit,
+        onCancelEdit: handleCancelEdit,
+        onSaveEdit: handleSaveEdit
+      }),
+    [editingId, nameDraft, isSaving]
+  )
+
   const table = useReactTable({
     data,
-    columns: docCateColumns as ColumnDef<DocCate>[],
+    columns,
     getCoreRowModel: getCoreRowModel(),
-    enableRowSelection: row => !row.original.isDefault && isBulkMode,
-    state: {
-      rowSelection,
-      columnVisibility: { select: isBulkMode, sort: isBulkMode }
-    },
-    getRowId: row => row.id,
-    onRowSelectionChange
+    getRowId: row => row.id
   })
 
   return (
     <DragDropProvider onDragEnd={handleDragEnd}>
-      <div className='flex min-h-0 flex-1 flex-col gap-3 px-2'>
-        <TableActionSection className='justify-between'>
-          <div></div>
-          <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
-            {isBulkMode && selectedLength > 0 && (
-              <>
-                <TableSelectionText count={selectedLength} />
-                <ConfirmDialog
-                  title='确认批量删除'
-                  description={`即将删除 ${selectedLength}
-                        个用户，此操作不可撤销，是否继续？`}
-                  actions={{
-                    label: '确认批量删除',
-                    onClick: handleBulkRemove
-                  }}
-                >
-                  <Button variant='destructive'>批量删除</Button>
-                </ConfirmDialog>
-              </>
-            )}
-          </TableBulkAction>
-        </TableActionSection>
+      <div className='flex min-h-0 flex-1 flex-col'>
         <Table className='table-fixed'>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      style={{
-                        width: header.getSize(),
-                        minWidth: header.getSize()
-                      }}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
+                {headerGroup.headers.map(header => (
+                  <TableHead
+                    key={header.id}
+                    style={{
+                      width: header.getSize(),
+                      minWidth: header.getSize()
+                    }}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length > 0 ? (
               table.getRowModel().rows.map((row, index) => (
                 <DraggableRow
                   key={row.id}
                   rowId={row.id}
                   index={index}
-                  disabled={row.original.isDefault || isPending}
+                  disabled={row.original.isDefault || isPending || Boolean(editingId)}
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map(cell => (
@@ -187,11 +203,8 @@ function DocCateTable({ data }: DocCateTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={docCateColumns.length}
-                  className='h-24 text-center'
-                >
-                  没有数据
+                <TableCell colSpan={columns.length} className='h-24 text-center'>
+                  还没有类目
                 </TableCell>
               </TableRow>
             )}

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'
 
+import Link from 'next/link'
 import ConfirmDialog from '@/components/confirm-dialog'
 import { Button } from '@/components/ui/button'
 import { deleteDocsAction } from '@/modules/docs/actions'
@@ -40,6 +41,9 @@ export function DocRowActions({ row }: DocRowActionsProps) {
 
   return (
     <div className='flex items-center justify-end gap-2 whitespace-nowrap'>
+      <Button size='sm' variant='ghost' asChild>
+        <Link href={`/docs/${row.original.id}`}>查看</Link>
+      </Button>
       <ConfirmDialog
         title='删除文档'
         description={`确认删除文档"${row.original.filename}"吗？此操作不可撤销。`}

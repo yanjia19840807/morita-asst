@@ -1,16 +1,43 @@
-import React from 'react'
+'use client'
 
-interface PageTitleProps {
-  title?: string
-  children: React.ReactNode
+import * as React from 'react'
+import type { ReactNode } from 'react'
+import { useSetDashboardHeader } from '@/components/layout/page-header-context'
+
+interface PageHeaderProps {
+  title?: ReactNode
+  description?: ReactNode
+  actions?: React.ReactNode
   actionButtons?: React.ReactNode
+  children?: ReactNode
+  className?: string
 }
 
-export default function PageTitle({ children, actionButtons }: PageTitleProps) {
-  return (
-    <div className='flex w-full items-center justify-between border-b p-2'>
-      <div className='text-foreground text-lg font-medium'>{children}</div>
-      <div>{actionButtons}</div>
-    </div>
-  )
+export function PageHeader({
+  title,
+  description,
+  actions,
+  actionButtons,
+  children
+}: PageHeaderProps) {
+  const heading = title ?? children
+  const right = actions ?? actionButtons
+  const setHeader = useSetDashboardHeader()
+
+  React.useLayoutEffect(() => {
+    setHeader({
+      title: heading,
+      description,
+      actions: right
+    })
+  }, [description, heading, right, setHeader])
+
+  React.useLayoutEffect(() => {
+    return () => setHeader(null)
+  }, [setHeader])
+
+  return null
 }
+
+export { PageHeader as PageTitle }
+export default PageHeader

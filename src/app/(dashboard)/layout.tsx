@@ -1,17 +1,16 @@
 import React from 'react'
+import AppHeader from '@/components/layout/app-header'
+import AppSidebar from '@/components/layout/sidebar/app-sidebar'
 import {
   SidebarInset,
-  SidebarProvider,
-  SidebarTrigger
+  SidebarProvider
 } from '@/components/layout/sidebar'
+import { DashboardHeaderProvider } from '@/components/layout/page-header-context'
+import { PageToolbar } from '@/components/layout/page-toolbar'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
-import { Separator } from '@/components/ui/separator'
-import AppSidebar from '@/components/layout/sidebar/app-sidebar'
-
 function MainLayout({
-  children,
-  breadcrumb
+  children
 }: Readonly<{
   children: React.ReactNode
   breadcrumb: React.ReactNode
@@ -19,20 +18,16 @@ function MainLayout({
   return (
     <TooltipProvider>
       <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <header className='px-4 py-4 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12'>
-            <div className='flex items-center gap-2'>
-              <SidebarTrigger className='-ml-1' />
-              <Separator
-                orientation='vertical'
-                className='mr-2 data-[orientation=vertical]:h-4'
-              />
-              {breadcrumb}
+        <DashboardHeaderProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <AppHeader />
+            <div className='flex min-h-0 flex-1 flex-col overflow-y-auto'>
+              <PageToolbar />
+              {children}
             </div>
-          </header>
-          {children}
-        </SidebarInset>
+          </SidebarInset>
+        </DashboardHeaderProvider>
       </SidebarProvider>
     </TooltipProvider>
   )

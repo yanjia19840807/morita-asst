@@ -1,4 +1,5 @@
 import KnowledgeForm from '@/components/knowledges/knowledge-form'
+import { PageShell } from '@/components/layout/page-shell'
 import { fetchDocCates, fetchDocs } from '@/modules/docs/service'
 import {
   docCatesQueryKey,
@@ -27,10 +28,10 @@ export default async function KnowledgeNewPage() {
   })
 
   return (
-    <div className='px-4'>
+    <PageShell>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <KnowledgeForm />
       </HydrationBoundary>
-    </div>
+    </PageShell>
   )
 }

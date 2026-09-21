@@ -132,8 +132,10 @@ export function PromptProfileForm({
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title={title}
+        description='编写助手使用的系统提示词'
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
             <Button type='submit' form={formId} disabled={isPending}>
@@ -152,9 +154,7 @@ export function PromptProfileForm({
             </Link>
           </div>
         }
-      >
-        {title}
-      </PageTitle>
+      />
       <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
         {'id' in defaultValues && (
           <input type='hidden' {...form.register('id')} />

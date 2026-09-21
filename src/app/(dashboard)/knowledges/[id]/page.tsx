@@ -1,4 +1,5 @@
 import { KnowledgeDetail } from '@/components/knowledges/knowledge-detail'
+import { PageShell } from '@/components/layout/page-shell'
 import { getQueryClient } from '@/lib/get-query-client'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import {
@@ -49,10 +50,10 @@ export default async function KnowledgeDetailPage({
   ])
 
   return (
-    <div className='flex flex-1 flex-col gap-3 px-4'>
+    <PageShell>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <KnowledgeDetail knowledgeId={id} />
       </HydrationBoundary>
-    </div>
+    </PageShell>
   )
 }

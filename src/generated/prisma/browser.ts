@@ -53,6 +53,16 @@ export type UserIssue = Prisma.UserIssueModel
  */
 export type Agent = Prisma.AgentModel
 /**
+ * Model Conversation
+ * 
+ */
+export type Conversation = Prisma.ConversationModel
+/**
+ * Model Message
+ * 
+ */
+export type Message = Prisma.MessageModel
+/**
  * Model PromptProfile
  * 
  */

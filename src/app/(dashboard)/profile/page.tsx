@@ -1,4 +1,5 @@
 import ProfileDetail from '@/components/auth/profile-detail'
+import { PageShell } from '@/components/layout/page-shell'
 import { fetchProfile } from '@/modules/auth/service'
 import { fetchMyUserProfile } from '@/modules/profiles/service'
 
@@ -8,8 +9,8 @@ export default async function ProfilePage() {
     session.user.role === 'admin' ? null : await fetchMyUserProfile()
 
   return (
-    <div className='flex flex-1 flex-col gap-3 px-4'>
+    <PageShell>
       <ProfileDetail user={session.user} profile={profile} />
-    </div>
+    </PageShell>
   )
 }

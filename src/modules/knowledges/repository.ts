@@ -6,6 +6,7 @@ import type {
   FetchKnowledgeChunksParams,
   FetchKnowledgeDocsParams,
   KnowledgeCreateFormValues,
+  KnowledgeDocSourceValues,
   KnowledgeSourceModeValues
 } from './schemas'
 import { KNOWLEDGE_SOURCE_MODE } from './schemas'
@@ -272,8 +273,25 @@ export async function findKnowledgeById(id: string): Promise<KnowledgeRow> {
   })
 
   if (!knowledge) {
-    throw new NotFoundError('Knowledge')
+    throw new NotFoundError('知识库')
   }
+
+  return knowledge
+}
+
+export async function deleteKnowledgeRecord(id: string) {
+  const knowledge = await prisma.knowledge.findUnique({
+    where: { id },
+    select: { id: true, name: true }
+  })
+
+  if (!knowledge) {
+    throw new NotFoundError('知识库')
+  }
+
+  await prisma.knowledge.delete({
+    where: { id }
+  })
 
   return knowledge
 }
@@ -541,21 +559,11 @@ export async function findKnowledgeChunks(
   return { chunks, total }
 }
 
-export async function createKnowledgeRecord(
-  input: KnowledgeCreateFormValues & { userId: string }
-): Promise<KnowledgeWithDocs> {
-  const { userId, name, description, docSource } = input
-
-  let docCateId: string | null = null
-  let docIds: string[] = []
-  const sourceMode: KnowledgeSourceModeValues = docSource.mode
-
+async function resolveDocsFromSource(docSource: KnowledgeDocSourceValues) {
   if (docSource.mode === KNOWLEDGE_SOURCE_MODE.DOC_CATE) {
-    docCateId = docSource.categoryId
-
     const category = await prisma.docCate.findFirst({
       where: {
-        id: docCateId
+        id: docSource.categoryId
       },
       select: {
         id: true
@@ -563,39 +571,52 @@ export async function createKnowledgeRecord(
     })
 
     if (!category) {
-      throw new NotFoundError('DocCate')
+      throw new NotFoundError('文档类目')
     }
 
     const docs = await prisma.doc.findMany({
       where: {
-        docCateId
+        docCateId: docSource.categoryId
       },
       select: {
         id: true
       }
     })
 
-    docIds = docs.map(doc => doc.id)
-  } else {
-    const selectedDocIds = docSource.docIds
-
-    const docs = await prisma.doc.findMany({
-      where: {
-        id: {
-          in: selectedDocIds
-        }
-      },
-      select: {
-        id: true
-      }
-    })
-
-    if (docs.length !== selectedDocIds.length) {
-      throw new NotFoundError('Doc')
+    return {
+      docCateId: docSource.categoryId,
+      docIds: docs.map(doc => doc.id)
     }
-
-    docIds = selectedDocIds
   }
+
+  const selectedDocIds = docSource.docIds
+  const docs = await prisma.doc.findMany({
+    where: {
+      id: {
+        in: selectedDocIds
+      }
+    },
+    select: {
+      id: true
+    }
+  })
+
+  if (docs.length !== selectedDocIds.length) {
+    throw new NotFoundError('文档')
+  }
+
+  return {
+    docCateId: null,
+    docIds: selectedDocIds
+  }
+}
+
+export async function createKnowledgeRecord(
+  input: KnowledgeCreateFormValues & { userId: string }
+): Promise<KnowledgeWithDocs> {
+  const { userId, name, description, docSource } = input
+  const sourceMode: KnowledgeSourceModeValues = docSource.mode
+  const { docCateId, docIds } = await resolveDocsFromSource(docSource)
 
   try {
     return await prisma.$transaction(async tx => {
@@ -649,4 +670,190 @@ export async function createKnowledgeRecord(
 
     throw error
   }
+}
+
+export async function updateKnowledgeRecord(input: {
+  id: string
+  name: string
+  description: string
+}): Promise<{ id: string; name: string; description: string | null }> {
+  const knowledge = await prisma.knowledge.findUnique({
+    where: { id: input.id },
+    select: { id: true }
+  })
+
+  if (!knowledge) {
+    throw new NotFoundError('知识库')
+  }
+
+  try {
+    return await prisma.knowledge.update({
+      where: { id: input.id },
+      data: {
+        name: input.name,
+        description: input.description
+      },
+      select: {
+        id: true,
+        name: true,
+        description: true
+      }
+    })
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      throw new ValidationError('同名知识库已存在')
+    }
+
+    throw error
+  }
+}
+
+export async function addKnowledgeDocsRecord(
+  knowledgeId: string,
+  docSource: KnowledgeDocSourceValues
+): Promise<KnowledgeDocIngestTarget[]> {
+  const knowledge = await prisma.knowledge.findUnique({
+    where: { id: knowledgeId },
+    select: { id: true }
+  })
+
+  if (!knowledge) {
+    throw new NotFoundError('知识库')
+  }
+
+  const { docIds } = await resolveDocsFromSource(docSource)
+
+  if (docIds.length === 0) {
+    throw new ValidationError('所选范围没有可添加的文档')
+  }
+
+  const existing = await prisma.knowledgeDoc.findMany({
+    where: {
+      knowledgeId,
+      docId: {
+        in: docIds
+      }
+    },
+    select: {
+      docId: true
+    }
+  })
+
+  const existingSet = new Set(existing.map(item => item.docId))
+  const newDocIds = docIds.filter(docId => !existingSet.has(docId))
+
+  if (newDocIds.length === 0) {
+    throw new ValidationError('所选文档已全部关联到当前知识库')
+  }
+
+  await prisma.knowledgeDoc.createMany({
+    data: newDocIds.map(docId => ({
+      knowledgeId,
+      docId
+    })),
+    skipDuplicates: true
+  })
+
+  return findKnowledgeDocsIngestTargetsByDocIds(knowledgeId, newDocIds)
+}
+
+export async function removeKnowledgeDocRecord(
+  knowledgeId: string,
+  knowledgeDocId: string
+) {
+  const knowledgeDoc = await prisma.knowledgeDoc.findFirst({
+    where: {
+      id: knowledgeDocId,
+      knowledgeId
+    },
+    select: {
+      id: true,
+      knowledgeId: true,
+      status: true,
+      doc: {
+        select: {
+          filename: true
+        }
+      }
+    }
+  })
+
+  if (!knowledgeDoc) {
+    throw new NotFoundError('知识库文档')
+  }
+
+  if (
+    knowledgeDoc.status === KnowledgeDocStatus.LOADING ||
+    knowledgeDoc.status === KnowledgeDocStatus.SPLITTING ||
+    knowledgeDoc.status === KnowledgeDocStatus.EMBEDDING
+  ) {
+    throw new ValidationError('该文档正在索引中，请稍后再试')
+  }
+
+  await prisma.knowledgeDoc.delete({
+    where: { id: knowledgeDoc.id }
+  })
+
+  return {
+    id: knowledgeDoc.id,
+    knowledgeId: knowledgeDoc.knowledgeId,
+    filename: knowledgeDoc.doc.filename
+  }
+}
+
+export async function findKnowledgeDocsIngestTargets(ids: string[]) {
+  if (ids.length === 0) {
+    return []
+  }
+
+  return prisma.knowledgeDoc.findMany({
+    where: {
+      id: {
+        in: ids
+      }
+    },
+    select: {
+      id: true,
+      knowledgeId: true,
+      status: true,
+      doc: {
+        select: {
+          id: true,
+          storageKey: true
+        }
+      }
+    }
+  })
+}
+
+async function findKnowledgeDocsIngestTargetsByDocIds(
+  knowledgeId: string,
+  docIds: string[]
+) {
+  if (docIds.length === 0) {
+    return []
+  }
+
+  return prisma.knowledgeDoc.findMany({
+    where: {
+      knowledgeId,
+      docId: {
+        in: docIds
+      }
+    },
+    select: {
+      id: true,
+      knowledgeId: true,
+      status: true,
+      doc: {
+        select: {
+          id: true,
+          storageKey: true
+        }
+      }
+    }
+  })
 }

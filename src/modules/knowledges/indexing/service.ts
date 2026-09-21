@@ -5,6 +5,7 @@ import { requireRoles } from '@/modules/auth/service'
 import {
   findKnowledgeDocStatusCounts,
   findKnowledgeDocIngestTarget,
+  findKnowledgeDocsIngestTargets,
   findKnowledgeIngestTarget,
   type KnowledgeDocIngestTarget,
   type KnowledgeIngestTarget
@@ -101,6 +102,55 @@ export async function sendKnowledgeIngest(
   return {
     jobIds,
     knowledgeId: knowledge.id,
+    docsCount: queuedKnowledgeDocs.length
+  }
+}
+
+export async function sendKnowledgeDocsIngest(
+  knowledgeId: string,
+  knowledgeDocIds: string[]
+): Promise<SendKnowledgeResult> {
+  const user = await requireRoles(['admin'])
+
+  if (knowledgeDocIds.length === 0) {
+    return {
+      jobIds: [],
+      knowledgeId,
+      docsCount: 0
+    }
+  }
+
+  const knowledgeDocs = await findKnowledgeDocsIngestTargets(knowledgeDocIds)
+  const queuedKnowledgeDocs = knowledgeDocs.filter(
+    knowledgeDoc =>
+      knowledgeDoc.knowledgeId === knowledgeId &&
+      !isKnowledgeDocProcessing(knowledgeDoc.status)
+  )
+
+  if (queuedKnowledgeDocs.length === 0) {
+    throw new ValidationError('当前没有可提交索引的文档')
+  }
+
+  const boss = await startBoss()
+  const jobIds = await Promise.all(
+    queuedKnowledgeDocs.map(knowledgeDoc => {
+      const job: ProcessDocJob = {
+        knowledgeDocId: knowledgeDoc.id,
+        knowledgeId,
+        docId: knowledgeDoc.doc.id,
+        storageKey: knowledgeDoc.doc.storageKey,
+        userId: user.id
+      }
+
+      return boss.send(KNOWLEDGE_INDEX_QUEUE.PROCESS_DOC, job, {
+        singletonKey: knowledgeDoc.id
+      })
+    })
+  )
+
+  return {
+    jobIds,
+    knowledgeId,
     docsCount: queuedKnowledgeDocs.length
   }
 }

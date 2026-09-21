@@ -10,7 +10,7 @@ export default function TableFooterSection({
   className
 }: TableFooterSectionProps) {
   return (
-    <div className={cn('my-4 flex items-center gap-2', className)}>
+    <div className={cn('flex items-center justify-end gap-2', className)}>
       {children}
     </div>
   )

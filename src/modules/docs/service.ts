@@ -3,20 +3,22 @@ import { requireRoles } from '@/modules/auth/service'
 import {
   createDocCateRecord,
   createDocs,
+  deleteDocCateRecord,
   deleteDocs as deleteDocRecords,
+  findDocById,
   findDocCates,
   findDocs,
   reorderDocCateRecords,
-  updateDocCateRecord,
-  type DocRow,
-  type FetchDocsResult
+  updateDocCateRecord
 } from './repository'
 import {
   deleteDocsParamsSchema,
   docCateCreateFormSchema,
   docCateEditFormSchema,
+  docCategoryIdSchema,
   docCateReorderSchema,
   docCreateSchema,
+  docIdSchema,
   fetchDocsParamsSchema,
   type DocCateCreateFormValues,
   type DocCateEditFormValues,
@@ -27,7 +29,12 @@ import {
 import { ValidationError } from '@/lib/api/errors'
 import { formatZodError } from '../../lib/zod'
 
-export type { DocRow, FetchDocsResult }
+export type {
+  DocCateRow,
+  DocDetail,
+  DocRow,
+  FetchDocsResult
+} from './repository'
 
 export async function createDoc(data: DocCreateValues) {
   const user = await requireRoles(['admin'])
@@ -57,6 +64,17 @@ export async function fetchDocs(
   }
 
   return findDocs(validation.data)
+}
+
+export async function fetchDocById(id: string) {
+  await requireRoles(['admin'])
+  const validation = docIdSchema.safeParse(id)
+
+  if (!validation.success) {
+    throw new ValidationError(formatZodError(validation.error))
+  }
+
+  return findDocById(validation.data)
 }
 
 export async function deleteDocs(ids: string[]) {
@@ -97,9 +115,20 @@ export async function editDocCate(
   return updateDocCateRecord(validation.data)
 }
 
-export async function fetchDocCates(): Promise<DocCate[]> {
+export async function fetchDocCates(): Promise<DocCateRow[]> {
   await requireRoles(['admin'])
   return findDocCates()
+}
+
+export async function deleteDocCate(id: string) {
+  await requireRoles(['admin'])
+  const validation = docCategoryIdSchema.safeParse(id)
+
+  if (!validation.success) {
+    throw new ValidationError(formatZodError(validation.error))
+  }
+
+  return deleteDocCateRecord(validation.data)
 }
 
 export async function reorderDocCates(

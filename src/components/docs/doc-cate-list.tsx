@@ -11,20 +11,21 @@ export default function DocCateList({ data }: { data: DocCate[] }) {
 
   return (
     <ScrollArea className='h-full'>
-      <div className='space-y-4'>
+      <div className='flex flex-col gap-1'>
         {data.map(item => (
-          <div key={item.id}>
-            <Link
-              href='#'
-              className={cn(
-                'text-muted-foreground hover:text-foreground text-sm transition-colors',
-                categoryId === item.id && 'text-foreground font-medium'
-              )}
-              onClick={() => setCategoryId(item.id)}
-            >
-              {item.name}
-            </Link>
-          </div>
+          <Link
+            key={item.id}
+            href='#'
+            className={cn(
+              'hover:bg-muted/80 rounded-md px-3 py-2 text-sm transition-colors',
+              categoryId === item.id
+                ? 'bg-muted text-foreground font-medium'
+                : 'text-muted-foreground hover:text-foreground'
+            )}
+            onClick={() => setCategoryId(item.id)}
+          >
+            {item.name}
+          </Link>
         ))}
       </div>
     </ScrollArea>

@@ -1,19 +1,16 @@
 import AppLogo from '../app-logo'
 import UserToolbar from '../user-tool-bar'
 import UserAvatar from '../user-avatar'
-import { ModeToggle } from '../mode-toggle'
+import { ThemeToggle } from '../theme-toggle'
 
 export default function SiteHeader() {
   return (
-    <nav className='flex w-full justify-between py-2'>
-      <div className='flex items-center gap-4'>
-        <AppLogo />
-      </div>
-
-      <div className='flex items-center gap-3'>
+    <nav className='bg-background/90 sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b backdrop-blur-sm'>
+      <AppLogo />
+      <div className='flex items-center gap-2'>
         <UserToolbar />
         <UserAvatar />
-        <ModeToggle />
+        <ThemeToggle />
       </div>
     </nav>
   )

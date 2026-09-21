@@ -1,6 +1,7 @@
 import { pinyin } from 'pinyin-pro'
 import type { DocCate, Prisma } from '@/generated/prisma/client'
 import { prisma } from '@/lib/prisma'
+import { NotFoundError, ValidationError } from '@/lib/api/errors'
 import type { DocCreateValues, FetchDocsParams } from './schemas'
 
 export type DocRow = Prisma.DocGetPayload<{
@@ -28,22 +29,55 @@ export type FetchDocsResult = {
   total: number
 }
 
+export type DocDetail = Prisma.DocGetPayload<{
+  include: {
+    docCate: {
+      select: {
+        id: true
+        name: true
+      }
+    }
+    _count: {
+      select: {
+        knowledgeDocs: true
+      }
+    }
+  }
+}>
+
 type CreateDocRecordInput = Pick<DocCreateValues, 'categoryId' | 'files'> & {
   userId: string
 }
 
-async function generateUniqueSlug(name: string): Promise<string> {
-  const base = pinyin(name, {
-    toneType: 'none',
-    separator: '-',
-    nonZh: 'consecutive'
-  })
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
+export type DocCateRow = Prisma.DocCateGetPayload<{
+  include: {
+    _count: {
+      select: {
+        docs: true
+      }
+    }
+  }
+}>
+
+async function generateUniqueSlug(
+  name: string,
+  excludeId?: string
+): Promise<string> {
+  const base =
+    pinyin(name, {
+      toneType: 'none',
+      separator: '-',
+      nonZh: 'consecutive'
+    })
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'cate'
 
   const existing = await prisma.docCate.findMany({
-    where: { slug: { startsWith: base } },
+    where: {
+      slug: { startsWith: base },
+      ...(excludeId ? { id: { not: excludeId } } : {})
+    },
     select: { slug: true }
   })
 
@@ -129,6 +163,31 @@ export async function findDocs(
   return { docs, total }
 }
 
+export async function findDocById(id: string): Promise<DocDetail> {
+  const doc = await prisma.doc.findFirst({
+    where: { id },
+    include: {
+      docCate: {
+        select: {
+          id: true,
+          name: true
+        }
+      },
+      _count: {
+        select: {
+          knowledgeDocs: true
+        }
+      }
+    }
+  })
+
+  if (!doc) {
+    throw new NotFoundError('文档')
+  }
+
+  return doc
+}
+
 export async function deleteDocs(ids: string[]) {
   const docs = await prisma.doc.deleteMany({
     where: {
@@ -155,9 +214,20 @@ export async function createDocCateRecord(input: {
   })
   const nextOrder = (maxOrder._max.order ?? 0) + 1
 
-  return prisma.docCate.create({
-    data: { userId, name, slug, order: nextOrder }
-  })
+  try {
+    return await prisma.docCate.create({
+      data: { userId, name, slug, order: nextOrder }
+    })
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      throw new ValidationError('同名类目已存在')
+    }
+
+    throw error
+  }
 }
 
 export async function updateDocCateRecord(input: {
@@ -165,16 +235,73 @@ export async function updateDocCateRecord(input: {
   name: string
 }): Promise<DocCate> {
   const { id, name } = input
-  const slug = await generateUniqueSlug(name)
-
-  return prisma.docCate.update({
-    data: { name, slug },
-    where: { id }
+  const category = await prisma.docCate.findUnique({
+    where: { id },
+    select: { id: true }
   })
+
+  if (!category) {
+    throw new NotFoundError('文档类目')
+  }
+
+  const slug = await generateUniqueSlug(name, id)
+
+  try {
+    return await prisma.docCate.update({
+      data: { name, slug },
+      where: { id }
+    })
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      throw new ValidationError('同名类目已存在')
+    }
+
+    throw error
+  }
 }
 
-export async function findDocCates(): Promise<DocCate[]> {
+export async function deleteDocCateRecord(id: string) {
+  const category = await prisma.docCate.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      isDefault: true,
+      _count: {
+        select: {
+          docs: true
+        }
+      }
+    }
+  })
+
+  if (!category) {
+    throw new NotFoundError('文档类目')
+  }
+
+  if (category.isDefault) {
+    throw new ValidationError('默认类目不能删除')
+  }
+
+  await prisma.docCate.delete({
+    where: { id }
+  })
+
+  return category
+}
+
+export async function findDocCates(): Promise<DocCateRow[]> {
   return prisma.docCate.findMany({
+    include: {
+      _count: {
+        select: {
+          docs: true
+        }
+      }
+    },
     orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
   })
 }

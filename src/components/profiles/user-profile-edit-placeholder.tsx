@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import PageTitle from '@/components/layout/page-title'
+import { PageEmpty } from '@/components/layout/page-empty'
 
 type UserProfileEditPlaceholderProps = {
   title: string
@@ -15,21 +15,17 @@ export function UserProfileEditPlaceholder({
   backHref
 }: UserProfileEditPlaceholderProps) {
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title={title}
+        description='维护用户画像，帮助助手更好地理解来访者'
         actionButtons={
           <Link className={buttonVariants({ variant: 'ghost' })} href={backHref}>
             返回
           </Link>
         }
-      >
-        {title}
-      </PageTitle>
-      <Card>
-        <CardContent className='py-6 text-sm text-muted-foreground'>
-          {description}
-        </CardContent>
-      </Card>
+      />
+      <PageEmpty title='暂时无法编辑' description={description} />
     </div>
   )
 }

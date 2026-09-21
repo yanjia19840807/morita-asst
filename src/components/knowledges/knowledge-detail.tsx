@@ -37,12 +37,17 @@ export function KnowledgeDetail({ knowledgeId }: { knowledgeId: string }) {
   if (!knowledge) return null
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
+    <div className='flex flex-col gap-6'>
       <PageTitle
-        actionButtons={<KnowledgeDetailActions knowledgeId={knowledge.id} />}
-      >
-        {knowledge.name}
-      </PageTitle>
+        title={knowledge.name}
+        description='查看知识库来源、关联范围和索引状态'
+        actionButtons={
+          <KnowledgeDetailActions
+            knowledgeId={knowledge.id}
+            knowledgeName={knowledge.name}
+          />
+        }
+      />
       <Card>
         <CardHeader>
           <CardTitle>基础信息</CardTitle>

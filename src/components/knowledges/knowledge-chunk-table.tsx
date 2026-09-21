@@ -54,8 +54,8 @@ function KnowledgeChunkTable({
   })
 
   return (
-    <div>
-      <TableActionSection className='justify-between'>
+    <div className='flex min-h-0 flex-1 flex-col gap-4'>
+      <TableActionSection>
         <Input
           value={searchValue}
           onKeyDown={event =>
@@ -63,7 +63,7 @@ function KnowledgeChunkTable({
           }
           onChange={event => setSearchValue(event.target.value || null)}
           placeholder='搜索 content / metadata / 文档名'
-          className='w-1/2'
+          className='w-full sm:max-w-sm'
         />
       </TableActionSection>
       <Table className='table-fixed'>
@@ -116,14 +116,12 @@ function KnowledgeChunkTable({
       </Table>
       <TableFooterSection className='justify-between'>
         <div className='text-muted-foreground text-sm'>共 {total} 条 Chunk</div>
-        <div>
-          <TablePagination
-            page={page}
-            setPage={setPage}
-            pageSize={pageSize}
-            total={total}
-          />
-        </div>
+        <TablePagination
+          page={page}
+          setPage={setPage}
+          pageSize={pageSize}
+          total={total}
+        />
       </TableFooterSection>
     </div>
   )

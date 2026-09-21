@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import AgentGrid from '@/components/agents/agent-grid'
-import PageTitle from '@/components/layout/page-title'
+import { PageHeader } from '@/components/layout/page-title'
+import { PageShell } from '@/components/layout/page-shell'
 import { Button } from '@/components/ui/button'
 import { fetchAgents } from '@/modules/agents/service'
 import { getPage } from '@/lib/pagination'
@@ -35,19 +36,15 @@ export default async function AgentsPage({
   })
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-4 px-4'>
-      <PageTitle
-        actionButtons={
-          <div className='flex flex-row items-center gap-2'>
-            <CreateBtn />
-          </div>
-        }
-      >
-        助手管理
-      </PageTitle>
+    <PageShell>
+      <PageHeader
+        title='助手'
+        description='创建和管理对话助手'
+        actions={<CreateBtn />}
+      />
       <Suspense fallback={null}>
         <AgentGrid data={data} pageSize={pageSize} />
       </Suspense>
-    </div>
+    </PageShell>
   )
 }

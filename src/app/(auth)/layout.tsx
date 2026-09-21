@@ -6,7 +6,7 @@ export default function AuthLayout({
   children
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className='flex min-h-screen flex-col justify-between px-4'>
+    <div className='bg-background flex min-h-screen flex-col justify-between px-4 md:px-6'>
       <AuthHeader />
       <main className='flex flex-1 items-center justify-center'>
         {children}

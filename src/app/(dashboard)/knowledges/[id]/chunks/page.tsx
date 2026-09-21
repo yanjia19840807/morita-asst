@@ -1,4 +1,5 @@
 import { KnowledgeChunksDetail } from '@/components/knowledges/knowledge-chunks-detail'
+import { PageShell } from '@/components/layout/page-shell'
 import { getPage } from '@/lib/pagination'
 import {
   toFetchKnowledgeChunksListDto,
@@ -40,12 +41,14 @@ export default async function KnowledgeChunksPage({
   const chunkDto = toFetchKnowledgeChunksListDto(chunkResult)
 
   return (
-    <KnowledgeChunksDetail
-      knowledgeId={id}
-      knowledge={knowledgeDto}
-      chunks={chunkDto.chunks}
-      total={chunkDto.total}
-      pageSize={pageSize}
-    />
+    <PageShell>
+      <KnowledgeChunksDetail
+        knowledgeId={id}
+        knowledge={knowledgeDto}
+        chunks={chunkDto.chunks}
+        total={chunkDto.total}
+        pageSize={pageSize}
+      />
+    </PageShell>
   )
 }

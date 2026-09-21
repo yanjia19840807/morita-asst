@@ -1,15 +1,22 @@
 import type { Knowledge } from '@/generated/prisma/client'
 import { requireRoles } from '@/modules/auth/service'
 import { ValidationError } from '@/lib/api/errors'
-import { sendKnowledgeIngest } from './indexing/service'
+import {
+  sendKnowledgeDocsIngest,
+  sendKnowledgeIngest
+} from './indexing/service'
 import { formatZodError } from '../../lib/zod'
 import {
+  addKnowledgeDocsRecord,
   createKnowledgeRecord,
+  deleteKnowledgeRecord,
   findAllKnowledges,
   findKnowledgeById,
   findKnowledgeChunks,
   findKnowledgeDocs,
   findKnowledges,
+  removeKnowledgeDocRecord,
+  updateKnowledgeRecord,
   type FetchKnowledgeChunksResult,
   type FetchKnowledgeDocsResult,
   type FetchKnowledgesParams,
@@ -18,12 +25,19 @@ import {
   type KnowledgeRow
 } from './repository'
 import {
+  addKnowledgeDocsSchema,
   fetchKnowledgeChunksParamsSchema,
   type FetchKnowledgeChunksParams,
   fetchKnowledgeDocsParamsSchema,
   knowledgeCreateSchema,
+  knowledgeIdSchema,
+  knowledgeUpdateSchema,
+  removeKnowledgeDocSchema,
+  type AddKnowledgeDocsInput,
   type FetchKnowledgeDocsParams,
-  type KnowledgeCreateFormValues
+  type KnowledgeCreateFormValues,
+  type KnowledgeUpdateFormValues,
+  type RemoveKnowledgeDocInput
 } from './schemas'
 
 export type {
@@ -101,4 +115,98 @@ export async function createKnowledge(
   })
 
   return knowledge
+}
+
+export async function updateKnowledge(data: KnowledgeUpdateFormValues) {
+  await requireRoles(['admin'])
+  const validation = knowledgeUpdateSchema.safeParse(data)
+
+  if (!validation.success) {
+    throw new ValidationError(formatZodError(validation.error))
+  }
+
+  const updated = await updateKnowledgeRecord({
+    id: validation.data.id,
+    name: validation.data.name,
+    description: validation.data.description
+  })
+
+  let addedCount = 0
+
+  if (validation.data.docSource) {
+    const added = await addKnowledgeDocsRecord(
+      validation.data.id,
+      validation.data.docSource
+    )
+    addedCount = added.length
+
+    void sendKnowledgeDocsIngest(
+      validation.data.id,
+      added.map(item => item.id)
+    ).catch(error => {
+      console.error(
+        `Failed to enqueue added docs for knowledge ${validation.data.id}:`,
+        error
+      )
+    })
+  }
+
+  return {
+    ...updated,
+    addedCount
+  }
+}
+
+export async function addKnowledgeDocs(data: AddKnowledgeDocsInput) {
+  await requireRoles(['admin'])
+  const validation = addKnowledgeDocsSchema.safeParse(data)
+
+  if (!validation.success) {
+    throw new ValidationError(formatZodError(validation.error))
+  }
+
+  const added = await addKnowledgeDocsRecord(
+    validation.data.knowledgeId,
+    validation.data.docSource
+  )
+
+  void sendKnowledgeDocsIngest(
+    validation.data.knowledgeId,
+    added.map(item => item.id)
+  ).catch(error => {
+    console.error(
+      `Failed to enqueue added docs for knowledge ${validation.data.knowledgeId}:`,
+      error
+    )
+  })
+
+  return {
+    knowledgeId: validation.data.knowledgeId,
+    addedCount: added.length
+  }
+}
+
+export async function removeKnowledgeDoc(data: RemoveKnowledgeDocInput) {
+  await requireRoles(['admin'])
+  const validation = removeKnowledgeDocSchema.safeParse(data)
+
+  if (!validation.success) {
+    throw new ValidationError(formatZodError(validation.error))
+  }
+
+  return removeKnowledgeDocRecord(
+    validation.data.knowledgeId,
+    validation.data.knowledgeDocId
+  )
+}
+
+export async function deleteKnowledge(id: string) {
+  await requireRoles(['admin'])
+  const validation = knowledgeIdSchema.safeParse(id)
+
+  if (!validation.success) {
+    throw new ValidationError(formatZodError(validation.error))
+  }
+
+  return deleteKnowledgeRecord(validation.data)
 }

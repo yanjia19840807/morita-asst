@@ -132,16 +132,16 @@ export default function DocCreateForm({
     startTransition(async () => {
       try {
         const userId = userData!.user.id
-        const fileKeys = new Map<File, string>()
+        const uploaded = new Map<File, Awaited<ReturnType<typeof uploadDocs>>>()
 
         await fileUploadRef.current!.upload(
           async (files, { onProgress, onSuccess, onError }) => {
             const onUpload = async (file: File) => {
               try {
-                const key = await uploadDocs(userId, file, progress =>
+                const result = await uploadDocs(userId, file, progress =>
                   onProgress(file, progress)
                 )
-                fileKeys.set(file, key)
+                uploaded.set(file, result)
                 onSuccess(file)
               } catch (err) {
                 onError(
@@ -155,22 +155,33 @@ export default function DocCreateForm({
           }
         )
 
-        const files = values.files.map(file => ({
-          filename: file.name,
-          fileSize: file.size,
-          mimeType: file.type,
-          storageKey: fileKeys.get(file)!
-        }))
+        const files = values.files.map(file => {
+          const result = uploaded.get(file)
+          if (!result) {
+            throw new Error(`文件 ${file.name} 上传失败`)
+          }
 
-        const failed = values.files.find(f => !fileKeys.has(f))
-        if (failed) throw new Error(`文件 ${failed.name} 上传失败`)
+          return {
+            filename: result.filename,
+            fileSize: result.fileSize,
+            mimeType: result.mimeType,
+            storageKey: result.storageKey
+          }
+        })
 
         await createDocAction({
           categoryId: values.categoryId,
           files
         })
 
-        toast.success('保存成功')
+        const convertedCount = [...uploaded.values()].filter(
+          item => item.converted
+        ).length
+        toast.success(
+          convertedCount > 0
+            ? `保存成功，已将 ${convertedCount} 个 .doc 转为 .docx`
+            : '保存成功'
+        )
         router.push('/docs')
       } catch (error) {
         console.error(error)
@@ -182,8 +193,10 @@ export default function DocCreateForm({
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-3'>
+    <div className='flex min-h-0 flex-1 flex-col gap-6'>
       <PageTitle
+        title='导入数据'
+        description='上传本地文件，并归入对应类目'
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
             <Button type='submit' form='docForm' disabled={isPending}>
@@ -201,9 +214,7 @@ export default function DocCreateForm({
             </Link>
           </div>
         }
-      >
-        导入数据
-      </PageTitle>
+      />
       <form id='docForm' onSubmit={e => form.handleSubmit(onSubmit)(e)}>
         <Card className='w-full'>
           <CardHeader>

@@ -9,9 +9,9 @@ import {
 
 export { DOC_ACCEPT_MINE_TYPES, DOC_ACCEPT_TYPES, DOC_MAX_FILES, DOC_MAX_SIZE }
 
-const docIdSchema = z.string().min(1, '文档ID不能为空')
+export const docIdSchema = z.string().min(1, '文档ID不能为空')
 
-const docCategoryIdSchema = z.string().min(1, '类目ID不能为空')
+export const docCategoryIdSchema = z.string().min(1, '类目ID不能为空')
 
 export const docCreateFormSchema = z.object({
   categoryId: docCategoryIdSchema,
@@ -58,7 +58,11 @@ export const docCreateSchema = z.object({
 
 export const docCateSchema = z.object({
   id: z.string().min(1, '类目ID不能为空'),
-  name: z.string().min(1, '类目名称不能为空')
+  name: z
+    .string()
+    .trim()
+    .min(1, '类目名称不能为空')
+    .max(50, '类目名称不能超过50个字符')
 })
 
 export const docCateCreateFormSchema = docCateSchema.omit({ id: true })
