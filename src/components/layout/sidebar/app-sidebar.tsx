@@ -19,7 +19,7 @@ export default function AppSidebar() {
   const pathname = usePathname()
 
   return (
-    <Sidebar>
+    <Sidebar collapsible='icon'>
       <SidebarHeader>
         <NavLogo />
       </SidebarHeader>
@@ -36,14 +36,12 @@ export default function AppSidebar() {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
-                      asChild
+                      render={<Link href={item.url ?? '#'} />}
                       isActive={active}
                       tooltip={item.title}
                     >
-                      <Link href={item.url ?? '#'}>
-                        {item.icon && <item.icon />}
-                        <span>{item.title}</span>
-                      </Link>
+                      {item.icon && <item.icon />}
+                      <span>{item.title}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 )

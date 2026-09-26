@@ -1,20 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useTransition } from 'react'
+import { useEffect, useTransition } from 'react'
 import { changePasswordAction, editProfileAction } from '@/modules/auth/actions'
-import { saveMyUserProfileAction } from '@/modules/profiles/actions'
-import {
-  UserProfileForm,
-  type UserProfileFormHandle
-} from '@/components/profiles/user-profile-form'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { UserSection } from '@/components/auth/user-section'
+import { PageStack } from '@/components/layout/page-stack'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -22,8 +11,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
-  FieldSet
+  FieldSeparator
 } from '@/components/ui/field'
 import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
 import Link from 'next/link'
@@ -42,10 +30,8 @@ import {
   profileEditSchema,
   profilePasswordSchema
 } from '@/modules/auth/schemas'
-import {
-  userProfileEditSchema,
-  type UserProfileEditValues
-} from '@/modules/profiles/schemas'
+import { UserProfileSummary } from '@/components/profiles/user-profile-summary'
+import type { UserProfileDetailDto } from '@/modules/profiles/dto'
 import { uploadAvatar } from '@/modules/oss/client'
 import AvatarPicker from '../avatar-picker'
 import PageTitle from '../layout/page-title'
@@ -54,14 +40,13 @@ import { toast } from 'sonner'
 export default function ProfileEditForm({
   data,
   userRole,
-  profileData
+  profile
 }: {
   data: ProfileEditFormValues & { id: string }
   userRole: string | null
-  profileData?: UserProfileEditValues | null
+  profile?: UserProfileDetailDto | null
 }) {
   const router = useRouter()
-  const profileFormRef = useRef<UserProfileFormHandle>(null)
   const [isProfilePending, startProfileTransition] = useTransition()
   const [isPasswordPending, startPasswordTransition] = useTransition()
 
@@ -116,7 +101,6 @@ export default function ProfileEditForm({
   }) {
     return (
       <Field data-invalid={fieldState.invalid}>
-        <FieldLabel htmlFor={field.name}>头像</FieldLabel>
         <AvatarPicker {...field} />
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
@@ -203,20 +187,6 @@ export default function ProfileEditForm({
   async function onSubmit(values: ProfileEditFormValues) {
     startProfileTransition(async () => {
       try {
-        const nextProfileValues =
-          userRole !== 'admin' && profileFormRef.current
-            ? await profileFormRef.current.getValidatedValues()
-            : null
-
-        if (
-          userRole !== 'admin' &&
-          profileFormRef.current &&
-          !nextProfileValues
-        ) {
-          toast.error('请先完善用户画像后再保存')
-          return
-        }
-
         const name = values.name
         const image = values.image
         const isNewImage = image instanceof File
@@ -230,16 +200,6 @@ export default function ProfileEditForm({
         })
 
         if (result.success) {
-          if (userRole !== 'admin' && nextProfileValues) {
-            const profileResult =
-              await saveMyUserProfileAction(nextProfileValues)
-
-            if (!profileResult.success) {
-              toast.error(profileResult.error.message)
-              return
-            }
-          }
-
           toast.success('资料更新成功')
           router.replace('/profile')
         } else {
@@ -287,7 +247,7 @@ export default function ProfileEditForm({
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-6'>
+    <PageStack>
       <PageTitle
         title='编辑资料'
         description='更新账号的基础信息和头像'
@@ -305,99 +265,72 @@ export default function ProfileEditForm({
           </div>
         }
       />
-      <div className='flex flex-col gap-4'>
+      <FieldGroup>
         <form id='profileEditForm' onSubmit={form.handleSubmit(onSubmit)}>
-          <Card>
-            <CardHeader>
-              <CardTitle>基本资料</CardTitle>
-              <CardDescription>编辑基本资料</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <FieldGroup>
-                <FieldSet>
-                  <Controller
-                    name='image'
-                    control={form.control}
-                    render={renderAvatarInput}
-                  />
-                  <FieldSeparator />
-                  <Controller
-                    name='name'
-                    control={form.control}
-                    render={renderNameInput}
-                  />
-                  <Field orientation='horizontal' className='justify-end'>
-                    <Button type='submit' disabled={isProfilePending}>
-                      {isProfilePending && (
-                        <LoaderCircle className='animate-spin' />
-                      )}
-                      <Save />
-                      保存
-                    </Button>
-                  </Field>
-                </FieldSet>
-              </FieldGroup>
-            </CardContent>
-            <CardFooter className='flex flex-wrap items-center gap-2'></CardFooter>
-          </Card>
+          <UserSection title='基本资料'>
+            <Controller
+              name='image'
+              control={form.control}
+              render={renderAvatarInput}
+            />
+            <Controller
+              name='name'
+              control={form.control}
+              render={renderNameInput}
+            />
+            <Field orientation='horizontal' className='justify-end'>
+              <Button type='submit' disabled={isProfilePending}>
+                {isProfilePending && <LoaderCircle className='animate-spin' />}
+                <Save />
+                保存
+              </Button>
+            </Field>
+          </UserSection>
         </form>
-        {userRole !== 'admin' && profileData ? (
-          <UserProfileForm
-            ref={profileFormRef}
-            title='用户画像'
-            formId='myEmbeddedUserProfileForm'
-            backHref='/profile'
-            defaultValues={profileData}
-            schema={userProfileEditSchema}
-            onSubmitAction={saveMyUserProfileAction}
-            embedded
-            cardDescription='补充当前问题背景、标签和主要困扰，用于支持后续问答与案例检索。'
-            hideSubmitButton
-          />
+        {userRole !== 'admin' ? (
+          <>
+            <FieldSeparator />
+            <UserProfileSummary
+              userId={data.id}
+              profile={profile}
+              href='/profile/user-profile#issues'
+              actionLabel='编辑画像'
+            />
+          </>
         ) : null}
+        <FieldSeparator />
         <form
           id='profilePasswordForm'
           onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
         >
-          <Card>
-            <CardHeader>
-              <CardTitle>修改密码</CardTitle>
-              <CardDescription>请输入当前密码后设置新密码</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <FieldGroup>
-                <FieldSet>
-                  <Controller
-                    name='currentPassword'
-                    control={passwordForm.control}
-                    render={renderCurrentPasswordInput}
-                  />
-                  <Controller
-                    name='newPassword'
-                    control={passwordForm.control}
-                    render={renderNewPasswordInput}
-                  />
-                  <Controller
-                    name='confirmPassword'
-                    control={passwordForm.control}
-                    render={renderConfirmPasswordInput}
-                  />
-                  <Field orientation='horizontal' className='justify-end'>
-                    <Button type='submit' disabled={isPasswordPending}>
-                      {isPasswordPending && (
-                        <LoaderCircle className='animate-spin' />
-                      )}
-                      <Save />
-                      修改密码
-                    </Button>
-                  </Field>
-                </FieldSet>
-              </FieldGroup>
-            </CardContent>
-            <CardFooter className='flex flex-wrap items-center gap-2'></CardFooter>
-          </Card>
+          <UserSection title='修改密码'>
+            <Controller
+              name='currentPassword'
+              control={passwordForm.control}
+              render={renderCurrentPasswordInput}
+            />
+            <Controller
+              name='newPassword'
+              control={passwordForm.control}
+              render={renderNewPasswordInput}
+            />
+            <Controller
+              name='confirmPassword'
+              control={passwordForm.control}
+              render={renderConfirmPasswordInput}
+            />
+            <Field orientation='horizontal' className='justify-end'>
+              <Button type='submit' disabled={isPasswordPending}>
+                {isPasswordPending && (
+                  <LoaderCircle className='animate-spin' />
+                )}
+                <Save />
+                修改密码
+              </Button>
+            </Field>
+          </UserSection>
         </form>
-      </div>
-    </div>
+      </FieldGroup>
+    </PageStack>
   )
 }

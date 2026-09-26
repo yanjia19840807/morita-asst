@@ -12,6 +12,9 @@ import type { DocRowDto } from '@/modules/docs/dto'
 export const docColumns: ColumnDef<DocRowDto>[] = [
   {
     id: 'select',
+    size: 32,
+    enableSorting: false,
+    enableHiding: false,
     header: ({ table }) => (
       <Checkbox
         checked={

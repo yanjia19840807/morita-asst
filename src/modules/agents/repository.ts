@@ -155,6 +155,9 @@ export async function createAgentRecord(
     description,
     status,
     model,
+    temperature,
+    historyLimit,
+    retrieveTopK,
     promptProfileId,
     knowledgeId
   } = input
@@ -181,6 +184,9 @@ export async function createAgentRecord(
       description: description || null,
       status,
       model: model || null,
+      temperature,
+      historyLimit,
+      retrieveTopK,
       promptProfileId: promptProfileId || null,
       knowledgeId: knowledgeId || null
     }
@@ -197,6 +203,9 @@ export async function updateAgentRecord(
     description,
     status,
     model,
+    temperature,
+    historyLimit,
+    retrieveTopK,
     promptProfileId,
     knowledgeId
   } = input
@@ -226,6 +235,9 @@ export async function updateAgentRecord(
       description: description || null,
       status,
       model: model || null,
+      temperature,
+      historyLimit,
+      retrieveTopK,
       promptProfileId: promptProfileId || null,
       knowledgeId: knowledgeId || null
     }

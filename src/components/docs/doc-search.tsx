@@ -12,7 +12,7 @@ export default function DocSearch() {
       value={searchValue}
       onChange={e => setSearch('filename', e.target.value || null)}
       placeholder='搜索文档名称'
-      className='w-full sm:max-w-sm'
+      className='max-w-sm'
     />
   )
 }

@@ -82,16 +82,34 @@ export default function AgentCard({ agent }: AgentCardProps) {
           </div>
         </div>
       </CardContent>
-      <CardFooter className='flex-row gap-2'>
-        <Button variant='ghost' size='sm' className='flex-1' asChild>
-          <Link href={`/agents/${agent.id}/edit`}>编辑</Link>
+      <CardFooter className='gap-2'>
+        <Button
+          variant='ghost'
+          size='sm'
+          className='flex-1'
+          nativeButton={false}
+          render={<Link href={`/agents/${agent.id}/edit`} />}
+        >
+          编辑
         </Button>
-        <Button variant='ghost' size='sm' className='flex-1' asChild>
-          <Link href={`/agents/${agent.id}`}>查看</Link>
+        <Button
+          variant='ghost'
+          size='sm'
+          className='flex-1'
+          nativeButton={false}
+          render={<Link href={`/agents/${agent.id}`} />}
+        >
+          查看
         </Button>
         {agent.status === 'ACTIVE' ? (
-          <Button variant='ghost' size='sm' className='flex-1' asChild>
-            <Link href={`/agents/${agent.id}/chat`}>对话</Link>
+          <Button
+            variant='ghost'
+            size='sm'
+            className='flex-1'
+            nativeButton={false}
+            render={<Link href={`/agents/${agent.id}/chat`} />}
+          >
+            对话
           </Button>
         ) : (
           <Button

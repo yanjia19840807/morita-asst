@@ -1,7 +1,7 @@
 import { MessageRole, Prisma } from '@/generated/prisma/client'
 import { prisma } from '@/lib/prisma'
 import { NotFoundError } from '@/lib/api/errors'
-import type { ChatCitationsPayload } from './schemas'
+import type { ChatRun } from './schemas'
 
 const agentChatInclude = {
   promptProfile: {
@@ -29,9 +29,19 @@ export type ConversationMessage = Prisma.MessageGetPayload<{
     role: true
     content: true
     citations: true
+    run: true
     createdAt: true
   }
 }>
+
+const messageSelect = {
+  id: true,
+  role: true,
+  content: true,
+  citations: true,
+  run: true,
+  createdAt: true
+} satisfies Prisma.MessageSelect
 
 export async function findAgentChatContext(
   agentId: string
@@ -48,48 +58,49 @@ export async function findAgentChatContext(
   return agent
 }
 
-export async function findOrCreateConversation(agentId: string, userId: string) {
-  const where = {
-    agentId_userId: {
-      agentId,
-      userId
+export async function listAgentConversations(agentId: string, userId: string) {
+  return prisma.conversation.findMany({
+    where: { agentId, userId },
+    orderBy: { updatedAt: 'desc' },
+    include: {
+      _count: {
+        select: { messages: true }
+      }
     }
-  } as const
+  })
+}
 
-  const existing = await prisma.conversation.findUnique({ where })
-  if (existing) {
-    return existing
+export async function createAgentConversation(agentId: string, userId: string) {
+  return prisma.conversation.create({
+    data: { agentId, userId },
+    include: {
+      _count: {
+        select: { messages: true }
+      }
+    }
+  })
+}
+
+export async function findAgentConversation(
+  conversationId: string,
+  agentId: string,
+  userId: string
+) {
+  const conversation = await prisma.conversation.findFirst({
+    where: { id: conversationId, agentId, userId }
+  })
+
+  if (!conversation) {
+    throw new NotFoundError('试聊')
   }
 
-  try {
-    return await prisma.conversation.create({
-      data: { agentId, userId }
-    })
-  } catch (error) {
-    const isUniqueConflict =
-      (error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002') ||
-      (error instanceof Error &&
-        /unique constraint/i.test(error.message))
-
-    if (isUniqueConflict) {
-      return prisma.conversation.findUniqueOrThrow({ where })
-    }
-
-    throw error
-  }
+  return conversation
 }
 
 export async function findConversationMessages(conversationId: string) {
   return prisma.message.findMany({
     where: { conversationId },
-    select: {
-      id: true,
-      role: true,
-      content: true,
-      citations: true,
-      createdAt: true
-    },
+    select: messageSelect,
     orderBy: { createdAt: 'asc' }
   })
 }
@@ -98,7 +109,7 @@ export async function createConversationMessage(data: {
   conversationId: string
   role: MessageRole
   content: string
-  citations?: ChatCitationsPayload | null
+  run?: ChatRun
 }) {
   const [message] = await prisma.$transaction([
     prisma.message.create({
@@ -106,15 +117,9 @@ export async function createConversationMessage(data: {
         conversationId: data.conversationId,
         role: data.role,
         content: data.content,
-        citations: data.citations === undefined ? undefined : data.citations
+        run: data.run
       },
-      select: {
-        id: true,
-        role: true,
-        content: true,
-        citations: true,
-        createdAt: true
-      }
+      select: messageSelect
     }),
     prisma.conversation.update({
       where: { id: data.conversationId },
@@ -125,9 +130,41 @@ export async function createConversationMessage(data: {
   return message
 }
 
-export async function clearConversationMessages(conversationId: string) {
+export async function setConversationTitleIfEmpty(
+  conversationId: string,
+  title: string
+) {
+  const conversation = await prisma.conversation.findUnique({
+    where: { id: conversationId },
+    select: { title: true }
+  })
+
+  if (!conversation || conversation.title) {
+    return conversation?.title ?? null
+  }
+
+  const updated = await prisma.conversation.update({
+    where: { id: conversationId },
+    data: { title },
+    select: { title: true }
+  })
+
+  return updated.title
+}
+
+export async function deleteMessagesAfter(
+  conversationId: string,
+  messageIds: string[]
+) {
+  if (messageIds.length === 0) {
+    return
+  }
+
   await prisma.message.deleteMany({
-    where: { conversationId }
+    where: {
+      conversationId,
+      id: { in: messageIds }
+    }
   })
 }
 
@@ -149,63 +186,42 @@ export async function findReadyKnowledgeDocs(knowledgeId: string) {
   })
 }
 
-export async function findKnowledgeChunksForRetrieve(
-  knowledgeDocIds: string[],
-  query: string,
-  limit: number
-) {
-  const terms = extractSearchTerms(query)
-  const baseWhere = {
-    knowledgeDocId: { in: knowledgeDocIds }
+export async function countReadyKnowledgeChunks(knowledgeDocIds: string[]) {
+  if (knowledgeDocIds.length === 0) {
+    return 0
   }
 
-  const matched =
-    terms.length > 0
-      ? await prisma.chunk.findMany({
-          where: {
-            ...baseWhere,
-            OR: terms.map(term => ({
-              content: {
-                contains: term,
-                mode: 'insensitive' as const
-              }
-            }))
-          },
-          select: {
-            id: true,
-            content: true,
-            knowledgeDocId: true
-          },
-          take: limit
-        })
-      : []
+  return prisma.chunk.count({
+    where: {
+      knowledgeDocId: { in: knowledgeDocIds }
+    }
+  })
+}
 
-  if (matched.length > 0) {
-    return matched
+export async function findReadyChunksByTerms(
+  knowledgeDocIds: string[],
+  terms: string[],
+  limit: number
+) {
+  if (knowledgeDocIds.length === 0 || terms.length === 0) {
+    return []
   }
 
   return prisma.chunk.findMany({
-    where: baseWhere,
+    where: {
+      knowledgeDocId: { in: knowledgeDocIds },
+      OR: terms.map(term => ({
+        content: {
+          contains: term,
+          mode: 'insensitive' as const
+        }
+      }))
+    },
     select: {
       id: true,
       content: true,
       knowledgeDocId: true
     },
-    orderBy: { createdAt: 'asc' },
     take: limit
   })
-}
-
-function extractSearchTerms(query: string) {
-  const tokens = query
-    .split(/[^\p{L}\p{N}]+/u)
-    .map(item => item.trim())
-    .filter(item => item.length >= 2)
-
-  const unique = [...new Set(tokens)]
-  if (unique.length === 0 && query.trim().length >= 2) {
-    return [query.trim()]
-  }
-
-  return unique.slice(0, 8)
 }

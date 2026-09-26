@@ -6,6 +6,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import type { AuthUserDto } from '@/modules/auth/dto'
 import { TableColumnHeader } from '../table/table-column-header'
+import { getAvatarSrc } from '@/modules/auth/avatar'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { UserTableRowActions } from './user-row-actions'
 import { Checkbox } from '../ui/checkbox'
@@ -13,6 +14,9 @@ import { Checkbox } from '../ui/checkbox'
 export const userColumns: ColumnDef<AuthUserDto>[] = [
   {
     id: 'select',
+    size: 32,
+    enableSorting: false,
+    enableHiding: false,
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -37,7 +41,7 @@ export const userColumns: ColumnDef<AuthUserDto>[] = [
     ),
     cell: ({ row }) => (
       <Avatar size='sm'>
-        <AvatarImage src={row.original.image || '/avatar-default.svg'} />
+        <AvatarImage src={getAvatarSrc(row.original.image)} />
         <AvatarFallback>U</AvatarFallback>
       </Avatar>
     )

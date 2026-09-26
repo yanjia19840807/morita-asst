@@ -41,8 +41,13 @@ export function DocRowActions({ row }: DocRowActionsProps) {
 
   return (
     <div className='flex items-center justify-end gap-2 whitespace-nowrap'>
-      <Button size='sm' variant='ghost' asChild>
-        <Link href={`/docs/${row.original.id}`}>查看</Link>
+      <Button
+        nativeButton={false}
+        render={<Link href={`/docs/${row.original.id}`} />}
+        size='sm'
+        variant='ghost'
+      >
+        查看
       </Button>
       <ConfirmDialog
         title='删除文档'

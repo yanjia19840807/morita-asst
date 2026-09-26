@@ -11,20 +11,19 @@ import {
   useForm,
   UseFormStateReturn
 } from 'react-hook-form'
-import { useEffect, useTransition } from 'react'
+import { useEffect, useTransition, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import type z from 'zod'
 import AvatarPicker from '@/components/avatar-picker'
+import { PageStack } from '@/components/layout/page-stack'
 import PageTitle from '@/components/layout/page-title'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
   FieldLegend,
-  FieldSeparator,
   FieldSet
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -47,17 +46,24 @@ type UserFormInput = Omit<UserEditFormValues, 'id'> & {
 
 type UserFormMode = 'Create' | 'Edit'
 
+type UserFormExtraContext = {
+  selectedRole: UserFormInput['role']
+  isPending: boolean
+}
+
 interface UserFormProps {
   mode: UserFormMode
   title: string
   formId: string
   defaultValues: UserFormInput
   schema: z.ZodType<UserFormInput>
-  onSubmitAction: (values: UserFormInput) => Promise<ResponseResult>
-  children?: React.ReactNode
-  renderExtra?: (context: {
-    selectedRole: UserFormInput['role']
-  }) => React.ReactNode
+  onSubmitAction: (values: UserFormInput) => Promise<ResponseResult<unknown>>
+  extraActions?: ReactNode
+  getSuccessHref?: (data: unknown) => string
+  afterFields?: (context: UserFormExtraContext) => ReactNode
+  renderExtra?: (context: UserFormExtraContext) => ReactNode
+  embedded?: boolean
+  successMessage?: string
 }
 
 export function UserForm({
@@ -67,8 +73,12 @@ export function UserForm({
   defaultValues,
   schema,
   onSubmitAction,
-  children,
-  renderExtra
+  extraActions,
+  getSuccessHref,
+  afterFields,
+  renderExtra,
+  embedded = false,
+  successMessage = '保存成功'
 }: UserFormProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
@@ -79,6 +89,7 @@ export function UserForm({
     defaultValues
   })
   const selectedRole = form.watch('role')
+  const extraContext = { selectedRole, isPending }
 
   useEffect(() => {
     form.reset(defaultValues)
@@ -93,8 +104,7 @@ export function UserForm({
     formState: UseFormStateReturn<UserFormInput>
   }) => {
     return (
-      <Field data-invalid={fieldState.invalid} className='flex-1'>
-        <FieldLabel htmlFor={field.name}>头像</FieldLabel>
+      <Field data-invalid={fieldState.invalid}>
         <AvatarPicker {...field} />
         {fieldState.invalid && fieldState.error && (
           <FieldError errors={[fieldState.error]} />
@@ -118,6 +128,7 @@ export function UserForm({
           id={field.name}
           placeholder='填写邮箱地址'
           aria-invalid={fieldState.invalid}
+          disabled={mode === 'Edit'}
           {...field}
         />
         {fieldState.invalid && fieldState.error && (
@@ -152,38 +163,6 @@ export function UserForm({
     )
   }
 
-  const renderPasswordInput = ({
-    field,
-    fieldState
-  }: {
-    field: ControllerRenderProps<UserFormInput, 'password'>
-    fieldState: ControllerFieldState
-    formState: UseFormStateReturn<UserFormInput>
-  }) => {
-    return (
-      <Field data-invalid={fieldState.invalid} className='flex-1'>
-        <FieldLabel htmlFor={field.name}>密码</FieldLabel>
-        <Input
-          id={field.name}
-          type='password'
-          placeholder='密码: 8-30个字符'
-          aria-invalid={fieldState.invalid}
-          value={field.value ?? ''}
-          onBlur={field.onBlur}
-          name={field.name}
-          ref={field.ref}
-          onChange={event => field.onChange(event.target.value)}
-        />
-        {mode === 'Edit' && (
-          <FieldDescription>留空则不修改密码</FieldDescription>
-        )}
-        {fieldState.invalid && fieldState.error && (
-          <FieldError errors={[fieldState.error]} />
-        )}
-      </Field>
-    )
-  }
-
   const renderRoleInput = ({
     field,
     fieldState
@@ -196,11 +175,19 @@ export function UserForm({
       <Field data-invalid={fieldState.invalid} className='flex-1'>
         <FieldLabel htmlFor={field.name}>角色</FieldLabel>
         <Select
-          value={field.value ?? ''}
-          onValueChange={field.onChange}
+          value={field.value || null}
+          onValueChange={value => field.onChange(value ?? '')}
+          items={[
+            { value: 'user', label: '用户' },
+            { value: 'admin', label: '管理员' }
+          ]}
           disabled={isPending}
         >
-          <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
+          <SelectTrigger
+            id={field.name}
+            aria-invalid={fieldState.invalid}
+            className='w-full'
+          >
             <SelectValue placeholder='请选择角色' />
           </SelectTrigger>
           <SelectContent>
@@ -230,8 +217,11 @@ export function UserForm({
         })
 
         if (result.success) {
-          toast.success('保存成功')
-          router.push('/users')
+          toast.success(successMessage)
+          router.push(
+            getSuccessHref?.('data' in result ? result.data : undefined) ??
+              '/users'
+          )
         } else {
           toast.error(result.error.message)
         }
@@ -242,12 +232,57 @@ export function UserForm({
     })
   }
 
+  const fields = (
+      <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
+        {'id' in defaultValues && (
+          <input type='hidden' {...form.register('id')} />
+        )}
+        <FieldGroup>
+            <FieldSet>
+              {embedded ? null : <FieldLegend>账号</FieldLegend>}
+              <Controller
+                name='image'
+                control={form.control}
+                render={renderAvatarInput}
+              />
+              <div className='grid gap-5 md:grid-cols-2'>
+                <Controller
+                  name='email'
+                  control={form.control}
+                  render={renderEmailInput}
+                />
+                <Controller
+                  name='name'
+                  control={form.control}
+                  render={renderNameInput}
+                />
+              </div>
+              <Controller
+                name='role'
+                control={form.control}
+                render={renderRoleInput}
+              />
+            </FieldSet>
+            {afterFields ? afterFields(extraContext) : null}
+          </FieldGroup>
+      </form>
+  )
+
+  if (embedded) {
+    return (
+      <>
+        {fields}
+        {renderExtra ? renderExtra(extraContext) : null}
+      </>
+    )
+  }
+
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-6'>
+    <PageStack>
       <PageTitle
         title={title}
         description={
-          mode === 'Create' ? '创建账号并设置角色' : '更新账号资料和角色'
+          mode === 'Create' ? '创建账号并设置角色' : '更新账号资料'
         }
         actionButtons={
           <div className='flex flex-row items-center gap-2'>
@@ -256,6 +291,7 @@ export function UserForm({
               <Save />
               保存
             </Button>
+            {extraActions}
             <Link
               href='/users'
               className={buttonVariants({
@@ -268,55 +304,8 @@ export function UserForm({
           </div>
         }
       />
-      <FieldGroup>
-        <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
-          {'id' in defaultValues && (
-            <input type='hidden' {...form.register('id')} />
-          )}
-          <FieldSet>
-            <FieldLegend>基本信息</FieldLegend>
-            <FieldDescription>维护用户账号基础资料和权限</FieldDescription>
-            <FieldGroup>
-              <Controller
-                name='image'
-                control={form.control}
-                render={renderAvatarInput}
-              />
-              <div className='grid gap-6 md:grid-cols-2'>
-                <Controller
-                  name='email'
-                  control={form.control}
-                  render={renderEmailInput}
-                />
-                <Controller
-                  name='name'
-                  control={form.control}
-                  render={renderNameInput}
-                />
-              </div>
-              <div className='grid gap-6 md:grid-cols-2'>
-                <Controller
-                  name='password'
-                  control={form.control}
-                  render={renderPasswordInput}
-                />
-                <Controller
-                  name='role'
-                  control={form.control}
-                  render={renderRoleInput}
-                />
-              </div>
-            </FieldGroup>
-          </FieldSet>
-        </form>
-        {renderExtra ? (
-          <>
-            <FieldSeparator />
-            {renderExtra({ selectedRole })}
-          </>
-        ) : null}
-      </FieldGroup>
-      {children}
-    </div>
+      {fields}
+      {renderExtra ? renderExtra(extraContext) : null}
+    </PageStack>
   )
 }

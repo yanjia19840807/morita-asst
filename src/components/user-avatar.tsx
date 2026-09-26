@@ -1,5 +1,6 @@
 'use client'
 
+import { getAvatarSrc } from '@/modules/auth/avatar'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { authClient } from '@/modules/auth/client'
 import {
@@ -36,13 +37,15 @@ export default function UserAvatar() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className='focus-visible:ring-ring cursor-pointer rounded-full outline-none focus-visible:ring-2'>
-          <Avatar>
-            <AvatarImage src={userData.user.image || '/avatar-default.svg'} />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-        </button>
+      <DropdownMenuTrigger
+        render={
+          <button className='focus-visible:ring-ring cursor-pointer rounded-full outline-none focus-visible:ring-2' />
+        }
+      >
+        <Avatar>
+          <AvatarImage src={getAvatarSrc(userData.user.image)} />
+          <AvatarFallback>U</AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-48'>
         <DropdownMenuLabel className='font-normal'>

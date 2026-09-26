@@ -6,13 +6,14 @@ import {
   handleActionResult,
   type ResponseResult
 } from '@/lib/api/response'
-import { clearAgentChatThread } from './service'
+import { startAgentChatRound } from './service'
+import type { ChatConversationSummary } from './types'
 
-export async function clearAgentChatAction(
+export async function startAgentChatRoundAction(
   agentId: string
-): Promise<ResponseResult<{ conversationId: string }>> {
+): Promise<ResponseResult<ChatConversationSummary>> {
   try {
-    const result = await clearAgentChatThread(agentId)
+    const result = await startAgentChatRound(agentId)
     revalidatePath(`/agents/${agentId}/chat`)
     return handleActionResult(result)
   } catch (error) {

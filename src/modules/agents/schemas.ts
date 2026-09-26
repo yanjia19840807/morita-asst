@@ -36,12 +36,36 @@ export const agentKnowledgeIdSchema = z
   .min(1, '知识库ID不能为空')
   .optional()
 
+export const DEFAULT_AGENT_TEMPERATURE = 0
+export const DEFAULT_AGENT_HISTORY_LIMIT = 20
+export const DEFAULT_AGENT_RETRIEVE_TOP_K = 4
+
+export const agentTemperatureSchema = z
+  .number({ message: '温度必须是数字' })
+  .min(0, '温度不能小于 0')
+  .max(2, '温度不能大于 2')
+
+export const agentHistoryLimitSchema = z
+  .number({ message: '历史条数必须是数字' })
+  .int('历史条数必须是整数')
+  .min(1, '历史条数不能小于 1')
+  .max(50, '历史条数不能大于 50')
+
+export const agentRetrieveTopKSchema = z
+  .number({ message: '检索条数必须是数字' })
+  .int('检索条数必须是整数')
+  .min(1, '检索条数不能小于 1')
+  .max(20, '检索条数不能大于 20')
+
 export const agentSchema = z.object({
   id: agentIdSchema,
   name: agentNameSchema,
   description: agentDescriptionSchema,
   status: agentStatusSchema,
   model: agentModelSchema,
+  temperature: agentTemperatureSchema,
+  historyLimit: agentHistoryLimitSchema,
+  retrieveTopK: agentRetrieveTopKSchema,
   promptProfileId: agentPromptProfileIdSchema,
   knowledgeId: agentKnowledgeIdSchema
 })

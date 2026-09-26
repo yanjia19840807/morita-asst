@@ -11,7 +11,7 @@ export function PageShell({
   return (
     <div
       className={cn(
-        'flex min-h-0 flex-1 flex-col gap-6 px-4 pt-4 pb-8 md:px-6',
+        'flex min-h-0 min-w-0 flex-1 flex-col gap-4 px-4 pt-4 pb-6 md:gap-6 md:px-6 md:pb-8',
         className
       )}
     >

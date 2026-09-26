@@ -12,7 +12,7 @@ export default function KnowledgeSearch() {
       value={searchValue}
       onChange={event => setSearchValue(event.target.value || null)}
       placeholder='搜索知识库名称或描述'
-      className='w-full sm:max-w-sm'
+      className='max-w-sm'
     />
   )
 }

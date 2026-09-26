@@ -1,20 +1,19 @@
-import { HumanMessage, SystemMessage } from '@langchain/core/messages'
-import { z } from 'zod'
-import { createChatModel } from '../models/chat-deep-seek'
 import {
-  findKnowledgeChunksForRetrieve,
+  countReadyKnowledgeChunks,
+  findReadyChunksByTerms,
   findReadyKnowledgeDocs
 } from './repository'
 import type { ChatCitation } from './schemas'
 
-const RETRIEVE_TOP_K = 4
-const CANDIDATE_LIMIT = 24
-const EXCERPT_LENGTH = 160
-const CONTEXT_LENGTH = 800
+const CANDIDATE_LIMIT = 80
+const STORED_LENGTH = 1500
 
-const selectionSchema = z.object({
-  ids: z.array(z.string())
-})
+export type RetrievedContext = {
+  status: 'hit' | 'miss'
+  reason: string | null
+  citations: ChatCitation[]
+  contextText: string
+}
 
 function clip(text: string, maxLength: number) {
   const normalized = text.replace(/\s+/g, ' ').trim()
@@ -25,104 +24,118 @@ function clip(text: string, maxLength: number) {
   return `${normalized.slice(0, maxLength).trim()}…`
 }
 
-async function selectChunksWithDeepSeek(
-  query: string,
-  candidates: Array<{ id: string; filename: string; excerpt: string }>,
-  model?: string | null
-) {
-  const selector = createChatModel(model, {
-    modelKwargs: {
-      thinking: { type: 'disabled' }
-    }
-  }).withStructuredOutput(selectionSchema)
+function searchTerms(query: string) {
+  const words = query
+    .toLowerCase()
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter(word => word.length >= 2 && !/[\u4e00-\u9fff]/.test(word))
+  const cjk = query.match(/[\u4e00-\u9fff]+/g)?.join('') ?? ''
+  const grams: string[] = []
 
-  const selected = await selector.invoke([
-    new SystemMessage(
-      '你是知识库检索助手。根据用户问题，从候选片段中选出最相关的条目。最多选 4 个，按相关性从高到低。'
-    ),
-    new HumanMessage(
-      `问题：\n${query}\n\n候选：\n${candidates
-        .map(
-          (item, index) =>
-            `[${index + 1}] id=${item.id} 文件=${item.filename}\n${item.excerpt}`
-        )
-        .join('\n\n')}`
-    )
-  ])
+  for (let index = 0; index < cjk.length - 1; index += 1) {
+    grams.push(cjk.slice(index, index + 2))
+  }
 
-  return selected.ids
+  const unique = [...new Set([...words, ...grams])]
+  if (unique.length <= 16) {
+    return unique
+  }
+
+  const step = unique.length / 16
+  return Array.from({ length: 16 }, (_, index) => unique[Math.floor(index * step)])
 }
 
-export type RetrievedContext = {
-  citations: ChatCitation[]
-  contextText: string
+function scoreChunk(content: string, terms: string[]) {
+  const haystack = content.toLowerCase()
+  return terms.reduce(
+    (total, term) => (haystack.includes(term) ? total + 1 : total),
+    0
+  )
 }
 
 export async function retrieveKnowledgeContext(
   knowledgeId: string,
   query: string,
-  model?: string | null
+  topK: number
 ): Promise<RetrievedContext> {
   const knowledgeDocs = await findReadyKnowledgeDocs(knowledgeId)
-  const docIds = knowledgeDocs.map(item => item.id)
 
-  if (docIds.length === 0) {
-    return { citations: [], contextText: '' }
-  }
-
-  const docsById = new Map(
-    knowledgeDocs.map(item => [item.id, item.doc] as const)
-  )
-  const candidates = await findKnowledgeChunksForRetrieve(
-    docIds,
-    query,
-    CANDIDATE_LIMIT
-  )
-
-  if (candidates.length === 0) {
-    return { citations: [], contextText: '' }
-  }
-
-  const candidateViews = candidates.map(chunk => ({
-    id: chunk.id,
-    filename: docsById.get(chunk.knowledgeDocId)?.filename ?? '未命名文档',
-    excerpt: clip(chunk.content, EXCERPT_LENGTH),
-    content: chunk.content,
-    knowledgeDocId: chunk.knowledgeDocId
-  }))
-
-  let selected = candidateViews.slice(0, RETRIEVE_TOP_K)
-
-  if (candidateViews.length > RETRIEVE_TOP_K) {
-    try {
-      const selectedIds = await selectChunksWithDeepSeek(
-        query,
-        candidateViews,
-        model
-      )
-      const selectedSet = new Set(selectedIds)
-      const picked = candidateViews.filter(item => selectedSet.has(item.id))
-
-      if (picked.length > 0) {
-        selected = picked.slice(0, RETRIEVE_TOP_K)
-      }
-    } catch (error) {
-      console.error('DeepSeek retrieve selection failed:', error)
+  if (knowledgeDocs.length === 0) {
+    return {
+      status: 'miss',
+      reason: '知识库没有已就绪的文档',
+      citations: [],
+      contextText: ''
     }
   }
 
-  const citations: ChatCitation[] = selected.map(item => ({
-    chunkId: item.id,
-    docId: docsById.get(item.knowledgeDocId)?.id,
-    filename: item.filename,
-    excerpt: item.excerpt
-  }))
-  const contextText = selected
+  const docIds = knowledgeDocs.map(item => item.id)
+  const chunkCount = await countReadyKnowledgeChunks(docIds)
+
+  if (chunkCount === 0) {
+    return {
+      status: 'miss',
+      reason: '已就绪文档还没有切片',
+      citations: [],
+      contextText: ''
+    }
+  }
+
+  const terms = searchTerms(query)
+  if (terms.length === 0) {
+    return {
+      status: 'miss',
+      reason: '问题过短，无法在切片中检索',
+      citations: [],
+      contextText: ''
+    }
+  }
+
+  const docsByKnowledgeDocId = new Map(
+    knowledgeDocs.map(item => [item.id, item.doc] as const)
+  )
+  const candidates = await findReadyChunksByTerms(docIds, terms, CANDIDATE_LIMIT)
+  const minimumScore = terms.length <= 2 ? 1 : 2
+  const ranked = candidates
+    .map(chunk => ({
+      chunk,
+      score: scoreChunk(chunk.content, terms)
+    }))
+    .filter(item => item.score >= minimumScore)
+    .sort((left, right) => right.score - left.score)
+    .slice(0, topK)
+
+  if (ranked.length === 0) {
+    return {
+      status: 'miss',
+      reason: '已就绪切片里没有与问题相关的内容',
+      citations: [],
+      contextText: ''
+    }
+  }
+
+  const citations: ChatCitation[] = ranked.map(({ chunk }) => {
+    const doc = docsByKnowledgeDocId.get(chunk.knowledgeDocId)
+    const content = clip(chunk.content, STORED_LENGTH)
+
+    return {
+      chunkId: chunk.id,
+      docId: doc?.id ?? null,
+      filename: doc?.filename ?? '未命名文档',
+      excerpt: clip(chunk.content, 160),
+      content
+    }
+  })
+  const contextText = citations
     .map(
-      (item, index) =>
-        `[${index + 1}] ${item.filename}\n${clip(item.content, CONTEXT_LENGTH)}`
+      (item, index) => `[${index + 1}] ${item.filename}\n${item.content ?? item.excerpt}`
     )
     .join('\n\n')
 
-  return { citations, contextText }
+  return {
+    status: 'hit',
+    reason: null,
+    citations,
+    contextText
+  }
 }

@@ -14,6 +14,15 @@ export const DEFAULT_CHAT_MODEL = 'deepseek-flash'
 
 export type ChatModelValue = (typeof CHAT_MODEL_OPTIONS)[number]['value']
 
+export function chatModelLabel(model?: string | null) {
+  const normalized = model?.trim()
+  return (
+    CHAT_MODEL_OPTIONS.find(option => option.value === normalized)?.label ??
+    normalized ??
+    '默认模型'
+  )
+}
+
 export function resolveChatModel(model?: string | null): ChatModelValue {
   const normalized = model?.trim()
   return CHAT_MODEL_OPTIONS.some(option => option.value === normalized)

@@ -14,6 +14,8 @@ import type { DragEndEvent } from '@dnd-kit/abstract'
 import { Controller, Resolver, useFieldArray, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type z from 'zod'
+import { UserSection } from '@/components/auth/user-section'
+import { PageStack } from '@/components/layout/page-stack'
 import PageTitle from '@/components/layout/page-title'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
@@ -22,8 +24,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
-  FieldSet
+  FieldSeparator
 } from '@/components/ui/field'
 import {
   Select,
@@ -87,7 +88,6 @@ export const UserProfileForm = forwardRef<
     schema,
     onSubmitAction,
     embedded = false,
-    cardDescription,
     submitLabel = '保存画像',
     hideSubmitButton = false
   },
@@ -185,13 +185,8 @@ export const UserProfileForm = forwardRef<
       <input type='hidden' {...form.register('userId')} />
       <input type='hidden' {...form.register('id')} />
       <FieldGroup>
-        <FieldSet>
-          <FieldLegend>{title}</FieldLegend>
-          {cardDescription ? (
-            <FieldDescription>{cardDescription}</FieldDescription>
-          ) : null}
-          <FieldGroup>
-            <div className='grid gap-6 md:grid-cols-2'>
+        <UserSection title='背景'>
+            <div className='grid gap-5 md:grid-cols-2'>
               <Controller
                 name='gender'
                 control={form.control}
@@ -199,13 +194,15 @@ export const UserProfileForm = forwardRef<
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor={field.name}>性别</FieldLabel>
                     <Select
-                      value={field.value ?? ''}
-                      onValueChange={field.onChange}
+                      value={field.value || null}
+                      onValueChange={value => field.onChange(value ?? '')}
+                      items={PROFILE_GENDER_OPTIONS}
                       disabled={isPending}
                     >
                       <SelectTrigger
                         id={field.name}
                         aria-invalid={fieldState.invalid}
+                        className='w-full'
                       >
                         <SelectValue placeholder='请选择性别' />
                       </SelectTrigger>
@@ -233,13 +230,15 @@ export const UserProfileForm = forwardRef<
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor={field.name}>年龄段</FieldLabel>
                     <Select
-                      value={field.value ?? ''}
-                      onValueChange={field.onChange}
+                      value={field.value || null}
+                      onValueChange={value => field.onChange(value ?? '')}
+                      items={PROFILE_AGE_RANGE_OPTIONS}
                       disabled={isPending}
                     >
                       <SelectTrigger
                         id={field.name}
                         aria-invalid={fieldState.invalid}
+                        className='w-full'
                       >
                         <SelectValue placeholder='请选择年龄段' />
                       </SelectTrigger>
@@ -280,12 +279,9 @@ export const UserProfileForm = forwardRef<
                 </Field>
               )}
             />
-          </FieldGroup>
-        </FieldSet>
-        <FieldSet>
-          <FieldLegend>主要问题</FieldLegend>
-          <FieldDescription>拖动左侧把手调整优先级</FieldDescription>
-          <FieldGroup>
+        </UserSection>
+        <FieldSeparator />
+        <UserSection id='issues' title='主要问题'>
             {issuesFieldArray.fields.length ? (
               <DragDropProvider onDragEnd={handleDragEnd}>
                 <div className='flex flex-col'>
@@ -400,8 +396,7 @@ export const UserProfileForm = forwardRef<
                 </Button>
               </Field>
             ) : null}
-          </FieldGroup>
-        </FieldSet>
+        </UserSection>
       </FieldGroup>
     </form>
   )
@@ -411,7 +406,7 @@ export const UserProfileForm = forwardRef<
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-6'>
+    <PageStack>
       <PageTitle
         title={title}
         description='维护用户画像，帮助助手更好地理解来访者'
@@ -430,6 +425,6 @@ export const UserProfileForm = forwardRef<
         }
       />
       {fields}
-    </div>
+    </PageStack>
   )
 })

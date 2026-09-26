@@ -1,23 +1,9 @@
 'use client'
 
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable
-} from '@tanstack/react-table'
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
+import { type ColumnDef } from '@tanstack/react-table'
 import { useTransition } from 'react'
 import { docColumns } from './doc-table-columns'
-import TableFooterSection from '../table/table-footer-section'
+import { DataTable } from '../table/data-table'
 import { TableQsPagination } from '../table/table-qs-pagination'
 import TableActionSection from '../table/table-action-section'
 import TableSelectionText from '../table/table-selection-text'
@@ -78,101 +64,52 @@ export function DocTable({ data, total, pageSize }: DocTableProps) {
     })
   }
 
-  const table = useReactTable({
-    data,
-    columns: docColumns as ColumnDef<DocRowDto>[],
-    getCoreRowModel: getCoreRowModel(),
-    enableRowSelection: isBulkMode,
-    getRowId: row => row.id,
-    state: {
-      sorting,
-      rowSelection,
-      columnVisibility: { select: isBulkMode }
-    },
-    onSortingChange,
-    onRowSelectionChange
-  })
-
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-4'>
-      <TableActionSection className='justify-between'>
-        <DocSearch />
-        <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
-          {isBulkMode && selectedIds.length > 0 && (
-            <>
-              <TableSelectionText count={selectedIds.length} />
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant='destructive'>批量删除</Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>确认批量删除</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      即将删除 {selectedIds.length}
-                      个文档，此操作不可撤销，是否继续？
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>取消</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleBulkRemove}>
-                      确认删除
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </>
-          )}
-        </TableBulkAction>
-      </TableActionSection>
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map(headerGroup => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map(header => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map(row => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-              >
-                {row.getVisibleCells().map(cell => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell
-                colSpan={docColumns.length}
-                className='h-24 text-center'
-              >
-                没有数据
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-      <TableFooterSection>
-        <TableQsPagination pageSize={pageSize} total={total} />
-      </TableFooterSection>
-    </div>
+    <DataTable
+      columns={docColumns as ColumnDef<DocRowDto>[]}
+      data={data}
+      enableRowSelection={isBulkMode}
+      getRowId={row => row.id}
+      state={{
+        sorting,
+        rowSelection,
+        columnVisibility: { select: isBulkMode }
+      }}
+      onSortingChange={onSortingChange}
+      onRowSelectionChange={onRowSelectionChange}
+      toolbar={
+        <TableActionSection className='w-full justify-between'>
+          <DocSearch />
+          <TableBulkAction isBulkMode={isBulkMode} handleToggle={handleToggle}>
+            {isBulkMode && selectedIds.length > 0 && (
+              <>
+                <TableSelectionText count={selectedIds.length} />
+                <AlertDialog>
+                  <AlertDialogTrigger render={<Button variant='destructive' />}>
+                    批量删除
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>确认批量删除</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        即将删除 {selectedIds.length}
+                        个文档，此操作不可撤销，是否继续？
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>取消</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleBulkRemove}>
+                        确认删除
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </>
+            )}
+          </TableBulkAction>
+        </TableActionSection>
+      }
+      footer={<TableQsPagination pageSize={pageSize} total={total} />}
+    />
   )
 }

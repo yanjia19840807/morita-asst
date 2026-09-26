@@ -28,9 +28,7 @@ export default function AppBreadCrumb({ segments }: { segments: string[] }) {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href='/agents'>首页</Link>
-          </BreadcrumbLink>
+          <BreadcrumbLink render={<Link href='/agents' />}>首页</BreadcrumbLink>
         </BreadcrumbItem>
         {crumbs.map((crumb, index) => {
           const isLast = index === crumbs.length - 1
@@ -41,8 +39,8 @@ export default function AppBreadCrumb({ segments }: { segments: string[] }) {
                 {isLast ? (
                   <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink asChild>
-                    <Link href={crumb.href}>{crumb.label}</Link>
+                  <BreadcrumbLink render={<Link href={crumb.href} />}>
+                    {crumb.label}
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>

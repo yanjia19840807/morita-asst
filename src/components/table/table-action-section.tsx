@@ -10,7 +10,7 @@ export default function TableActionSection({
   className
 }: TableActionSectionProps) {
   return (
-    <div className={cn('flex items-center justify-between gap-2', className)}>
+    <div className={cn('flex w-full min-w-0 items-center justify-between gap-2', className)}>
       {children}
     </div>
   )

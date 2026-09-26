@@ -11,11 +11,9 @@ import KnowledgeGrid from '@/components/knowledges/knowledge-grid'
 
 const CreateBtn = function () {
   return (
-    <Button asChild>
-      <Link href='/knowledges/new'>
-        <Plus />
-        新建知识库
-      </Link>
+    <Button nativeButton={false} render={<Link href='/knowledges/new' />}>
+      <Plus />
+      新建知识库
     </Button>
   )
 }

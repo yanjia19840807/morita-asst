@@ -19,11 +19,9 @@ const pageSize = 10
 
 const CreateBtn = function () {
   return (
-    <Button asChild>
-      <Link href='/prompt-profiles/new'>
-        <Plus />
-        新建提示词
-      </Link>
+    <Button nativeButton={false} render={<Link href='/prompt-profiles/new' />}>
+      <Plus />
+      新建提示词
     </Button>
   )
 }

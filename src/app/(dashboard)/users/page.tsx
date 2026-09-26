@@ -19,11 +19,9 @@ const pageSize = 10
 
 const CreateBtn = function () {
   return (
-    <Button asChild>
-      <Link href='/users/new'>
-        <Plus />
-        新增
-      </Link>
+    <Button nativeButton={false} render={<Link href='/users/new' />}>
+      <Plus />
+      新增
     </Button>
   )
 }

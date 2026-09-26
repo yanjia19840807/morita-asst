@@ -12,7 +12,7 @@ export default function TableBulkAction({
   children
 }: TableBulkActionProps) {
   return (
-    <div className='flex flex-row items-center gap-2'>
+    <div className='flex shrink-0 flex-row items-center gap-2'>
       {children}
       <Button
         variant={isBulkMode ? 'secondary' : 'ghost'}

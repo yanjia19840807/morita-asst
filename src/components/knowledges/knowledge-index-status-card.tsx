@@ -2,13 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { Badge } from '@/components/ui/badge'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { PagePanel } from '@/components/layout/page-panel'
 import {
   queryKnowledgeIndexSummary,
   getKnowledgeIndexSummaryQueryKey
@@ -36,13 +30,8 @@ export function KnowledgeIndexStatusCard({
     summary.total > 0 ? Math.round((summary.ready / summary.total) * 100) : 0
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>索引状态</CardTitle>
-        <CardDescription>文档处理进度和各阶段统计概览</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className='flex flex-col gap-6'>
+    <PagePanel title='索引状态' description='文档处理进度和各阶段统计概览'>
+      <div className='flex flex-col gap-6'>
           <div className='flex flex-col gap-3'>
             <div className='flex items-center justify-between gap-3'>
               <div className='text-muted-foreground text-sm'>
@@ -77,7 +66,6 @@ export function KnowledgeIndexStatusCard({
           <Separator />
           <KnowledgeDocsReadonlyTable knowledgeId={knowledgeId} />
         </div>
-      </CardContent>
-    </Card>
+    </PagePanel>
   )
 }

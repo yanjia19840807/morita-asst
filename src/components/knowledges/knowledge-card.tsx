@@ -48,8 +48,8 @@ export default function KnowledgeCard({ knowledge }: KnowledgeCardProps) {
   }
 
   return (
-    <Card className='border-border/70 bg-card/80 flex h-full flex-col shadow-sm'>
-      <CardHeader className='gap-3'>
+    <Card className='flex h-full flex-col'>
+      <CardHeader>
         <div className='flex items-start justify-between gap-3'>
           <div className='min-w-0 space-y-1'>
             <CardTitle className='line-clamp-1 text-base'>
@@ -93,12 +93,24 @@ export default function KnowledgeCard({ knowledge }: KnowledgeCardProps) {
           </div>
         </div>
       </CardContent>
-      <CardFooter className='flex-row border-t'>
-        <Button variant='ghost' size='sm' className='flex-1' asChild>
-          <Link href={`/knowledges/${knowledge.id}/edit`}>编辑</Link>
+      <CardFooter>
+        <Button
+          variant='ghost'
+          size='sm'
+          className='flex-1'
+          nativeButton={false}
+          render={<Link href={`/knowledges/${knowledge.id}/edit`} />}
+        >
+          编辑
         </Button>
-        <Button variant='ghost' size='sm' className='flex-1' asChild>
-          <Link href={`/knowledges/${knowledge.id}`}>查看</Link>
+        <Button
+          variant='ghost'
+          size='sm'
+          className='flex-1'
+          nativeButton={false}
+          render={<Link href={`/knowledges/${knowledge.id}`} />}
+        >
+          查看
         </Button>
         <ConfirmDialog
           title='删除知识库'

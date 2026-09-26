@@ -12,7 +12,7 @@ export default function PromptProfileSearch() {
       value={searchValue}
       onChange={event => setSearch(event.target.value || null)}
       placeholder='搜索提示词名称或正文内容'
-      className='w-full sm:max-w-sm'
+      className='max-w-sm'
     />
   )
 }

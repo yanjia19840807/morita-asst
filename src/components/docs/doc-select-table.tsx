@@ -13,21 +13,11 @@ import {
   type ColumnDef,
   type OnChangeFn,
   type RowSelectionState,
-  type SortingState,
-  flexRender,
-  getCoreRowModel,
-  useReactTable
+  type SortingState
 } from '@tanstack/react-table'
 import { Checkbox } from '../ui/checkbox'
 import { Input } from '../ui/input'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '../ui/table'
+import { DataTable } from '../table/data-table'
 import { TableColumnHeader } from '../table/table-column-header'
 import TablePagination from '../table/table-pagination'
 import { getErrorMessage } from '@/lib/utils'
@@ -37,7 +27,9 @@ type SelectableDoc = FetchSelectDocsResult['docs'][number]
 const docSelectColumns: ColumnDef<SelectableDoc>[] = [
   {
     id: 'select',
+    size: 32,
     enableSorting: false,
+    enableHiding: false,
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -179,25 +171,21 @@ export function DocSelectTable({
     setPage(1)
   }
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const table = useReactTable({
-    data,
-    columns: docSelectColumns,
-    getCoreRowModel: getCoreRowModel(),
-    getRowId: row => row.id,
-    enableRowSelection: !disabled,
-    state: {
-      rowSelection,
-      sorting,
-      columnVisibility: { select: !disabled }
-    },
-    onRowSelectionChange: handleRowSelectionChange,
-    onSortingChange: handleSortingChange
-  })
-
   return (
-    <div className='flex h-full min-h-0 flex-1 flex-col gap-3 p-4'>
-      <div className='w-1/2'>
+    <DataTable
+      columns={docSelectColumns}
+      data={data}
+      getRowId={row => row.id}
+      enableRowSelection={!disabled}
+      state={{
+        rowSelection,
+        sorting,
+        columnVisibility: { select: !disabled }
+      }}
+      onRowSelectionChange={handleRowSelectionChange}
+      onSortingChange={handleSortingChange}
+      empty={isLoading ? '加载中...' : error ? error : '没有数据'}
+      toolbar={
         <Input
           onKeyDown={event =>
             event.key === 'Enter' && event.currentTarget.blur()
@@ -209,67 +197,17 @@ export function DocSelectTable({
           }}
           placeholder='搜索文档名称'
           disabled={disabled}
+          className='max-w-sm'
         />
-      </div>
-      {error && <div className='text-destructive text-sm'>{error}</div>}
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map(headerGroup => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {isLoading ? (
-            <TableRow>
-              <TableCell
-                colSpan={docSelectColumns.length}
-                className='h-24 text-center'
-              >
-                加载中...
-              </TableCell>
-            </TableRow>
-          ) : table.getRowModel().rows.length > 0 ? (
-            table.getRowModel().rows.map(row => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-              >
-                {row.getVisibleCells().map(cell => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell
-                colSpan={docSelectColumns.length}
-                className='h-24 text-center'
-              >
-                没有数据
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-      <TablePagination
-        page={page}
-        setPage={setPage}
-        pageSize={pageSize}
-        total={total}
-      />
-    </div>
+      }
+      footer={
+        <TablePagination
+          page={page}
+          setPage={setPage}
+          pageSize={pageSize}
+          total={total}
+        />
+      }
+    />
   )
 }

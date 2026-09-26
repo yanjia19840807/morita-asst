@@ -242,8 +242,12 @@ function UnsupportedPreview({
       <FileText className='text-muted-foreground mb-4 size-10' />
       <h2 className='text-base font-semibold'>{title}</h2>
       <p className='text-muted-foreground mt-2 max-w-md text-sm'>{description}</p>
-      <Button className='mt-6' asChild>
-        <a href={downloadUrl}>下载文档</a>
+      <Button
+        className='mt-6'
+        nativeButton={false}
+        render={<a href={downloadUrl} />}
+      >
+        下载文档
       </Button>
     </div>
   )

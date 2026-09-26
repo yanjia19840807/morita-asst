@@ -180,6 +180,9 @@ export const AgentScalarFieldEnum = {
   userId: 'userId',
   status: 'status',
   model: 'model',
+  temperature: 'temperature',
+  historyLimit: 'historyLimit',
+  retrieveTopK: 'retrieveTopK',
   knowledgeId: 'knowledgeId',
   promptProfileId: 'promptProfileId',
   createdAt: 'createdAt',
@@ -193,6 +196,7 @@ export const ConversationScalarFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   userId: 'userId',
+  title: 'title',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -206,6 +210,7 @@ export const MessageScalarFieldEnum = {
   role: 'role',
   content: 'content',
   citations: 'citations',
+  run: 'run',
   createdAt: 'createdAt'
 } as const
 

@@ -514,7 +514,8 @@ export async function findKnowledgeChunks(
   const searchClause = searchPattern
     ? Prisma.sql`
         AND (
-          c."content" ILIKE ${searchPattern}
+          c."id" ILIKE ${searchPattern}
+          OR c."content" ILIKE ${searchPattern}
           OR CAST(c."metadata" AS text) ILIKE ${searchPattern}
           OR COALESCE(CAST(c."vector" AS text), '') ILIKE ${searchPattern}
           OR d."filename" ILIKE ${searchPattern}

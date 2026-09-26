@@ -82,3 +82,45 @@ export function getPage(value: unknown): number {
   const num = parseInt(String(value), 10)
   return isNaN(num) || num <= 0 ? 1 : num
 }
+
+export type PaginationItemValue = number | 'ellipsis'
+
+export function getPaginationItems(
+  current: number,
+  max: number
+): PaginationItemValue[] {
+  if (max <= 1) {
+    return [1]
+  }
+
+  if (max <= 7) {
+    return Array.from({ length: max }, (_, index) => index + 1)
+  }
+
+  const items: PaginationItemValue[] = [1]
+  const left = Math.max(2, current - 1)
+  const right = Math.min(max - 1, current + 1)
+
+  if (left > 2) {
+    items.push('ellipsis')
+  } else {
+    for (let page = 2; page < left; page++) {
+      items.push(page)
+    }
+  }
+
+  for (let page = left; page <= right; page++) {
+    items.push(page)
+  }
+
+  if (right < max - 1) {
+    items.push('ellipsis')
+  } else {
+    for (let page = right + 1; page < max; page++) {
+      items.push(page)
+    }
+  }
+
+  items.push(max)
+  return items
+}

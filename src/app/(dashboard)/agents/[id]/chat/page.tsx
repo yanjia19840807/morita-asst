@@ -11,11 +11,15 @@ export default async function AgentChatPage({
   const agent = await fetchAgentById(id)
 
   return (
-    <PageShell className='pb-4'>
+    <PageShell>
       <AgentChat
         agentId={agent.id}
         agentName={agent.name}
         status={agent.status}
+        model={agent.model}
+        temperature={agent.temperature}
+        historyLimit={agent.historyLimit}
+        retrieveTopK={agent.retrieveTopK}
         knowledgeName={agent.knowledge?.name ?? null}
         promptName={agent.promptProfile?.name ?? null}
       />

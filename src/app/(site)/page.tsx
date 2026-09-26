@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { BookOpen, Bot, Database } from 'lucide-react'
 import { LandingCta } from '@/components/layout/landing-cta'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 const workspaceEntries = [
   {
@@ -44,18 +45,16 @@ export default function Home() {
           const Icon = item.icon
 
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className='bg-card shadow-md ring-border hover:bg-accent rounded-[10px] p-5 ring-1 transition-colors'
-            >
-              <div className='bg-accent text-primary mb-4 flex size-10 items-center justify-center rounded-[10px]'>
-                <Icon className='size-5' />
-              </div>
-              <h2 className='text-sm'>{item.title}</h2>
-              <p className='text-muted-foreground mt-1 text-sm'>
-                {item.description}
-              </p>
+            <Link key={item.href} href={item.href} className='block'>
+              <Card>
+                <CardHeader>
+                  <div className='bg-accent text-primary flex size-10 items-center justify-center rounded-xl'>
+                    <Icon className='size-5' />
+                  </div>
+                  <CardTitle>{item.title}</CardTitle>
+                  <CardDescription>{item.description}</CardDescription>
+                </CardHeader>
+              </Card>
             </Link>
           )
         })}

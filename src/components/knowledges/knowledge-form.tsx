@@ -1,25 +1,19 @@
 'use client'
 
 import { LoaderCircle, Save, ChevronLeft } from 'lucide-react'
+import { PagePanel } from '../layout/page-panel'
+import { PageStack } from '../layout/page-stack'
 import PageTitle from '../layout/page-title'
 import { Button, buttonVariants } from '../ui/button'
 import Link from 'next/link'
 import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
-import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
-  FieldLabel,
-  FieldSet
+  FieldLabel
 } from '@/components/ui/field'
 import {
   Controller,
@@ -200,7 +194,7 @@ export default function KnowledgeForm({ knowledge }: KnowledgeFormProps) {
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-6'>
+    <PageStack>
       <PageTitle
         title={isEdit ? '编辑知识库' : '新建知识库'}
         description={
@@ -227,52 +221,39 @@ export default function KnowledgeForm({ knowledge }: KnowledgeFormProps) {
       />
 
       <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
-        <div className='flex flex-col gap-3'>
-          <Card className='w-full'>
-            <CardHeader>
-              <CardTitle>基础信息</CardTitle>
-              <CardDescription>填写知识库的名称和描述信息</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <FieldGroup>
-                <FieldSet>
-                  <Controller
-                    name='name'
-                    control={form.control}
-                    render={renderNameInput}
-                  />
-                  <Controller
-                    name='description'
-                    control={form.control}
-                    render={renderDescriptionInput}
-                  />
-                </FieldSet>
-              </FieldGroup>
-            </CardContent>
-          </Card>
-          <Card className='w-full'>
-            <CardHeader>
-              <CardTitle>数据来源</CardTitle>
-              <CardDescription>
-                {isEdit
-                  ? '选择要追加的类目或文件，已关联的文档会自动跳过'
-                  : '选择知识库对应的类目或文件'}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <FieldGroup>
-                <FieldSet>
-                  <Controller
-                    name='docSource'
-                    control={form.control}
-                    render={renderDocSelect}
-                  />
-                </FieldSet>
-              </FieldGroup>
-            </CardContent>
-          </Card>
-        </div>
+        <PageStack>
+          <PagePanel title='基础信息' description='填写知识库的名称和描述信息'>
+            <FieldGroup>
+              <Controller
+                name='name'
+                control={form.control}
+                render={renderNameInput}
+              />
+              <Controller
+                name='description'
+                control={form.control}
+                render={renderDescriptionInput}
+              />
+            </FieldGroup>
+          </PagePanel>
+          <PagePanel
+            title='数据来源'
+            description={
+              isEdit
+                ? '选择要追加的类目或文件，已关联的文档会自动跳过'
+                : '选择知识库对应的类目或文件'
+            }
+          >
+            <FieldGroup>
+              <Controller
+                name='docSource'
+                control={form.control}
+                render={renderDocSelect}
+              />
+            </FieldGroup>
+          </PagePanel>
+        </PageStack>
       </form>
-    </div>
+    </PageStack>
   )
 }

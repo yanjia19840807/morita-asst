@@ -15,8 +15,8 @@ export function LandingCta() {
 
   return (
     <div>
-      <Button asChild>
-        <Link href='/sign-up/email'>开始使用</Link>
+      <Button nativeButton={false} render={<Link href='/sign-up/email' />}>
+        开始使用
       </Button>
     </div>
   )

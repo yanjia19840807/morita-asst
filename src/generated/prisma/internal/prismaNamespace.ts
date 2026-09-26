@@ -1663,6 +1663,9 @@ export const AgentScalarFieldEnum = {
   userId: 'userId',
   status: 'status',
   model: 'model',
+  temperature: 'temperature',
+  historyLimit: 'historyLimit',
+  retrieveTopK: 'retrieveTopK',
   knowledgeId: 'knowledgeId',
   promptProfileId: 'promptProfileId',
   createdAt: 'createdAt',
@@ -1676,6 +1679,7 @@ export const ConversationScalarFieldEnum = {
   id: 'id',
   agentId: 'agentId',
   userId: 'userId',
+  title: 'title',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1689,6 +1693,7 @@ export const MessageScalarFieldEnum = {
   role: 'role',
   content: 'content',
   citations: 'citations',
+  run: 'run',
   createdAt: 'createdAt'
 } as const
 
@@ -1913,6 +1918,20 @@ export type ListEnumAgentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
  * Reference to a field of type 'MessageRole'
  */
 export type EnumMessageRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageRole'>
@@ -1951,20 +1970,6 @@ export type EnumKnowledgeDocStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
  * Reference to a field of type 'KnowledgeDocStatus[]'
  */
 export type ListEnumKnowledgeDocStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeDocStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**

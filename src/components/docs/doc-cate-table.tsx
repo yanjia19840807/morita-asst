@@ -1,18 +1,8 @@
 'use client'
 
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable
-} from '@tanstack/react-table'
-import {
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-  Table
-} from '../ui/table'
+import { flexRender } from '@tanstack/react-table'
+import { TableCell } from '../ui/table'
+import { DataTable } from '../table/data-table'
 import { getDocCateColumns } from './doc-cate-table-columns'
 import { reorderDocCatesAction } from '@/modules/docs/actions'
 import { DragDropProvider } from '@dnd-kit/react'
@@ -142,75 +132,36 @@ function DocCateTable({ data }: DocCateTableProps) {
     [editingId, nameDraft, isSaving]
   )
 
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getRowId: row => row.id
-  })
-
   return (
     <DragDropProvider onDragEnd={handleDragEnd}>
-      <div className='flex min-h-0 flex-1 flex-col'>
-        <Table className='table-fixed'>
-          <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <TableHead
-                    key={header.id}
-                    style={{
-                      width: header.getSize(),
-                      minWidth: header.getSize()
-                    }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
+      <DataTable
+        columns={columns}
+        data={data}
+        getRowId={row => row.id}
+        tableClassName='table-fixed'
+        empty='还没有类目'
+        renderRow={(row, index) => (
+          <DraggableRow
+            key={row.id}
+            rowId={row.id}
+            index={index}
+            disabled={row.original.isDefault || isPending || Boolean(editingId)}
+            data-state={row.getIsSelected() && 'selected'}
+          >
+            {row.getVisibleCells().map(cell => (
+              <TableCell
+                key={cell.id}
+                style={{
+                  width: cell.column.getSize(),
+                  minWidth: cell.column.getSize()
+                }}
+              >
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TableCell>
             ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length > 0 ? (
-              table.getRowModel().rows.map((row, index) => (
-                <DraggableRow
-                  key={row.id}
-                  rowId={row.id}
-                  index={index}
-                  disabled={row.original.isDefault || isPending || Boolean(editingId)}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell
-                      key={cell.id}
-                      style={{
-                        width: cell.column.getSize(),
-                        minWidth: cell.column.getSize()
-                      }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </DraggableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className='h-24 text-center'>
-                  还没有类目
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+          </DraggableRow>
+        )}
+      />
     </DragDropProvider>
   )
 }

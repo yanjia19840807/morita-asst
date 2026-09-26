@@ -87,9 +87,7 @@ export const userSchema = z.object({
   banExpires: z.date().optional()
 })
 
-export const userCreateSchema = userSchema
-  .omit({ id: true })
-  .required({ password: true })
+export const userCreateSchema = userSchema.omit({ id: true, password: true })
 
 export const userEditSchema = userSchema.extend({})
 
@@ -97,6 +95,17 @@ export const userBanSchema = z.object({
   id: userIdSchema,
   banReason: z.string().trim().max(255, '长度不能大于255个字符').optional()
 })
+
+export const adminSetPasswordSchema = z
+  .object({
+    id: userIdSchema,
+    password: passwordSchema,
+    confirmPassword: z.string()
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: '两次密码输入不一致',
+    path: ['confirmPassword']
+  })
 
 export const profileEditSchema = z.object({
   name: nameSchema,
@@ -131,6 +140,7 @@ export type EmailSignInFormValues = z.infer<typeof emailSignInSchema>
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
 export type UserBanValues = z.infer<typeof userBanSchema>
+export type AdminSetPasswordFormValues = z.infer<typeof adminSetPasswordSchema>
 export type UserBulkActionFormValues = z.infer<typeof userBulkActionSchema>
 export type ProfileEditFormValues = z.infer<typeof profileEditSchema>
 export type ProfilePasswordFormValues = z.infer<typeof profilePasswordSchema>

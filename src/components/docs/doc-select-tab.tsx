@@ -37,7 +37,6 @@ export function DocSelectTab({
       defaultValue={mode}
       value={mode}
       onValueChange={value => onModeChange(value as DocSelectMode)}
-      orientation='horizontal'
       className='flex flex-row gap-3'
       disabled={disabled}
     >

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { isValidElement } from 'react'
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -31,7 +31,13 @@ export default function ConfirmDialog({
   const actionList = Array.isArray(actions) ? actions : [actions]
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      <AlertDialogTrigger
+        render={
+          isValidElement(children) ? children : <button type='button' />
+        }
+      >
+        {isValidElement(children) ? null : children}
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
@@ -42,6 +48,7 @@ export default function ConfirmDialog({
           {actionList.map(action => (
             <AlertDialogAction
               key={action.label}
+              type='button'
               className={action.className}
               onClick={action.onClick}
             >

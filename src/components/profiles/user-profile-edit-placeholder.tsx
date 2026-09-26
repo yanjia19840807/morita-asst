@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
+import { PageStack } from '@/components/layout/page-stack'
 import PageTitle from '@/components/layout/page-title'
 import { PageEmpty } from '@/components/layout/page-empty'
 
@@ -15,7 +16,7 @@ export function UserProfileEditPlaceholder({
   backHref
 }: UserProfileEditPlaceholderProps) {
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-6'>
+    <PageStack>
       <PageTitle
         title={title}
         description='维护用户画像，帮助助手更好地理解来访者'
@@ -26,6 +27,6 @@ export function UserProfileEditPlaceholder({
         }
       />
       <PageEmpty title='暂时无法编辑' description={description} />
-    </div>
+    </PageStack>
   )
 }

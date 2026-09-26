@@ -1,13 +1,5 @@
-import { UserProfileEditForm } from '@/components/profiles/user-profile-edit-form'
-import { PageShell } from '@/components/layout/page-shell'
-import { fetchMyUserProfile } from '@/modules/profiles/service'
+import { redirect } from 'next/navigation'
 
-export default async function MyUserProfileEditPage() {
-  const profile = await fetchMyUserProfile()
-
-  return (
-    <PageShell>
-      <UserProfileEditForm mode='self' data={profile} />
-    </PageShell>
-  )
+export default function MyUserProfileEditPage() {
+  redirect('/profile/user-profile')
 }

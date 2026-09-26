@@ -1,6 +1,7 @@
 import { DocTable } from '@/components/docs/doc-table'
 import { PageHeader } from '@/components/layout/page-title'
 import { PageShell } from '@/components/layout/page-shell'
+import { PageSplit } from '@/components/layout/page-split'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
@@ -12,11 +13,9 @@ import { FetchDocsParams } from '@/modules/docs/schemas'
 
 function ImportBtn() {
   return (
-    <Button asChild>
-      <Link href='/docs/new'>
-        <Plus />
-        导入数据
-      </Link>
+    <Button nativeButton={false} render={<Link href='/docs/new' />}>
+      <Plus />
+      导入数据
     </Button>
   )
 }
@@ -47,14 +46,11 @@ export default async function DocsPage({
         description='上传、分类并检索文档资料'
         actions={<ImportBtn />}
       />
-      <div className='flex min-h-0 flex-1'>
-        <DocCateSidebar />
-        <div className='flex min-h-0 flex-1 flex-col'>
-          <Suspense fallback={null}>
-            <DocTable data={data.docs} total={data.total} pageSize={pageSize} />
-          </Suspense>
-        </div>
-      </div>
+      <PageSplit aside={<DocCateSidebar />}>
+        <Suspense fallback={null}>
+          <DocTable data={data.docs} total={data.total} pageSize={pageSize} />
+        </Suspense>
+      </PageSplit>
     </PageShell>
   )
 }

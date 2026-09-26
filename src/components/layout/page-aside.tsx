@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
+import { PagePanel } from '@/components/layout/page-panel'
 
 export function PageAside({
   title,
@@ -13,16 +14,10 @@ export function PageAside({
   className?: string
 }) {
   return (
-    <aside
-      className={cn('flex w-56 shrink-0 flex-col border-r pr-6', className)}
-    >
-      {title || actions ? (
-        <div className='flex items-center justify-between gap-2 pb-3'>
-          {title ? <div className='text-sm font-medium'>{title}</div> : null}
-          {actions}
-        </div>
-      ) : null}
-      <div className='min-h-0 flex-1'>{children}</div>
+    <aside className={cn('flex w-56 shrink-0 flex-col', className)}>
+      <PagePanel title={title} action={actions}>
+        <div className='min-h-0 flex-1'>{children}</div>
+      </PagePanel>
     </aside>
   )
 }

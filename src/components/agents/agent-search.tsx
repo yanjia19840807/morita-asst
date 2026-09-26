@@ -12,7 +12,7 @@ export default function AgentSearch() {
       value={searchValue}
       onChange={event => setSearchValue(event.target.value || null)}
       placeholder='搜索助手名称或描述'
-      className='w-full sm:max-w-sm'
+      className='max-w-sm'
     />
   )
 }

@@ -16,16 +16,10 @@ import {
   UseFormStateReturn
 } from 'react-hook-form'
 import { toast } from 'sonner'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent
-} from '@/components/ui/card'
+import { PagePanel } from '@/components/layout/page-panel'
+import { PageStack } from '@/components/layout/page-stack'
 import {
   FieldGroup,
-  FieldSet,
   Field,
   FieldDescription,
   FieldError,
@@ -193,7 +187,7 @@ export default function DocCreateForm({
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-6'>
+    <PageStack>
       <PageTitle
         title='导入数据'
         description='上传本地文件，并归入对应类目'
@@ -216,33 +210,25 @@ export default function DocCreateForm({
         }
       />
       <form id='docForm' onSubmit={e => form.handleSubmit(onSubmit)(e)}>
-        <Card className='w-full'>
-          <CardHeader>
-            <CardTitle>本地上传</CardTitle>
-            <CardDescription>上传本地文件到文档数据</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <FieldGroup>
-              <FieldSet>
-                <div className='flex w-1/2 flex-col gap-6 md:flex-row'>
-                  <Controller
-                    name='categoryId'
-                    control={form.control}
-                    render={renderDocCateCombobox}
-                  />
-                </div>
-                <div className='flex w-1/2 flex-col gap-6 md:flex-row'>
-                  <Controller
-                    name='files'
-                    control={form.control}
-                    render={renderFileInput}
-                  />
-                </div>
-              </FieldSet>
-            </FieldGroup>
-          </CardContent>
-        </Card>
+        <PagePanel title='本地上传' description='上传本地文件到文档数据'>
+          <FieldGroup>
+            <div className='flex w-1/2 flex-col gap-6 md:flex-row'>
+              <Controller
+                name='categoryId'
+                control={form.control}
+                render={renderDocCateCombobox}
+              />
+            </div>
+            <div className='flex w-1/2 flex-col gap-6 md:flex-row'>
+              <Controller
+                name='files'
+                control={form.control}
+                render={renderFileInput}
+              />
+            </div>
+          </FieldGroup>
+        </PagePanel>
       </form>
-    </div>
+    </PageStack>
   )
 }

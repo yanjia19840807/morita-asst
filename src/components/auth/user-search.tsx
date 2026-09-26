@@ -12,7 +12,7 @@ export default function UserSearch() {
       value={searchValue}
       onChange={event => setSearchValue(event.target.value || null)}
       placeholder='搜索用户名或邮箱'
-      className='w-full sm:max-w-sm'
+      className='max-w-sm'
     />
   )
 }

@@ -14,16 +14,16 @@ import {
 import { useEffect, useTransition } from 'react'
 import { toast } from 'sonner'
 import type z from 'zod'
+import { PagePanel } from '@/components/layout/page-panel'
+import { PageStack } from '@/components/layout/page-stack'
 import PageTitle from '@/components/layout/page-title'
 import { Button, buttonVariants } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
-  FieldLabel,
-  FieldSet
+  FieldLabel
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { ChevronLeft, LoaderCircle, Save } from 'lucide-react'
@@ -132,7 +132,7 @@ export function PromptProfileForm({
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-6'>
+    <PageStack>
       <PageTitle
         title={title}
         description='编写助手使用的系统提示词'
@@ -159,25 +159,21 @@ export function PromptProfileForm({
         {'id' in defaultValues && (
           <input type='hidden' {...form.register('id')} />
         )}
-        <Card className='w-full'>
-          <CardContent>
-            <FieldGroup>
-              <FieldSet>
-                <Controller
-                  name='name'
-                  control={form.control}
-                  render={renderNameInput}
-                />
-                <Controller
-                  name='systemPrompt'
-                  control={form.control}
-                  render={renderSystemPromptInput}
-                />
-              </FieldSet>
-            </FieldGroup>
-          </CardContent>
-        </Card>
+        <PagePanel>
+          <FieldGroup>
+            <Controller
+              name='name'
+              control={form.control}
+              render={renderNameInput}
+            />
+            <Controller
+              name='systemPrompt'
+              control={form.control}
+              render={renderSystemPromptInput}
+            />
+          </FieldGroup>
+        </PagePanel>
       </form>
-    </div>
+    </PageStack>
   )
 }

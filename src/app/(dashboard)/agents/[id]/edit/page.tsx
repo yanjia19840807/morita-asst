@@ -25,6 +25,9 @@ export default async function AgentEditPage({
           description: agent.description,
           status: agent.status,
           model: agent.model,
+          temperature: agent.temperature,
+          historyLimit: agent.historyLimit,
+          retrieveTopK: agent.retrieveTopK,
           promptProfileId: agent.promptProfileId,
           knowledgeId: agent.knowledgeId
         }}

@@ -1,25 +1,12 @@
 'use client'
 
-import {
-  type ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable
-} from '@tanstack/react-table'
+import { type ColumnDef } from '@tanstack/react-table'
 import { Input } from '@/components/ui/input'
 import type { KnowledgeChunkListItemDto } from '@/modules/knowledges'
 import TableActionSection from '../table/table-action-section'
-import TableFooterSection from '../table/table-footer-section'
+import { DataTable } from '../table/data-table'
 import { knowledgeChunkColumns } from './knowledge-chunk-table-columns'
 import TablePagination from '../table/table-pagination'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '../ui/table'
 import { useChunkParams } from '@/hooks/use-chunk-params'
 
 function KnowledgeChunkTable({
@@ -40,90 +27,44 @@ function KnowledgeChunkTable({
     onSortingChange
   } = useChunkParams()
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const table = useReactTable({
-    data: chunks,
-    columns: knowledgeChunkColumns as ColumnDef<KnowledgeChunkListItemDto>[],
-    getCoreRowModel: getCoreRowModel(),
-    manualSorting: true,
-    getRowId: row => row.id,
-    state: {
-      sorting
-    },
-    onSortingChange
-  })
-
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-4'>
-      <TableActionSection>
-        <Input
-          value={searchValue}
-          onKeyDown={event =>
-            event.key === 'Enter' && event.currentTarget.blur()
-          }
-          onChange={event => setSearchValue(event.target.value || null)}
-          placeholder='搜索 content / metadata / 文档名'
-          className='w-full sm:max-w-sm'
-        />
-      </TableActionSection>
-      <Table className='table-fixed'>
-        <TableHeader>
-          {table.getHeaderGroups().map(headerGroup => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <TableHead
-                  key={header.id}
-                  style={{ width: header.getSize() }}
-                  className='truncate'
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.length > 0 ? (
-            table.getRowModel().rows.map(row => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map(cell => (
-                  <TableCell
-                    key={cell.id}
-                    style={{ width: cell.column.getSize() }}
-                    className='align-top whitespace-normal'
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell
-                colSpan={knowledgeChunkColumns.length}
-                className='h-24 text-center'
-              >
-                当前没有可浏览的 Chunk
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-      <TableFooterSection className='justify-between'>
-        <div className='text-muted-foreground text-sm'>共 {total} 条 Chunk</div>
-        <TablePagination
-          page={page}
-          setPage={setPage}
-          pageSize={pageSize}
-          total={total}
-        />
-      </TableFooterSection>
-    </div>
+    <DataTable
+      columns={knowledgeChunkColumns as ColumnDef<KnowledgeChunkListItemDto>[]}
+      data={chunks}
+      manualSorting
+      getRowId={row => row.id}
+      state={{ sorting }}
+      onSortingChange={onSortingChange}
+      tableClassName='table-fixed'
+      cellClassName='align-top whitespace-normal'
+      empty='当前没有可浏览的 Chunk'
+      toolbar={
+        <TableActionSection className='w-full'>
+          <Input
+            value={searchValue}
+            onKeyDown={event =>
+              event.key === 'Enter' && event.currentTarget.blur()
+            }
+            onChange={event => setSearchValue(event.target.value || null)}
+            placeholder='搜索 content / metadata / 文档名'
+            className='max-w-sm'
+          />
+        </TableActionSection>
+      }
+      footerClassName='flex items-center justify-between gap-4'
+      footer={
+        <>
+          <div className='text-muted-foreground text-sm'>共 {total} 条 Chunk</div>
+          <TablePagination
+            page={page}
+            setPage={setPage}
+            pageSize={pageSize}
+            total={total}
+            className='mx-0 w-auto'
+          />
+        </>
+      }
+    />
   )
 }
 

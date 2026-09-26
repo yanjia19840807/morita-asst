@@ -12,11 +12,13 @@ import {
   forgotPassword,
   removeUser,
   resetPassword,
+  setUserPassword,
   signInEmail,
   signUpEmail,
   unbanUser
 } from './service'
 import type {
+  AdminSetPasswordFormValues,
   EmailSignInFormValues,
   EmailSignUpFormValues,
   ForgotPasswordFormValues,
@@ -144,6 +146,21 @@ export async function editUserAction(
 > {
   try {
     const result = await editUser(data)
+    revalidateUsers()
+    revalidateUserDetail(data.id)
+    return handleActionResult(result)
+  } catch (error) {
+    return handleActionError(error)
+  }
+}
+
+export async function setUserPasswordAction(
+  data: AdminSetPasswordFormValues
+): Promise<
+  ResponseResult<Awaited<ReturnType<typeof auth.api.setUserPassword>>>
+> {
+  try {
+    const result = await setUserPassword(data)
     revalidateUsers()
     revalidateUserDetail(data.id)
     return handleActionResult(result)

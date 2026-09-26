@@ -20,8 +20,22 @@ export type AgentModel = runtime.Types.Result.DefaultSelection<Prisma.$AgentPayl
 
 export type AggregateAgent = {
   _count: AgentCountAggregateOutputType | null
+  _avg: AgentAvgAggregateOutputType | null
+  _sum: AgentSumAggregateOutputType | null
   _min: AgentMinAggregateOutputType | null
   _max: AgentMaxAggregateOutputType | null
+}
+
+export type AgentAvgAggregateOutputType = {
+  temperature: number | null
+  historyLimit: number | null
+  retrieveTopK: number | null
+}
+
+export type AgentSumAggregateOutputType = {
+  temperature: number | null
+  historyLimit: number | null
+  retrieveTopK: number | null
 }
 
 export type AgentMinAggregateOutputType = {
@@ -31,6 +45,9 @@ export type AgentMinAggregateOutputType = {
   userId: string | null
   status: $Enums.AgentStatus | null
   model: string | null
+  temperature: number | null
+  historyLimit: number | null
+  retrieveTopK: number | null
   knowledgeId: string | null
   promptProfileId: string | null
   createdAt: Date | null
@@ -44,6 +61,9 @@ export type AgentMaxAggregateOutputType = {
   userId: string | null
   status: $Enums.AgentStatus | null
   model: string | null
+  temperature: number | null
+  historyLimit: number | null
+  retrieveTopK: number | null
   knowledgeId: string | null
   promptProfileId: string | null
   createdAt: Date | null
@@ -57,6 +77,9 @@ export type AgentCountAggregateOutputType = {
   userId: number
   status: number
   model: number
+  temperature: number
+  historyLimit: number
+  retrieveTopK: number
   knowledgeId: number
   promptProfileId: number
   createdAt: number
@@ -65,6 +88,18 @@ export type AgentCountAggregateOutputType = {
 }
 
 
+export type AgentAvgAggregateInputType = {
+  temperature?: true
+  historyLimit?: true
+  retrieveTopK?: true
+}
+
+export type AgentSumAggregateInputType = {
+  temperature?: true
+  historyLimit?: true
+  retrieveTopK?: true
+}
+
 export type AgentMinAggregateInputType = {
   id?: true
   name?: true
@@ -72,6 +107,9 @@ export type AgentMinAggregateInputType = {
   userId?: true
   status?: true
   model?: true
+  temperature?: true
+  historyLimit?: true
+  retrieveTopK?: true
   knowledgeId?: true
   promptProfileId?: true
   createdAt?: true
@@ -85,6 +123,9 @@ export type AgentMaxAggregateInputType = {
   userId?: true
   status?: true
   model?: true
+  temperature?: true
+  historyLimit?: true
+  retrieveTopK?: true
   knowledgeId?: true
   promptProfileId?: true
   createdAt?: true
@@ -98,6 +139,9 @@ export type AgentCountAggregateInputType = {
   userId?: true
   status?: true
   model?: true
+  temperature?: true
+  historyLimit?: true
+  retrieveTopK?: true
   knowledgeId?: true
   promptProfileId?: true
   createdAt?: true
@@ -143,6 +187,18 @@ export type AgentAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: AgentAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: AgentSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: AgentMinAggregateInputType
@@ -173,6 +229,8 @@ export type AgentGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: AgentCountAggregateInputType | true
+  _avg?: AgentAvgAggregateInputType
+  _sum?: AgentSumAggregateInputType
   _min?: AgentMinAggregateInputType
   _max?: AgentMaxAggregateInputType
 }
@@ -184,11 +242,16 @@ export type AgentGroupByOutputType = {
   userId: string
   status: $Enums.AgentStatus
   model: string | null
+  temperature: number
+  historyLimit: number
+  retrieveTopK: number
   knowledgeId: string | null
   promptProfileId: string | null
   createdAt: Date
   updatedAt: Date
   _count: AgentCountAggregateOutputType | null
+  _avg: AgentAvgAggregateOutputType | null
+  _sum: AgentSumAggregateOutputType | null
   _min: AgentMinAggregateOutputType | null
   _max: AgentMaxAggregateOutputType | null
 }
@@ -218,6 +281,9 @@ export type AgentWhereInput = {
   userId?: Prisma.StringFilter<"Agent"> | string
   status?: Prisma.EnumAgentStatusFilter<"Agent"> | $Enums.AgentStatus
   model?: Prisma.StringNullableFilter<"Agent"> | string | null
+  temperature?: Prisma.FloatFilter<"Agent"> | number
+  historyLimit?: Prisma.IntFilter<"Agent"> | number
+  retrieveTopK?: Prisma.IntFilter<"Agent"> | number
   knowledgeId?: Prisma.StringNullableFilter<"Agent"> | string | null
   promptProfileId?: Prisma.StringNullableFilter<"Agent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Agent"> | Date | string
@@ -235,6 +301,9 @@ export type AgentOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
+  temperature?: Prisma.SortOrder
+  historyLimit?: Prisma.SortOrder
+  retrieveTopK?: Prisma.SortOrder
   knowledgeId?: Prisma.SortOrderInput | Prisma.SortOrder
   promptProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -255,6 +324,9 @@ export type AgentWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"Agent"> | string
   status?: Prisma.EnumAgentStatusFilter<"Agent"> | $Enums.AgentStatus
   model?: Prisma.StringNullableFilter<"Agent"> | string | null
+  temperature?: Prisma.FloatFilter<"Agent"> | number
+  historyLimit?: Prisma.IntFilter<"Agent"> | number
+  retrieveTopK?: Prisma.IntFilter<"Agent"> | number
   knowledgeId?: Prisma.StringNullableFilter<"Agent"> | string | null
   promptProfileId?: Prisma.StringNullableFilter<"Agent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Agent"> | Date | string
@@ -272,13 +344,18 @@ export type AgentOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
+  temperature?: Prisma.SortOrder
+  historyLimit?: Prisma.SortOrder
+  retrieveTopK?: Prisma.SortOrder
   knowledgeId?: Prisma.SortOrderInput | Prisma.SortOrder
   promptProfileId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AgentCountOrderByAggregateInput
+  _avg?: Prisma.AgentAvgOrderByAggregateInput
   _max?: Prisma.AgentMaxOrderByAggregateInput
   _min?: Prisma.AgentMinOrderByAggregateInput
+  _sum?: Prisma.AgentSumOrderByAggregateInput
 }
 
 export type AgentScalarWhereWithAggregatesInput = {
@@ -291,6 +368,9 @@ export type AgentScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"Agent"> | string
   status?: Prisma.EnumAgentStatusWithAggregatesFilter<"Agent"> | $Enums.AgentStatus
   model?: Prisma.StringNullableWithAggregatesFilter<"Agent"> | string | null
+  temperature?: Prisma.FloatWithAggregatesFilter<"Agent"> | number
+  historyLimit?: Prisma.IntWithAggregatesFilter<"Agent"> | number
+  retrieveTopK?: Prisma.IntWithAggregatesFilter<"Agent"> | number
   knowledgeId?: Prisma.StringNullableWithAggregatesFilter<"Agent"> | string | null
   promptProfileId?: Prisma.StringNullableWithAggregatesFilter<"Agent"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Agent"> | Date | string
@@ -303,6 +383,9 @@ export type AgentCreateInput = {
   description?: string | null
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAgentsInput
@@ -318,6 +401,9 @@ export type AgentUncheckedCreateInput = {
   userId: string
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   knowledgeId?: string | null
   promptProfileId?: string | null
   createdAt?: Date | string
@@ -331,6 +417,9 @@ export type AgentUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAgentsNestedInput
@@ -346,6 +435,9 @@ export type AgentUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   knowledgeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -360,6 +452,9 @@ export type AgentCreateManyInput = {
   userId: string
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   knowledgeId?: string | null
   promptProfileId?: string | null
   createdAt?: Date | string
@@ -372,6 +467,9 @@ export type AgentUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -383,6 +481,9 @@ export type AgentUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   knowledgeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -406,10 +507,19 @@ export type AgentCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   model?: Prisma.SortOrder
+  temperature?: Prisma.SortOrder
+  historyLimit?: Prisma.SortOrder
+  retrieveTopK?: Prisma.SortOrder
   knowledgeId?: Prisma.SortOrder
   promptProfileId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type AgentAvgOrderByAggregateInput = {
+  temperature?: Prisma.SortOrder
+  historyLimit?: Prisma.SortOrder
+  retrieveTopK?: Prisma.SortOrder
 }
 
 export type AgentMaxOrderByAggregateInput = {
@@ -419,6 +529,9 @@ export type AgentMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   model?: Prisma.SortOrder
+  temperature?: Prisma.SortOrder
+  historyLimit?: Prisma.SortOrder
+  retrieveTopK?: Prisma.SortOrder
   knowledgeId?: Prisma.SortOrder
   promptProfileId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -432,10 +545,19 @@ export type AgentMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   model?: Prisma.SortOrder
+  temperature?: Prisma.SortOrder
+  historyLimit?: Prisma.SortOrder
+  retrieveTopK?: Prisma.SortOrder
   knowledgeId?: Prisma.SortOrder
   promptProfileId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type AgentSumOrderByAggregateInput = {
+  temperature?: Prisma.SortOrder
+  historyLimit?: Prisma.SortOrder
+  retrieveTopK?: Prisma.SortOrder
 }
 
 export type AgentScalarRelationFilter = {
@@ -487,6 +609,14 @@ export type AgentUncheckedUpdateManyWithoutUserNestedInput = {
 
 export type EnumAgentStatusFieldUpdateOperationsInput = {
   set?: $Enums.AgentStatus
+}
+
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type AgentCreateNestedOneWithoutConversationsInput = {
@@ -593,6 +723,9 @@ export type AgentCreateWithoutUserInput = {
   description?: string | null
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   knowledge?: Prisma.KnowledgeCreateNestedOneWithoutAgentsInput
@@ -606,6 +739,9 @@ export type AgentUncheckedCreateWithoutUserInput = {
   description?: string | null
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   knowledgeId?: string | null
   promptProfileId?: string | null
   createdAt?: Date | string
@@ -649,6 +785,9 @@ export type AgentScalarWhereInput = {
   userId?: Prisma.StringFilter<"Agent"> | string
   status?: Prisma.EnumAgentStatusFilter<"Agent"> | $Enums.AgentStatus
   model?: Prisma.StringNullableFilter<"Agent"> | string | null
+  temperature?: Prisma.FloatFilter<"Agent"> | number
+  historyLimit?: Prisma.IntFilter<"Agent"> | number
+  retrieveTopK?: Prisma.IntFilter<"Agent"> | number
   knowledgeId?: Prisma.StringNullableFilter<"Agent"> | string | null
   promptProfileId?: Prisma.StringNullableFilter<"Agent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Agent"> | Date | string
@@ -661,6 +800,9 @@ export type AgentCreateWithoutConversationsInput = {
   description?: string | null
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAgentsInput
@@ -675,6 +817,9 @@ export type AgentUncheckedCreateWithoutConversationsInput = {
   userId: string
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   knowledgeId?: string | null
   promptProfileId?: string | null
   createdAt?: Date | string
@@ -703,6 +848,9 @@ export type AgentUpdateWithoutConversationsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAgentsNestedInput
@@ -717,6 +865,9 @@ export type AgentUncheckedUpdateWithoutConversationsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   knowledgeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -729,6 +880,9 @@ export type AgentCreateWithoutPromptProfileInput = {
   description?: string | null
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAgentsInput
@@ -743,6 +897,9 @@ export type AgentUncheckedCreateWithoutPromptProfileInput = {
   userId: string
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   knowledgeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -781,6 +938,9 @@ export type AgentCreateWithoutKnowledgeInput = {
   description?: string | null
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAgentsInput
@@ -795,6 +955,9 @@ export type AgentUncheckedCreateWithoutKnowledgeInput = {
   userId: string
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   promptProfileId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -833,6 +996,9 @@ export type AgentCreateManyUserInput = {
   description?: string | null
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   knowledgeId?: string | null
   promptProfileId?: string | null
   createdAt?: Date | string
@@ -845,6 +1011,9 @@ export type AgentUpdateWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   knowledge?: Prisma.KnowledgeUpdateOneWithoutAgentsNestedInput
@@ -858,6 +1027,9 @@ export type AgentUncheckedUpdateWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   knowledgeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -871,6 +1043,9 @@ export type AgentUncheckedUpdateManyWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   knowledgeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -884,6 +1059,9 @@ export type AgentCreateManyPromptProfileInput = {
   userId: string
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   knowledgeId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -895,6 +1073,9 @@ export type AgentUpdateWithoutPromptProfileInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAgentsNestedInput
@@ -909,6 +1090,9 @@ export type AgentUncheckedUpdateWithoutPromptProfileInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   knowledgeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -922,6 +1106,9 @@ export type AgentUncheckedUpdateManyWithoutPromptProfileInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   knowledgeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -934,6 +1121,9 @@ export type AgentCreateManyKnowledgeInput = {
   userId: string
   status?: $Enums.AgentStatus
   model?: string | null
+  temperature?: number
+  historyLimit?: number
+  retrieveTopK?: number
   promptProfileId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -945,6 +1135,9 @@ export type AgentUpdateWithoutKnowledgeInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAgentsNestedInput
@@ -959,6 +1152,9 @@ export type AgentUncheckedUpdateWithoutKnowledgeInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -972,6 +1168,9 @@ export type AgentUncheckedUpdateManyWithoutKnowledgeInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAgentStatusFieldUpdateOperationsInput | $Enums.AgentStatus
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  temperature?: Prisma.FloatFieldUpdateOperationsInput | number
+  historyLimit?: Prisma.IntFieldUpdateOperationsInput | number
+  retrieveTopK?: Prisma.IntFieldUpdateOperationsInput | number
   promptProfileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1015,6 +1214,9 @@ export type AgentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   userId?: boolean
   status?: boolean
   model?: boolean
+  temperature?: boolean
+  historyLimit?: boolean
+  retrieveTopK?: boolean
   knowledgeId?: boolean
   promptProfileId?: boolean
   createdAt?: boolean
@@ -1033,6 +1235,9 @@ export type AgentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   userId?: boolean
   status?: boolean
   model?: boolean
+  temperature?: boolean
+  historyLimit?: boolean
+  retrieveTopK?: boolean
   knowledgeId?: boolean
   promptProfileId?: boolean
   createdAt?: boolean
@@ -1049,6 +1254,9 @@ export type AgentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   userId?: boolean
   status?: boolean
   model?: boolean
+  temperature?: boolean
+  historyLimit?: boolean
+  retrieveTopK?: boolean
   knowledgeId?: boolean
   promptProfileId?: boolean
   createdAt?: boolean
@@ -1065,13 +1273,16 @@ export type AgentSelectScalar = {
   userId?: boolean
   status?: boolean
   model?: boolean
+  temperature?: boolean
+  historyLimit?: boolean
+  retrieveTopK?: boolean
   knowledgeId?: boolean
   promptProfileId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AgentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "userId" | "status" | "model" | "knowledgeId" | "promptProfileId" | "createdAt" | "updatedAt", ExtArgs["result"]["agent"]>
+export type AgentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "userId" | "status" | "model" | "temperature" | "historyLimit" | "retrieveTopK" | "knowledgeId" | "promptProfileId" | "createdAt" | "updatedAt", ExtArgs["result"]["agent"]>
 export type AgentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   knowledge?: boolean | Prisma.Agent$knowledgeArgs<ExtArgs>
@@ -1105,6 +1316,9 @@ export type $AgentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     userId: string
     status: $Enums.AgentStatus
     model: string | null
+    temperature: number
+    historyLimit: number
+    retrieveTopK: number
     knowledgeId: string | null
     promptProfileId: string | null
     createdAt: Date
@@ -1542,6 +1756,9 @@ export interface AgentFieldRefs {
   readonly userId: Prisma.FieldRef<"Agent", 'String'>
   readonly status: Prisma.FieldRef<"Agent", 'AgentStatus'>
   readonly model: Prisma.FieldRef<"Agent", 'String'>
+  readonly temperature: Prisma.FieldRef<"Agent", 'Float'>
+  readonly historyLimit: Prisma.FieldRef<"Agent", 'Int'>
+  readonly retrieveTopK: Prisma.FieldRef<"Agent", 'Int'>
   readonly knowledgeId: Prisma.FieldRef<"Agent", 'String'>
   readonly promptProfileId: Prisma.FieldRef<"Agent", 'String'>
   readonly createdAt: Prisma.FieldRef<"Agent", 'DateTime'>

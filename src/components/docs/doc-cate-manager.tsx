@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Plus, ChevronLeft } from 'lucide-react'
 import { PageHeader } from '@/components/layout/page-title'
 import { ListStack } from '@/components/layout/list-stack'
+import { PagePanel } from '@/components/layout/page-panel'
 import { Button, buttonVariants } from '@/components/ui/button'
 import DocCateForm from './doc-cate-form'
 import DocCateTable from './doc-cate-table'
@@ -43,13 +44,10 @@ export default function DocCateManager({ data }: { data: DocCateRow[] }) {
         }
       />
       {creating ? (
-        <div className='flex flex-col gap-3'>
-          <div>
-            <div className='text-sm font-medium'>新建类目</div>
-            <p className='text-muted-foreground text-sm'>
-              名称需唯一，创建后可随时改名或调整顺序
-            </p>
-          </div>
+        <PagePanel
+          title='新建类目'
+          description='名称需唯一，创建后可随时改名或调整顺序'
+        >
           <DocCateForm
             onCancel={() => setCreating(false)}
             onCreated={() => {
@@ -57,7 +55,7 @@ export default function DocCateManager({ data }: { data: DocCateRow[] }) {
               router.refresh()
             }}
           />
-        </div>
+        </PagePanel>
       ) : null}
       <DocCateTable data={data} />
     </ListStack>

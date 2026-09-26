@@ -12,6 +12,7 @@ import type {
   KnowledgeChunkListItemDto,
   KnowledgeDetailDto
 } from '@/modules/knowledges'
+import { PageStack } from '../layout/page-stack'
 import PageTitle from '../layout/page-title'
 import KnowledgeChunkTable from './knowledge-chunk-table'
 
@@ -33,7 +34,7 @@ export function KnowledgeChunksDetail({
     : '0.0'
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-6'>
+    <PageStack>
       <PageTitle
         title={knowledge ? `${knowledge.name} / 切片` : '切片浏览'}
         description='查看知识库切分后的文本片段'
@@ -55,7 +56,7 @@ export function KnowledgeChunksDetail({
         }
       />
 
-      <div className='grid gap-3 md:grid-cols-3'>
+      <div className='grid gap-4 md:grid-cols-3 md:gap-6'>
         <Card size='sm'>
           <CardHeader>
             <CardDescription>Chunk总数</CardDescription>
@@ -83,6 +84,6 @@ export function KnowledgeChunksDetail({
         total={total}
         pageSize={pageSize}
       />
-    </div>
+    </PageStack>
   )
 }

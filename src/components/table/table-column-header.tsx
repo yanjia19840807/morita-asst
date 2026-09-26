@@ -30,17 +30,15 @@ export function TableColumnHeader<TData, TValue>({
   return (
     <div className={cn('flex items-center space-x-2', className)}>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant='ghost' size='sm'>
-            <span>{title}</span>
-            {column.getIsSorted() === 'desc' ? (
-              <ArrowDownIcon />
-            ) : column.getIsSorted() === 'asc' ? (
-              <ArrowUpIcon />
-            ) : (
-              <ArrowDownUp />
-            )}
-          </Button>
+        <DropdownMenuTrigger render={<Button variant='ghost' size='sm' />}>
+          <span>{title}</span>
+          {column.getIsSorted() === 'desc' ? (
+            <ArrowDownIcon />
+          ) : column.getIsSorted() === 'asc' ? (
+            <ArrowUpIcon />
+          ) : (
+            <ArrowDownUp />
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align='start'>
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>

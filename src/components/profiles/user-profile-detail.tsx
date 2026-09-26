@@ -1,17 +1,16 @@
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
-import InfoItem from '@/components/info-item'
+import { UserFieldValue, UserSection } from '@/components/auth/user-section'
+import { PageStack } from '@/components/layout/page-stack'
 import PageTitle from '@/components/layout/page-title'
+import { Field, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field'
 import type { UserProfileDetailDto } from '@/modules/profiles/dto'
-import DescriptionItem from '../description-item'
-import { Separator } from '../ui/separator'
+import {
+  formatIssueTags,
+  getAgeRangeLabel,
+  getGenderLabel,
+  getOccupationLabel
+} from '@/modules/profiles/labels'
 
 type UserProfileDetailProps = {
   data: UserProfileDetailDto
@@ -20,7 +19,6 @@ type UserProfileDetailProps = {
   backHref?: string
   embedded?: boolean
   showUserFields?: boolean
-  description?: string
 }
 
 export function UserProfileDetail({
@@ -29,65 +27,74 @@ export function UserProfileDetail({
   editHref,
   backHref,
   embedded = false,
-  showUserFields = true,
-  description
+  showUserFields = true
 }: UserProfileDetailProps) {
-  const card = (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-      </CardHeader>
-      <CardContent>
-        <div className='flex flex-col gap-6'>
-          <div className='grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2'>
-            {showUserFields ? (
-              <>
-                <InfoItem label='用户名' value={data.user.name} />
-                <InfoItem label='邮箱' value={data.user.email} />
-              </>
-            ) : null}
-            <InfoItem label='性别' value={data.gender ?? '-'} />
-            <InfoItem label='年龄段' value={data.ageRange ?? '-'} />
-            <InfoItem label='职业' value={data.occupation ?? '-'} />
-            <InfoItem label='问题数量' value={data.issues.length} />
-          </div>
-          <Separator />
-          <div className='flex flex-col gap-3'>
-            <div className='text-muted-foreground text-sm'>主要问题</div>
-            {data.issues.length ? (
-              <div className='flex flex-col gap-3'>
-                {data.issues.map(issue => (
-                  <div key={issue.id} className='flex flex-col gap-3'>
-                    <div className='grid grid-cols-1 gap-x-6 gap-y-3 md:grid-cols-2'>
-                      <InfoItem label='优先级' value={`P${issue.priority}`} />
-                      <InfoItem
-                        label='标签'
-                        value={issue.tags.length ? issue.tags.join('、') : '-'}
-                      />
-                    </div>
-                    <DescriptionItem label='描述' value={issue.description} />
-                    <Separator />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className='text-muted-foreground rounded-md border border-dashed p-4 text-sm'>
-                暂未填写
-              </div>
-            )}
-          </div>
+  const content = (
+    <FieldGroup>
+      <UserSection title='背景'>
+        <div className='grid gap-5 md:grid-cols-2'>
+          {showUserFields ? (
+            <>
+              <Field>
+                <FieldLabel>用户名</FieldLabel>
+                <UserFieldValue>{data.user.name}</UserFieldValue>
+              </Field>
+              <Field>
+                <FieldLabel>邮箱</FieldLabel>
+                <UserFieldValue>{data.user.email}</UserFieldValue>
+              </Field>
+            </>
+          ) : null}
+          <Field>
+            <FieldLabel>性别</FieldLabel>
+            <UserFieldValue>{getGenderLabel(data.gender)}</UserFieldValue>
+          </Field>
+          <Field>
+            <FieldLabel>年龄段</FieldLabel>
+            <UserFieldValue>{getAgeRangeLabel(data.ageRange)}</UserFieldValue>
+          </Field>
+          <Field>
+            <FieldLabel>职业</FieldLabel>
+            <UserFieldValue>
+              {getOccupationLabel(data.occupation)}
+            </UserFieldValue>
+          </Field>
         </div>
-      </CardContent>
-    </Card>
+      </UserSection>
+      <FieldSeparator />
+      <UserSection id='issues' title='主要问题'>
+        {data.issues.length ? (
+          <div className='flex flex-col gap-5'>
+            {data.issues.map(issue => (
+              <div key={issue.id} className='grid gap-5 md:grid-cols-2'>
+                <Field>
+                  <FieldLabel>优先级</FieldLabel>
+                  <UserFieldValue>{`P${issue.priority}`}</UserFieldValue>
+                </Field>
+                <Field>
+                  <FieldLabel>标签</FieldLabel>
+                  <UserFieldValue>{formatIssueTags(issue.tags)}</UserFieldValue>
+                </Field>
+                <Field className='md:col-span-2'>
+                  <FieldLabel>描述</FieldLabel>
+                  <UserFieldValue>{issue.description}</UserFieldValue>
+                </Field>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className='text-muted-foreground text-sm'>暂未填写主要问题</p>
+        )}
+      </UserSection>
+    </FieldGroup>
   )
 
   if (embedded) {
-    return card
+    return content
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-6'>
+    <PageStack>
       <PageTitle
         title={title}
         description='查看用户画像，帮助助手更好地理解来访者'
@@ -112,7 +119,7 @@ export function UserProfileDetail({
           </div>
         }
       />
-      {card}
-    </div>
+      {content}
+    </PageStack>
   )
 }

@@ -34,6 +34,15 @@ export const userProfileEditSchema = userProfileSchema.superRefine(
   }
 )
 
+export const userProfileBackgroundSchema = userProfileSchema.pick({
+  gender: true,
+  ageRange: true,
+  occupation: true
+})
+
 export type UserIssueValues = z.infer<typeof userIssueSchema>
 export type UserProfileValues = z.infer<typeof userProfileSchema>
 export type UserProfileEditValues = z.infer<typeof userProfileEditSchema>
+export type UserProfileBackgroundValues = z.infer<
+  typeof userProfileBackgroundSchema
+>

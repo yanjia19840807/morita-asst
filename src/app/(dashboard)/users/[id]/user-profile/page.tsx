@@ -1,5 +1,4 @@
-import { UserProfileDetail } from '@/components/profiles/user-profile-detail'
-import { PageShell } from '@/components/layout/page-shell'
+import { UserProfilePane } from '@/components/profiles/user-profile-pane'
 import { fetchUserProfileByUserId } from '@/modules/profiles/service'
 
 export default async function UserProfilePage({
@@ -10,14 +9,5 @@ export default async function UserProfilePage({
   const { id } = await params
   const profile = await fetchUserProfileByUserId(id)
 
-  return (
-    <PageShell>
-      <UserProfileDetail
-        data={profile}
-        title='用户画像'
-        editHref={`/users/${id}/user-profile/edit`}
-        backHref={`/users/${id}`}
-      />
-    </PageShell>
-  )
+  return <UserProfilePane profile={profile} mode='admin' />
 }

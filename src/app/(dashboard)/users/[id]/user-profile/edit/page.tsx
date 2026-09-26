@@ -1,6 +1,4 @@
-import { UserProfileEditForm } from '@/components/profiles/user-profile-edit-form'
-import { PageShell } from '@/components/layout/page-shell'
-import { fetchUserProfileByUserId } from '@/modules/profiles/service'
+import { redirect } from 'next/navigation'
 
 export default async function UserProfileEditPage({
   params
@@ -8,11 +6,5 @@ export default async function UserProfileEditPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const profile = await fetchUserProfileByUserId(id)
-
-  return (
-    <PageShell>
-      <UserProfileEditForm mode='admin' data={profile} />
-    </PageShell>
-  )
+  redirect(`/users/${id}/user-profile`)
 }

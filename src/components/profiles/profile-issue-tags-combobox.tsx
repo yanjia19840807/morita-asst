@@ -38,7 +38,7 @@ export function ProfileIssueTagsCombobox({
   )
 
   return (
-    <Combobox<ProfileOption>
+    <Combobox<ProfileOption, true>
       multiple
       autoHighlight
       items={PROFILE_ISSUE_TAG_OPTIONS}
@@ -49,10 +49,10 @@ export function ProfileIssueTagsCombobox({
     >
       <ComboboxChips ref={anchor} aria-invalid={invalid}>
         <ComboboxValue>
-          {values => (
+          {(values: ProfileOption[]) => (
             <>
               {values.map(option => (
-                <ComboboxChip key={option.value} value={option}>
+                <ComboboxChip key={option.value}>
                   {option.label}
                 </ComboboxChip>
               ))}

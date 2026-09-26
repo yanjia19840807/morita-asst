@@ -8,27 +8,22 @@ import {
   Controller,
   ControllerFieldState,
   ControllerRenderProps,
+  Resolver,
   useForm,
   UseFormStateReturn
 } from 'react-hook-form'
 import { use, useTransition } from 'react'
 import { toast } from 'sonner'
+import { PagePanel } from '@/components/layout/page-panel'
+import { PageStack } from '@/components/layout/page-stack'
 import PageTitle from '@/components/layout/page-title'
 import { Button, buttonVariants } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
-  FieldLabel,
-  FieldSet
+  FieldLabel
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import {
@@ -48,7 +43,10 @@ import {
 } from '@/modules/agents/models/chat-models'
 import {
   AgentCreateFormValues,
-  agentCreateSchema
+  agentCreateSchema,
+  DEFAULT_AGENT_HISTORY_LIMIT,
+  DEFAULT_AGENT_RETRIEVE_TOP_K,
+  DEFAULT_AGENT_TEMPERATURE
 } from '@/modules/agents/schemas'
 import type { KnowledgeOptionDto } from '@/modules/knowledges/dto'
 import type { PromptProfileOptionDto } from '@/modules/prompt-profiles/dto'
@@ -61,6 +59,9 @@ export type AgentFormData = {
   description: string | null
   status: AgentCreateFormValues['status']
   model: string | null
+  temperature: number
+  historyLimit: number
+  retrieveTopK: number
   promptProfileId: string | null
   knowledgeId: string | null
 }
@@ -84,6 +85,9 @@ function toFormValues(agent?: AgentFormData): AgentCreateFormValues {
       description: '',
       status: 'DRAFT',
       model: DEFAULT_CHAT_MODEL,
+      temperature: DEFAULT_AGENT_TEMPERATURE,
+      historyLimit: DEFAULT_AGENT_HISTORY_LIMIT,
+      retrieveTopK: DEFAULT_AGENT_RETRIEVE_TOP_K,
       promptProfileId: undefined,
       knowledgeId: undefined
     }
@@ -94,6 +98,9 @@ function toFormValues(agent?: AgentFormData): AgentCreateFormValues {
     description: agent.description ?? '',
     status: agent.status,
     model: resolveChatModel(agent.model),
+    temperature: agent.temperature,
+    historyLimit: agent.historyLimit,
+    retrieveTopK: agent.retrieveTopK,
     promptProfileId: agent.promptProfileId || undefined,
     knowledgeId: agent.knowledgeId || undefined
   }
@@ -113,7 +120,7 @@ export function AgentCreateForm({
   const defaultValues = toFormValues(agent)
 
   const form = useForm<AgentCreateFormValues>({
-    resolver: zodResolver(agentCreateSchema),
+    resolver: zodResolver(agentCreateSchema) as Resolver<AgentCreateFormValues>,
     defaultValues
   })
 
@@ -177,11 +184,16 @@ export function AgentCreateForm({
     <Field data-invalid={fieldState.invalid}>
       <FieldLabel htmlFor={field.name}>状态</FieldLabel>
       <Select
-        value={field.value}
-        onValueChange={field.onChange}
+        value={field.value || null}
+        onValueChange={value => field.onChange(value ?? field.value)}
+        items={[...statusOptions]}
         disabled={isPending}
       >
-        <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
+        <SelectTrigger
+          id={field.name}
+          aria-invalid={fieldState.invalid}
+          className='w-full'
+        >
           <SelectValue placeholder='请选择状态' />
         </SelectTrigger>
         <SelectContent>
@@ -210,9 +222,14 @@ export function AgentCreateForm({
       <FieldLabel htmlFor={field.name}>模型</FieldLabel>
       <Select
         value={resolveChatModel(field.value)}
-        onValueChange={field.onChange}
+        onValueChange={value => field.onChange(value ?? field.value)}
+        items={[...CHAT_MODEL_OPTIONS]}
       >
-        <SelectTrigger id={field.name} aria-invalid={fieldState.invalid}>
+        <SelectTrigger
+          id={field.name}
+          aria-invalid={fieldState.invalid}
+          className='w-full'
+        >
           <SelectValue placeholder='请选择模型' />
         </SelectTrigger>
         <SelectContent>
@@ -223,6 +240,96 @@ export function AgentCreateForm({
           ))}
         </SelectContent>
       </Select>
+      {fieldState.invalid && fieldState.error && (
+        <FieldError errors={[fieldState.error]} />
+      )}
+    </Field>
+  )
+
+  const renderTemperatureInput = ({
+    field,
+    fieldState
+  }: {
+    field: ControllerRenderProps<AgentCreateFormValues, 'temperature'>
+    fieldState: ControllerFieldState
+    formState: UseFormStateReturn<AgentCreateFormValues>
+  }) => (
+    <Field data-invalid={fieldState.invalid}>
+      <FieldLabel htmlFor={field.name}>温度</FieldLabel>
+      <Input
+        id={field.name}
+        type='number'
+        min={0}
+        max={2}
+        step={0.1}
+        aria-invalid={fieldState.invalid}
+        defaultValue={field.value}
+        onBlur={field.onBlur}
+        name={field.name}
+        ref={field.ref}
+        onChange={event => field.onChange(event.target.valueAsNumber)}
+      />
+      <FieldDescription>0 最稳定，越大回答越发散</FieldDescription>
+      {fieldState.invalid && fieldState.error && (
+        <FieldError errors={[fieldState.error]} />
+      )}
+    </Field>
+  )
+
+  const renderHistoryLimitInput = ({
+    field,
+    fieldState
+  }: {
+    field: ControllerRenderProps<AgentCreateFormValues, 'historyLimit'>
+    fieldState: ControllerFieldState
+    formState: UseFormStateReturn<AgentCreateFormValues>
+  }) => (
+    <Field data-invalid={fieldState.invalid}>
+      <FieldLabel htmlFor={field.name}>历史条数</FieldLabel>
+      <Input
+        id={field.name}
+        type='number'
+        min={1}
+        max={50}
+        step={1}
+        aria-invalid={fieldState.invalid}
+        defaultValue={field.value}
+        onBlur={field.onBlur}
+        name={field.name}
+        ref={field.ref}
+        onChange={event => field.onChange(event.target.valueAsNumber)}
+      />
+      <FieldDescription>带入模型的最近消息数，含本次问题</FieldDescription>
+      {fieldState.invalid && fieldState.error && (
+        <FieldError errors={[fieldState.error]} />
+      )}
+    </Field>
+  )
+
+  const renderRetrieveTopKInput = ({
+    field,
+    fieldState
+  }: {
+    field: ControllerRenderProps<AgentCreateFormValues, 'retrieveTopK'>
+    fieldState: ControllerFieldState
+    formState: UseFormStateReturn<AgentCreateFormValues>
+  }) => (
+    <Field data-invalid={fieldState.invalid}>
+      <FieldLabel htmlFor={field.name}>检索条数</FieldLabel>
+      <Input
+        id={field.name}
+        type='number'
+        min={1}
+        max={20}
+        step={1}
+        aria-invalid={fieldState.invalid}
+        defaultValue={field.value}
+        onBlur={field.onBlur}
+        name={field.name}
+        ref={field.ref}
+        onChange={event => field.onChange(event.target.valueAsNumber)}
+      />
+      <FieldDescription>从已就绪切片中取最相关的条数</FieldDescription>
       {fieldState.invalid && fieldState.error && (
         <FieldError errors={[fieldState.error]} />
       )}
@@ -299,7 +406,7 @@ export function AgentCreateForm({
   }
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col gap-6'>
+    <PageStack>
       <PageTitle
         title={isEdit ? '编辑助手' : '新建助手'}
         description={
@@ -325,79 +432,79 @@ export function AgentCreateForm({
         }
       />
       <form id='agentCreateForm' onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className='w-full'>
-          <CardHeader>
-            <CardTitle>基础信息</CardTitle>
-            <CardDescription>定义助手身份和运行状态</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <PageStack>
+          <PagePanel title='基础信息' description='定义助手身份和运行状态'>
             <FieldGroup>
-              <FieldSet>
-                <div className='flex flex-col gap-6 md:flex-row'>
-                  <div className='flex-1'>
-                    <Controller
-                      name='name'
-                      control={form.control}
-                      render={renderNameInput}
-                    />
-                  </div>
-                  <div className='flex-1'>
-                    <Controller
-                      name='status'
-                      control={form.control}
-                      render={renderStatusInput}
-                    />
-                  </div>
-                </div>
-                <div>
+              <div className='flex flex-col gap-6 md:flex-row'>
+                <div className='flex-1'>
                   <Controller
-                    name='description'
+                    name='name'
                     control={form.control}
-                    render={renderDescriptionInput}
+                    render={renderNameInput}
                   />
                 </div>
-              </FieldSet>
-            </FieldGroup>
-          </CardContent>
-        </Card>
-        <Card className='mt-4 w-full'>
-          <CardHeader>
-            <CardTitle>能力配置</CardTitle>
-            <CardDescription>
-              绑定提示词模板和知识库，形成助手的初始工作上下文
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <FieldGroup>
-              <FieldSet>
-                <div className='flex flex-col gap-6 md:flex-row'>
-                  <div className='flex-1'>
-                    <Controller
-                      name='model'
-                      control={form.control}
-                      render={renderModelInput}
-                    />
-                  </div>
-                  <div className='flex-1'>
-                    <Controller
-                      name='promptProfileId'
-                      control={form.control}
-                      render={renderPromptProfileSelect}
-                    />
-                  </div>
-                </div>
-                <div>
+                <div className='flex-1'>
                   <Controller
-                    name='knowledgeId'
+                    name='status'
                     control={form.control}
-                    render={renderKnowledgeSelect}
+                    render={renderStatusInput}
                   />
                 </div>
-              </FieldSet>
+              </div>
+              <Controller
+                name='description'
+                control={form.control}
+                render={renderDescriptionInput}
+              />
             </FieldGroup>
-          </CardContent>
-        </Card>
+          </PagePanel>
+          <PagePanel
+            title='能力配置'
+            description='绑定提示词模板和知识库，形成助手的初始工作上下文'
+          >
+            <FieldGroup>
+              <div className='flex flex-col gap-6 md:flex-row'>
+                <div className='flex-1'>
+                  <Controller
+                    name='model'
+                    control={form.control}
+                    render={renderModelInput}
+                  />
+                </div>
+                <div className='flex-1'>
+                  <Controller
+                    name='promptProfileId'
+                    control={form.control}
+                    render={renderPromptProfileSelect}
+                  />
+                </div>
+              </div>
+              <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
+                <Controller
+                  name='temperature'
+                  control={form.control}
+                  render={renderTemperatureInput}
+                />
+                <Controller
+                  name='historyLimit'
+                  control={form.control}
+                  render={renderHistoryLimitInput}
+                />
+                <Controller
+                  name='retrieveTopK'
+                  control={form.control}
+                  render={renderRetrieveTopKInput}
+                />
+              </div>
+              <Controller
+                name='knowledgeId'
+                control={form.control}
+                render={renderKnowledgeSelect}
+              />
+            </FieldGroup>
+          </PagePanel>
+        </PageStack>
       </form>
-    </div>
+    </PageStack>
   )
 }

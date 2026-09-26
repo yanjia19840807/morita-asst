@@ -1,16 +1,25 @@
-import type { ChatCitation } from './schemas'
+import type { ChatCitation, ChatRetrieveStatus, ChatRun } from './schemas'
 
 export type ChatMessageDto = {
   id: string
   role: 'USER' | 'ASSISTANT'
   content: string
-  citations: ChatCitation[] | null
-  knowledgeMissed: boolean
-  retrieveError: string | null
+  run: ChatRun | null
   createdAt: string
 }
 
+export type ChatConversationSummary = {
+  id: string
+  title: string
+  updatedAt: string
+  messageCount: number
+}
+
 export type ChatThreadDto = {
-  conversationId: string
+  conversations: ChatConversationSummary[]
+  conversationId: string | null
   messages: ChatMessageDto[]
 }
+
+export type ChatCitationView = ChatCitation
+export type { ChatRetrieveStatus, ChatRun }

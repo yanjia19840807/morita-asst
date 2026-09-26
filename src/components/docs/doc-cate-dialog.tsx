@@ -106,7 +106,13 @@ export default function DocCateDialog({
   return (
     <form id='docCateForm'>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>{children}</DialogTrigger>
+        <DialogTrigger
+          render={
+            React.isValidElement(children) ? children : <button type='button' />
+          }
+        >
+          {React.isValidElement(children) ? null : children}
+        </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>新增类目</DialogTitle>
@@ -122,10 +128,10 @@ export default function DocCateDialog({
             </FieldSet>
           </FieldGroup>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button type='button' variant='secondary'>
-                取消
-              </Button>
+            <DialogClose
+              render={<Button type='button' variant='secondary' />}
+            >
+              取消
             </DialogClose>
             <Button
               type='button'

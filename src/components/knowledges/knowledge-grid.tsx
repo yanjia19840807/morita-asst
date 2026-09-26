@@ -2,6 +2,7 @@
 
 import type { KnowledgesWithTotalDto } from '@/modules/knowledges/dto'
 import { ListStack } from '@/components/layout/list-stack'
+import { PageEmpty } from '@/components/layout/page-empty'
 import TableActionSection from '../table/table-action-section'
 import TableFooterSection from '../table/table-footer-section'
 import { TableQsPagination } from '../table/table-qs-pagination'
@@ -28,9 +29,10 @@ export default function KnowledgeGrid({ data, pageSize }: KnowledgeGridProps) {
           ))}
         </div>
       ) : (
-        <div className='bg-card shadow-md ring-border text-muted-foreground flex min-h-64 flex-1 items-center justify-center rounded-[10px] text-sm ring-1'>
-          还没有知识库，点击右上角新建一个。
-        </div>
+        <PageEmpty
+          title='还没有知识库'
+          description='点击右上角新建一个知识库。'
+        />
       )}
       <TableFooterSection>
         <TableQsPagination pageSize={pageSize} total={total} />

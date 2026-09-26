@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto'
+
 import { auth } from './server'
 import { headers } from 'next/headers'
 import type { PaginationParams } from '@/lib/query'
@@ -16,10 +18,12 @@ import {
   profileEditSchema,
   profilePasswordSchema,
   resetPasswordSchema,
+  adminSetPasswordSchema,
   userBanSchema,
   userCreateSchema,
   userEditSchema,
   userIdSchema,
+  type AdminSetPasswordFormValues,
   type EmailSignInFormValues,
   type EmailSignUpFormValues,
   type ForgotPasswordFormValues,
@@ -233,7 +237,8 @@ export async function createUser(data: UserCreateFormValues) {
   if (!validation.success) {
     throw new ValidationError(formatZodError(validation.error))
   }
-  const { email, name, password, role, image } = validation.data
+  const { email, name, role, image } = validation.data
+  const password = randomBytes(18).toString('base64url').slice(0, 24)
 
   return auth.api.createUser({
     body: {
@@ -281,6 +286,23 @@ export async function editUser(data: UserEditFormValues) {
   }
 
   return result
+}
+
+export async function setUserPassword(data: AdminSetPasswordFormValues) {
+  await requireRoles(['admin'])
+  const validation = adminSetPasswordSchema.safeParse(data)
+  if (!validation.success) {
+    throw new ValidationError(formatZodError(validation.error))
+  }
+
+  const { id, password } = validation.data
+  return auth.api.setUserPassword({
+    body: {
+      userId: id,
+      newPassword: password
+    },
+    headers: await getRequestHeaders()
+  })
 }
 
 export async function removeUser(id: UserId) {

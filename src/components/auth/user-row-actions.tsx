@@ -75,14 +75,13 @@ export function UserTableRowActions({ row }: UserTableRowActionsProps) {
   return (
     <div className='flex items-center justify-end gap-2 whitespace-nowrap'>
       <Button
-        asChild
+        nativeButton={false}
+        render={<Link href={`/users/${user.id}/edit`} />}
         size='sm'
         variant='ghost'
         className={isPending ? 'pointer-events-none opacity-50' : undefined}
       >
-        <Link href={`/users/${user.id}/edit`}>
-          <span>编辑</span>
-        </Link>
+        <span>编辑</span>
       </Button>
       <Button
         size='sm'
